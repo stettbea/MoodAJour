@@ -24,6 +24,7 @@
 					<nav class="dropdown">
 						<a href="/overview">Übersicht</a>
 						<a href="/tipps">Tipps</a>
+						<a href="/settings">Einstellungen</a>
 						<a href="/registration">Registrierung</a>
 					</nav>
 				</details>

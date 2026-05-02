@@ -1,5 +1,5 @@
 <script>
-	let { filters = {} } = $props();
+	let { filters = {}, categories = [], persons = [] } = $props();
 </script>
 
 <section class="filter-panel">
@@ -22,10 +22,9 @@
 				<span>Kategorie</span>
 				<select name="category" value={filters.category}>
 					<option value="">Alle</option>
-					<option value="Arbeit">Arbeit</option>
-					<option value="Freizeit">Freizeit</option>
-					<option value="Familie">Familie</option>
-					<option value="Gesundheit">Gesundheit</option>
+					{#each categories as category}
+						<option value={category}>{category}</option>
+					{/each}
 				</select>
 			</label>
 		</div>
@@ -42,7 +41,12 @@
 			</label>
 			<label>
 				<span>Personen</span>
-				<input type="text" name="persons" value={filters.persons} placeholder="z. B. Freund" />
+				<select name="persons" value={filters.persons}>
+					<option value="">Alle</option>
+					{#each persons as person}
+						<option value={person}>{person}</option>
+					{/each}
+				</select>
 			</label>
 		</div>
 

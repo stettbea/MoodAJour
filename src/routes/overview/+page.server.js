@@ -1,6 +1,10 @@
 import { getDb } from '$lib/server/db.js';
 
-// Load-Funktion: Lädt gefilterte Mood-Einträge aus MongoDB
+// Defaultwerte für Einstellungen
+const DEFAULT_CATEGORIES = ['Arbeit', 'Freizeit', 'Familie', 'Gesundheit'];
+const DEFAULT_PERSONS = ['Freund', 'Familie', 'Kollege', 'Partner'];
+
+// Load-Funktion: Lädt gefilterte Mood-Einträge und Einstellungen aus MongoDB
 export async function load({ url }) {
   const params = url.searchParams;
   const query = { userId: 'demo-user' };
@@ -48,6 +52,18 @@ export async function load({ url }) {
     .sort({ createdAt: -1 })
     .toArray();
 
+  // Lade Benutzer-Einstellungen (Kategorien und Personen)
+  let settings = await db.collection('userSettings').findOne({
+    userId: 'demo-user'
+  });
+
+  if (!settings) {
+    settings = {
+      categories: DEFAULT_CATEGORIES,
+      persons: DEFAULT_PERSONS
+    };
+  }
+
   return {
     entries: entries.map(entry => ({
       id: entry._id.toString(),
@@ -58,6 +74,8 @@ export async function load({ url }) {
       mood: entry.mood,
       description: entry.description
     })),
-    filters
+    filters,
+    categories: settings.categories || DEFAULT_CATEGORIES,
+    persons: settings.persons || DEFAULT_PERSONS
   };
 }

@@ -6,7 +6,11 @@
 </script>
 
 <main class="overview-page">
-	<FilterBar filters={data.filters} />
+	<FilterBar
+		filters={data.filters}
+		categories={data.categories}
+		persons={data.persons}
+	/>
 
 	<section class="entries-list">
 		{#if data.entries.length === 0}
