@@ -3,27 +3,91 @@
 	import WarningBox from '$lib/components/WarningBox.svelte';
 	import EntryCard from '$lib/components/EntryCard.svelte';
 
-	const sampleEntry = {
-		was: 'Tagesausflug',
-		wann: '2026-05-02 14:30',
-		kategorie: 'Freizeit',
-		stimmung: 8,
-		beschreibung: 'War ein schöner Spaziergang im Park.'
-	};
-
-	const warningEntry = {
-		was: 'Stress bei der Arbeit',
-		wann: '2026-05-01 09:00',
-		kategorie: 'Arbeit',
-		stimmung: 3,
-		beschreibung: 'Wichtige Präsentation hat mich sehr unter Druck gesetzt.'
-	};
+	const entries = [
+		{
+			was: 'Tagesausflug',
+			wann: '2026-05-02 14:30',
+			kategorie: 'Freizeit',
+			stimmung: 8,
+			beschreibung: 'War ein schöner Spaziergang im Park.'
+		},
+		{
+			was: 'Stress bei der Arbeit',
+			wann: '2026-05-01 09:00',
+			kategorie: 'Arbeit',
+			stimmung: 3,
+			beschreibung: 'Wichtige Präsentation hat mich sehr unter Druck gesetzt.'
+		}
+	];
 </script>
 
-<main>
-	<h1>Home</h1>
-	<MoodForm buttonText="Hinzufügen" />
+<main class="home-page">
+	<section class="form-card">
+		<div class="card-header">
+			<h2>Neuer Mood-Eintrag erstellen</h2>
+		</div>
+		<MoodForm buttonText="+ Hinzufügen" />
+	</section>
+
 	<WarningBox />
-	<EntryCard entry={warningEntry} />
-	<EntryCard entry={sampleEntry} />
+
+	<section class="recent-entries">
+		<div class="recent-header">
+			<h3>Letzte Einträge</h3>
+		</div>
+		{#each entries as entry}
+			<EntryCard entry={entry} />
+		{/each}
+	</section>
 </main>
+
+<style>
+	.home-page {
+		width: min(100%, 430px);
+		margin: 0 auto;
+		padding: 20px 0 40px;
+	}
+
+	.form-card,
+	.recent-entries {
+		background: white;
+		border-radius: 24px;
+		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+		margin: 0 16px 20px;
+	}
+
+	.card-header {
+		padding: 20px 20px 0;
+	}
+
+	.card-header h2 {
+		margin: 0;
+		font-size: 1.2rem;
+		color: #2c2c3a;
+	}
+
+	.recent-header {
+		padding: 20px 20px 0;
+	}
+
+	.recent-header h3 {
+		margin: 0;
+		font-size: 1rem;
+		color: #4c407d;
+	}
+
+	.recent-entries > :global(.entry-card) {
+		margin: 12px 20px 16px;
+	}
+
+	@media (max-width: 360px) {
+		.home-page {
+			padding: 16px 0 32px;
+		}
+
+		.form-card,
+		.recent-entries {
+			margin: 0 12px 18px;
+		}
+	}
+</style>
