@@ -52,8 +52,6 @@
 </script>
 
 <main class="settings-page">
-	<a class="back-link" href="/overview">← Zurück</a>
-
 	<section class="settings-card">
 		<div class="card-header">
 			<h1>Einstellungen</h1>
