@@ -3,22 +3,7 @@
 	import WarningBox from '$lib/components/WarningBox.svelte';
 	import EntryCard from '$lib/components/EntryCard.svelte';
 
-	const entries = [
-		{
-			was: 'Tagesausflug',
-			wann: '2026-05-02 14:30',
-			kategorie: 'Freizeit',
-			stimmung: 8,
-			beschreibung: 'War ein schöner Spaziergang im Park.'
-		},
-		{
-			was: 'Stress bei der Arbeit',
-			wann: '2026-05-01 09:00',
-			kategorie: 'Arbeit',
-			stimmung: 3,
-			beschreibung: 'Wichtige Präsentation hat mich sehr unter Druck gesetzt.'
-		}
-	];
+	let { data, form } = $props();
 </script>
 
 <main class="home-page">
@@ -26,7 +11,7 @@
 		<div class="card-header">
 			<h2>Neuer Mood-Eintrag erstellen</h2>
 		</div>
-		<MoodForm buttonText="+ Hinzufügen" />
+		<MoodForm />
 	</section>
 
 	<WarningBox />
@@ -35,8 +20,8 @@
 		<div class="recent-header">
 			<h3>Letzte Einträge</h3>
 		</div>
-		{#each entries as entry}
-			<EntryCard entry={entry} />
+		{#each data.entries as entry}
+			<EntryCard {entry} />
 		{/each}
 	</section>
 </main>

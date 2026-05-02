@@ -1,52 +1,43 @@
-﻿<script>
-let { buttonText = "+ Hinzufügen" } = $props();
+﻿<form method="POST" class="mood-form">
+  <div class="field-pair">
+    <label>
+      Was?
+      <input type="text" name="title" required />
+    </label>
+    <label>
+      Wann?
+      <input type="datetime-local" name="date" required />
+    </label>
+  </div>
 
-function handleSubmit(event) {
-event.preventDefault();
-// Noch keine Speicherlogik
-}
-</script>
+  <div class="field-pair">
+    <label>
+      Personen
+      <input type="text" name="persons" />
+    </label>
+    <label>
+      Kategorie
+      <select name="category">
+        <option value="arbeit">Arbeit</option>
+        <option value="freizeit">Freizeit</option>
+        <option value="familie">Familie</option>
+        <option value="gesundheit">Gesundheit</option>
+      </select>
+    </label>
+  </div>
 
-<form onsubmit={handleSubmit} class="mood-form">
-<div class="field-pair">
-<label>
-Was?
-<input type="text" required />
-</label>
-<label>
-Wann?
-<input type="datetime-local" required />
-</label>
-</div>
+  <div class="range-row">
+    <span>Stimmungsskala</span>
+    <span>1–10</span>
+  </div>
+  <input class="range-input" type="range" name="mood" min="1" max="10" value="5" />
 
-<div class="field-pair">
-<label>
-Personen
-<input type="text" />
-</label>
-<label>
-Kategorie
-<select>
-<option value="arbeit">Arbeit</option>
-<option value="freizeit">Freizeit</option>
-<option value="familie">Familie</option>
-<option value="gesundheit">Gesundheit</option>
-</select>
-</label>
-</div>
+  <label>
+    Beschreibung
+    <textarea name="description"></textarea>
+  </label>
 
-<div class="range-row">
-<span>Stimmungsskala</span>
-<span>1–10</span>
-</div>
-<input class="range-input" type="range" min="1" max="10" value="5" />
-
-<label>
-Beschreibung
-<textarea></textarea>
-</label>
-
-<button type="submit">{buttonText}</button>
+  <button type="submit">+ Hinzufügen</button>
 </form>
 
 <style>

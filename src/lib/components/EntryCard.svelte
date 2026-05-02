@@ -4,14 +4,14 @@ let { entry } = $props();
 
 <div class="entry-card">
 <div class="entry-top">
-<h3>{entry.was || 'Unbekannt'}</h3>
-<div class="mood-badge">{entry.stimmung || 5}</div>
+<h3>{entry.title || 'Unbekannt'}</h3>
+<div class="mood-badge">{entry.mood || 5}</div>
 </div>
 <div class="entry-meta">
-<span>{entry.wann || 'Unbekannt'}</span>
-<span>{entry.kategorie || 'Unbekannt'}</span>
+<span>{entry.date || 'Unbekannt'}</span>
+<span>{entry.category || 'Unbekannt'}</span>
 </div>
-<p>{entry.beschreibung || 'Keine Beschreibung'}</p>
+<p>{entry.description || 'Keine Beschreibung'}</p>
 <div class="actions">
 <button>Bearbeiten</button>
 <button>Löschen</button>
