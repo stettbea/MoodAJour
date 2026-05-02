@@ -1,0 +1,16 @@
+&lt;h1&gt;Registration&lt;/h1&gt;
+&lt;form&gt;
+  &lt;label for="name"&gt;Name:&lt;/label&gt;
+  &lt;input type="text" id="name" name="name"&gt;
+  &lt;br&gt;
+  &lt;label for="email"&gt;Email:&lt;/label&gt;
+  &lt;input type="email" id="email" name="email"&gt;
+  &lt;br&gt;
+  &lt;label for="password"&gt;Password:&lt;/label&gt;
+  &lt;input type="password" id="password" name="password"&gt;
+  &lt;br&gt;
+  &lt;label for="confirmPassword"&gt;Confirm Password:&lt;/label&gt;
+  &lt;input type="password" id="confirmPassword" name="confirmPassword"&gt;
+  &lt;br&gt;
+  &lt;button type="submit"&gt;Register&lt;/button&gt;
+&lt;/form&gt;
