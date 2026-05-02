@@ -14,8 +14,8 @@ let { entry } = $props();
 </div>
 <p>{entry.description || 'Keine Beschreibung'}</p>
 <div class="actions">
-<button>Bearbeiten</button>
-<button>Löschen</button>
+<a href="/entries/{entry.id}/edit" class="action-btn">Bearbeiten</a>
+<button class="action-btn delete-btn">Löschen</button>
 </div>
 </div>
 
@@ -72,7 +72,7 @@ display: flex;
 gap: 10px;
 }
 
-button {
+.action-btn {
 flex: 1;
 padding: 12px 14px;
 background: white;
@@ -81,9 +81,16 @@ border: 1px solid #dcd1f7;
 border-radius: 14px;
 cursor: pointer;
 font-weight: 700;
+text-decoration: none;
+text-align: center;
+display: block;
 }
 
-button:hover {
+.action-btn:hover {
 background: #f3ebfb;
+}
+
+.delete-btn {
+border: 1px solid #dcd1f7;
 }
 </style>

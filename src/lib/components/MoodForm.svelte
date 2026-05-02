@@ -1,27 +1,32 @@
-﻿<form method="POST" class="mood-form">
+﻿<script>
+  let { values = {}, buttonText = '+ Hinzufügen' } = $props();
+</script>
+
+<form method="POST" class="mood-form">
   <div class="field-pair">
     <label>
       Was?
-      <input type="text" name="title" required />
+      <input type="text" name="title" required value={values.title ?? ''} />
     </label>
     <label>
       Wann?
-      <input type="datetime-local" name="date" required />
+      <input type="datetime-local" name="date" required value={values.date ?? ''} />
     </label>
   </div>
 
   <div class="field-pair">
     <label>
       Personen
-      <input type="text" name="persons" />
+      <input type="text" name="persons" value={values.persons ?? ''} />
     </label>
     <label>
       Kategorie
-      <select name="category">
-        <option value="arbeit">Arbeit</option>
-        <option value="freizeit">Freizeit</option>
-        <option value="familie">Familie</option>
-        <option value="gesundheit">Gesundheit</option>
+      <select name="category" value={values.category ?? ''}>
+        <option value="">Bitte wählen</option>
+        <option value="Arbeit">Arbeit</option>
+        <option value="Freizeit">Freizeit</option>
+        <option value="Familie">Familie</option>
+        <option value="Gesundheit">Gesundheit</option>
       </select>
     </label>
   </div>
@@ -30,14 +35,14 @@
     <span>Stimmungsskala</span>
     <span>1–10</span>
   </div>
-  <input class="range-input" type="range" name="mood" min="1" max="10" value="5" />
+  <input class="range-input" type="range" name="mood" min="1" max="10" value={values.mood ?? 5} />
 
   <label>
     Beschreibung
-    <textarea name="description"></textarea>
+    <textarea name="description">{values.description ?? ''}</textarea>
   </label>
 
-  <button type="submit">+ Hinzufügen</button>
+  <button type="submit">{buttonText}</button>
 </form>
 
 <style>

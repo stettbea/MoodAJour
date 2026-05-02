@@ -11,8 +11,13 @@ export async function load() {
 
   return {
     entries: entries.map(entry => ({
-      ...entry,
-      _id: entry._id.toString() // ObjectId in String umwandeln für Svelte
+      id: entry._id.toString(), // ObjectId als String
+      title: entry.title,
+      date: entry.date,
+      persons: entry.persons,
+      category: entry.category,
+      mood: entry.mood,
+      description: entry.description
     }))
   };
 }
