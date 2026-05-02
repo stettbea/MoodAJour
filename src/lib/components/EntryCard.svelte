@@ -10,6 +10,7 @@ let { entry } = $props();
 <div class="entry-meta">
 <span>{entry.date || 'Unbekannt'}</span>
 <span>{entry.category || 'Unbekannt'}</span>
+<span>{entry.persons ? entry.persons : 'Personen: -'}</span>
 </div>
 <p>{entry.description || 'Keine Beschreibung'}</p>
 <div class="actions">
