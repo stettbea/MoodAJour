@@ -14,7 +14,9 @@
 		<MoodForm />
 	</section>
 
-	<WarningBox />
+	{#if form?.showWarning}
+		<WarningBox isVisible={true} />
+	{/if}
 
 	<section class="recent-entries">
 		<div class="recent-header">

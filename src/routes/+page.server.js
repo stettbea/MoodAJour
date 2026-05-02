@@ -52,7 +52,10 @@ export const actions = {
     const db = await getDb();
     await db.collection('moodEntries').insertOne(newEntry);
 
+    // Wenn Stimmung < 5, soll die WarningBox angezeigt werden
+    const showWarning = mood < 5;
+
     // Nach dem Speichern die Seite neu laden (kein Redirect nötig)
-    return { success: true };
+    return { success: true, showWarning };
   }
 };
