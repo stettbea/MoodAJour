@@ -1,0 +1,1 @@
+&lt;h1&gt;Tipps-Seite&lt;/h1&gt;
