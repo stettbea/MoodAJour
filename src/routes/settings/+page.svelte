@@ -5,6 +5,9 @@
 	let categories = $state(data.categories || []);
 	let persons = $state(data.persons || []);
 
+	const usedCategories = new Set(data.usedCategories || []);
+	const usedPersons = new Set(data.usedPersons || []);
+
 	// Neue Kategorie oder Person hinzufügen
 	function addCategory() {
 		categories = [...categories, ''];
@@ -14,12 +17,22 @@
 		persons = [...persons, ''];
 	}
 
-	// Kategorie oder Person entfernen
+	// Kategorie oder Person entfernen (nur wenn nicht verwendet)
 	function removeCategory(index) {
+		const categoryToRemove = categories[index];
+		if (usedCategories.has(categoryToRemove)) {
+			alert(`Die Kategorie "${categoryToRemove}" kann nicht gelöscht werden, da sie noch verwendet wird.`);
+			return;
+		}
 		categories = categories.filter((_, i) => i !== index);
 	}
 
 	function removePerson(index) {
+		const personToRemove = persons[index];
+		if (usedPersons.has(personToRemove)) {
+			alert(`Die Person "${personToRemove}" kann nicht gelöscht werden, da sie noch verwendet wird.`);
+			return;
+		}
 		persons = persons.filter((_, i) => i !== index);
 	}
 
@@ -30,6 +43,11 @@
 
 	function updatePerson(index, value) {
 		persons[index] = value;
+	}
+
+	// Prüfe ob Element verwendet wird
+	function isUsed(value, usedSet) {
+		return usedSet.has(value);
 	}
 </script>
 
@@ -52,7 +70,7 @@
 
 				<div class="items-list">
 					{#each categories as category, index (index)}
-						<div class="item-input">
+						<div class="item-input" class:used={isUsed(category, usedCategories)}>
 							<input
 								type="text"
 								name="category"
@@ -65,7 +83,9 @@
 								type="button"
 								class="remove-btn"
 								onclick={() => removeCategory(index)}
+								disabled={isUsed(category, usedCategories)}
 								aria-label="Entfernen"
+								title={isUsed(category, usedCategories) ? 'Diese Kategorie wird noch verwendet' : 'Entfernen'}
 							>
 								✕
 							</button>
@@ -83,7 +103,7 @@
 
 				<div class="items-list">
 					{#each persons as person, index (index)}
-						<div class="item-input">
+						<div class="item-input" class:used={isUsed(person, usedPersons)}>
 							<input
 								type="text"
 								name="person"
@@ -96,7 +116,9 @@
 								type="button"
 								class="remove-btn"
 								onclick={() => removePerson(index)}
+								disabled={isUsed(person, usedPersons)}
 								aria-label="Entfernen"
+								title={isUsed(person, usedPersons) ? 'Diese Person wird noch verwendet' : 'Entfernen'}
 							>
 								✕
 							</button>
@@ -114,6 +136,10 @@
 
 		{#if form?.success}
 			<p class="success-message">✓ Einstellungen gespeichert!</p>
+		{/if}
+
+		{#if form?.error}
+			<p class="error-message">✗ {form.error}</p>
 		{/if}
 	</section>
 </main>
@@ -210,6 +236,12 @@
 		display: flex;
 		gap: 8px;
 		align-items: center;
+		opacity: 1;
+		transition: opacity 0.2s;
+	}
+
+	.item-input.used {
+		opacity: 0.6;
 	}
 
 	.item-input input {
@@ -220,6 +252,12 @@
 		background: white;
 		color: #2c2c3a;
 		font-size: 0.95rem;
+	}
+
+	.item-input.used input {
+		background: #f5f0ff;
+		border-color: #e8ddff;
+		cursor: not-allowed;
 	}
 
 	.item-input input:focus {
@@ -240,11 +278,20 @@
 		font-size: 1.2rem;
 		line-height: 1;
 		flex-shrink: 0;
+		transition: all 0.2s;
 	}
 
-	.remove-btn:hover {
+	.remove-btn:hover:not(:disabled) {
 		background: #fef2f2;
 		border-color: #f5c2c7;
+	}
+
+	.remove-btn:disabled {
+		cursor: not-allowed;
+		opacity: 0.5;
+		background: #f5f0ff;
+		border-color: #e8ddff;
+		color: #9b8bb5;
 	}
 
 	.action-row {
@@ -295,6 +342,17 @@
 		border: 1px solid #c3e6cb;
 		border-radius: 12px;
 		color: #155724;
+		text-align: center;
+		font-weight: 700;
+	}
+
+	.error-message {
+		margin-top: 16px;
+		padding: 12px 14px;
+		background: #f8d7da;
+		border: 1px solid #f5c2c7;
+		border-radius: 12px;
+		color: #842029;
 		text-align: center;
 		font-weight: 700;
 	}

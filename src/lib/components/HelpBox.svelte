@@ -10,45 +10,44 @@
 		<p><strong>147</strong> – Hilfe für Kinder und Jugendliche</p>
 		<p><strong>144</strong> – Bei akutem Notfall</p>
 	</div>
-
-	<p class="note">
-		Diese App ersetzt keine professionelle Unterstützung.
-	</p>
 </div>
 
 <style>
 	.help-box {
 		padding: 20px;
-		background: #f3ebfb;
-		border: 1px solid #e4d3f7;
+		background: #f1e8fb;
+		border: 1px solid #cdb6f3;
 		border-radius: 20px;
 		color: #2c2c3a;
-		margin: 16px 0;
+		margin: 18px 0 0;
+		box-shadow: 0 8px 20px rgba(125, 78, 201, 0.08);
 	}
 
 	h3 {
-		margin: 0 0 10px;
+		margin: 0 0 12px;
 		color: #7d4ec9;
-		font-size: 1.05rem;
+		font-size: 1.08rem;
+		font-weight: 700;
 	}
 
 	.main-text {
 		margin: 0 0 14px;
 		font-size: 0.95rem;
-		line-height: 1.4;
+		line-height: 1.45;
 		color: #4c407d;
 	}
 
 	.contacts {
-		margin-bottom: 12px;
-		padding: 12px;
+		margin-bottom: 14px;
+		padding: 14px;
 		background: rgba(125, 78, 201, 0.08);
-		border-radius: 12px;
+		border-radius: 14px;
 	}
 
 	.contacts p {
-		margin: 6px 0;
+		margin: 7px 0;
 		font-size: 0.95rem;
+		color: #20182f;
 	}
 
 	.note {
@@ -56,5 +55,6 @@
 		font-size: 0.85rem;
 		color: #6b5a7a;
 		text-align: center;
+		line-height: 1.4;
 	}
 </style>
