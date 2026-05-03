@@ -3,75 +3,75 @@
 
 	let { form } = $props();
 
-	let mode = $derived(page.url.searchParams.get('mode') === 'register' ? 'register' : 'login');
+	let showRegisterModal = $state(false);
 </script>
 
 <main class="auth-page">
 	<section class="auth-card">
-		{#if mode === 'login'}
-			<h1>Willkommen zurück</h1>
-			<p>Logge dich ein, um deine Mood-Einträge zu sehen.</p>
+		<h1>Willkommen zurück</h1>
+		<p>Logge dich ein, um deine Mood-Einträge zu sehen.</p>
 
-			{#if form?.error}
-				<div class="error-message">{form.error}</div>
-			{/if}
-
-			<form method="POST" action="?/login">
-				<label for="email">E-Mail</label>
-				<input id="email" name="email" type="email" required />
-
-				<label for="password">Passwort</label>
-				<input id="password" name="password" type="password" required />
-
-				<button type="submit">Einloggen</button>
-			</form>
-
-			<p class="switch-link">
-				Noch kein Konto?
-				<a href="/login?mode=register">Registrieren</a>
-			</p>
-		{:else}
-			<h1>Konto erstellen</h1>
-			<p>Erstelle ein Konto, damit deine Einträge persönlich gespeichert werden.</p>
-
-			{#if form?.error}
-				<div class="error-message">{form.error}</div>
-			{/if}
-
-			<form method="POST" action="?/register">
-				<label for="username">Benutzername</label>
-				<input
-					id="username"
-					name="username"
-					type="text"
-					value={form?.values?.username ?? ''}
-					required
-				/>
-
-				<label for="register-email">E-Mail</label>
-				<input
-					id="register-email"
-					name="email"
-					type="email"
-					value={form?.values?.email ?? ''}
-					required
-				/>
-
-				<label for="register-password">Passwort</label>
-				<input id="register-password" name="password" type="password" required />
-
-				<label for="passwordConfirm">Passwort bestätigen</label>
-				<input id="passwordConfirm" name="passwordConfirm" type="password" required />
-
-				<button type="submit">Registrieren</button>
-			</form>
-
-			<p class="switch-link">
-				Schon ein Konto?
-				<a href="/login">Einloggen</a>
-			</p>
+		{#if form?.error}
+			<div class="error-message">{form.error}</div>
 		{/if}
+
+		<form method="POST" action="?/login">
+			<label for="input">E-Mail oder Benutzername</label>
+			<input id="input" name="input" type="text" required />
+
+			<label for="password">Passwort</label>
+			<input id="password" name="password" type="password" required />
+
+			<button type="submit">Einloggen</button>
+		</form>
+
+		<p class="switch-link">
+			Noch kein Konto?
+			<button type="button" class="link-button" on:click={() => showRegisterModal = true}>Registrieren</button>
+		</p>
 	</section>
+
+	{#if showRegisterModal}
+		<div class="modal-overlay" on:click={() => showRegisterModal = false}>
+			<div class="modal" on:click|stopPropagation>
+				<button class="close-button" on:click={() => showRegisterModal = false}>&times;</button>
+				<h1>Konto erstellen</h1>
+				<p>Erstelle ein Konto, damit deine Einträge persönlich gespeichert werden.</p>
+
+				{#if form?.error}
+					<div class="error-message">{form.error}</div>
+				{/if}
+
+				<form method="POST" action="?/register">
+					<label for="username">Benutzername</label>
+					<input
+						id="username"
+						name="username"
+						type="text"
+						value={form?.values?.username ?? ''}
+						required
+					/>
+
+					<label for="register-email">E-Mail</label>
+					<input
+						id="register-email"
+						name="email"
+						type="email"
+						value={form?.values?.email ?? ''}
+						required
+					/>
+
+					<label for="register-password">Passwort</label>
+					<input id="register-password" name="password" type="password" required />
+
+					<label for="passwordConfirm">Passwort bestätigen</label>
+					<input id="passwordConfirm" name="passwordConfirm" type="password" required />
+
+					<button type="submit">Registrieren</button>
+				</form>
+			</div>
+		</div>
+	{/if}
 </main>
 
 <style>
@@ -139,6 +139,17 @@
 		cursor: pointer;
 	}
 
+	.link-button {
+		background: none;
+		border: none;
+		color: #7d4ec9;
+		text-decoration: underline;
+		cursor: pointer;
+		font-size: inherit;
+		padding: 0;
+		margin: 0;
+	}
+
 	.error-message {
 		background: #fdecec;
 		border: 1px solid #f3b6b6;
@@ -147,6 +158,41 @@
 		border-radius: 12px;
 		margin-bottom: 14px;
 		font-size: 0.9rem;
+	}
+
+	.modal-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		z-index: 1000;
+	}
+
+	.modal {
+		background: #f7f3fc;
+		border: 1px solid #d9c8f3;
+		border-radius: 22px;
+		padding: 20px;
+		box-shadow: 0 8px 20px rgba(125, 78, 201, 0.08);
+		max-width: 400px;
+		width: 90%;
+		position: relative;
+	}
+
+	.close-button {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background: none;
+		border: none;
+		font-size: 1.5rem;
+		cursor: pointer;
+		color: #6b5a7a;
 	}
 
 	.switch-link {

@@ -5,21 +5,22 @@ export const actions = {
 	login: async ({ request, cookies }) => {
 		const data = await request.formData();
 
-		const email = data.get('email')?.toString().toLowerCase().trim();
+		const input = data.get('input')?.toString().toLowerCase().trim();
 		const password = data.get('password')?.toString();
 
-		if (!email || !password) {
+		if (!input || !password) {
 			return fail(400, {
-				error: 'Bitte E-Mail und Passwort eingeben.'
+				error: 'Bitte E-Mail/Benutzername und Passwort eingeben.'
 			});
 		}
 
 		const db = await getDb();
-		const user = await db.collection('users').findOne({ email });
+		const query = input.includes('@') ? { email: input } : { username: input };
+		const user = await db.collection('users').findOne(query);
 
 		if (!user || user.password !== password) {
 			return fail(400, {
-				error: 'E-Mail oder Passwort ist falsch.'
+				error: 'E-Mail/Benutzername oder Passwort ist falsch.'
 			});
 		}
 
@@ -58,11 +59,14 @@ export const actions = {
 
 		const db = await getDb();
 
-		const existingUser = await db.collection('users').findOne({ email });
+		const existingUser = await db.collection('users').findOne({
+			$or: [{ email }, { username }]
+		});
 
 		if (existingUser) {
+			const field = existingUser.email === email ? 'E-Mail' : 'Benutzername';
 			return fail(400, {
-				error: 'Diese E-Mail ist bereits registriert.',
+				error: `Diese ${field} ist bereits registriert.`,
 				values: { username, email }
 			});
 		}
