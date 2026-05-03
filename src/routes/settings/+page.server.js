@@ -1,106 +1,113 @@
+import { redirect } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db.js';
 
-// Defaultwerte für Einstellungen
 const DEFAULT_CATEGORIES = ['Arbeit', 'Freizeit', 'Familie', 'Gesundheit'];
 const DEFAULT_PERSONS = ['Freund', 'Familie', 'Kollege', 'Partner'];
 
-// Load-Funktion: Lade die Benutzer-Einstellungen und welche verwendet werden
-export async function load() {
-  const db = await getDb();
-  
-  let settings = await db.collection('userSettings').findOne({
-    userId: 'demo-user'
-  });
+export async function load({ locals }) {
+	if (!locals.user) {
+		throw redirect(303, '/login');
+	}
 
-  // Wenn keine Einstellungen existieren, erstelle sie mit Defaults
-  if (!settings) {
-    settings = {
-      userId: 'demo-user',
-      categories: DEFAULT_CATEGORIES,
-      persons: DEFAULT_PERSONS,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-  }
+	const db = await getDb();
+	const userId = locals.user.id;
 
-  // Finde welche Kategorien und Personen in Mood-Einträgen verwendet werden
-  const usedCategories = await db.collection('moodEntries')
-    .distinct('category', { userId: 'demo-user' });
-  
-  const usedPersons = await db.collection('moodEntries')
-    .distinct('persons', { userId: 'demo-user' });
+	let settings = await db.collection('userSettings').findOne({
+		userId
+	});
 
-  return {
-    categories: settings.categories || DEFAULT_CATEGORIES,
-    persons: settings.persons || DEFAULT_PERSONS,
-    usedCategories: usedCategories.filter(c => c && c.trim()),
-    usedPersons: usedPersons.filter(p => p && p.trim())
-  };
+	if (!settings) {
+		settings = {
+			userId,
+			categories: DEFAULT_CATEGORIES,
+			persons: DEFAULT_PERSONS,
+			createdAt: new Date(),
+			updatedAt: new Date()
+		};
+	}
+
+	const usedCategories = await db
+		.collection('moodEntries')
+		.distinct('category', { userId });
+
+	const usedPersons = await db
+		.collection('moodEntries')
+		.distinct('persons', { userId });
+
+	return {
+		categories: settings.categories || DEFAULT_CATEGORIES,
+		persons: settings.persons || DEFAULT_PERSONS,
+		usedCategories: usedCategories.filter((c) => c && c.trim()),
+		usedPersons: usedPersons.filter((p) => p && p.trim())
+	};
 }
 
-// Actions: Speichere die Benutzer-Einstellungen (mit Validierung)
 export const actions = {
-  default: async ({ request }) => {
-    const data = await request.formData();
+	default: async ({ request, locals }) => {
+		if (!locals.user) {
+			throw redirect(303, '/login');
+		}
 
-    // Extrahiere Kategorien und Personen aus dem Formular
-    const formCategories = data.getAll('category').filter(c => c.trim());
-    const formPersons = data.getAll('person').filter(p => p.trim());
+		const data = await request.formData();
 
-    const db = await getDb();
+		const formCategories = data.getAll('category').filter((c) => c.trim());
+		const formPersons = data.getAll('person').filter((p) => p.trim());
 
-    // Finde die aktuellen Einstellungen
-    const currentSettings = await db.collection('userSettings').findOne({ userId: 'demo-user' });
-    const currentCategories = currentSettings?.categories || DEFAULT_CATEGORIES;
-    const currentPersons = currentSettings?.persons || DEFAULT_PERSONS;
+		const db = await getDb();
+		const userId = locals.user.id;
 
-    // Finde welche Kategorien und Personen aktuell verwendet werden
-    const usedCategories = await db.collection('moodEntries')
-      .distinct('category', { userId: 'demo-user' });
-    
-    const usedPersons = await db.collection('moodEntries')
-      .distinct('persons', { userId: 'demo-user' });
+		const currentSettings = await db.collection('userSettings').findOne({ userId });
+		const currentCategories = currentSettings?.categories || DEFAULT_CATEGORIES;
+		const currentPersons = currentSettings?.persons || DEFAULT_PERSONS;
 
-    const usedCategoriesSet = new Set(usedCategories.filter(c => c && c.trim()));
-    const usedPersonsSet = new Set(usedPersons.filter(p => p && p.trim()));
+		const usedCategories = await db
+			.collection('moodEntries')
+			.distinct('category', { userId });
 
-    // Finde welche Kategorien gelöscht werden sollen
-    const deletedCategories = currentCategories.filter(c => !formCategories.includes(c));
-    const deletedPersons = currentPersons.filter(p => !formPersons.includes(p));
+		const usedPersons = await db
+			.collection('moodEntries')
+			.distinct('persons', { userId });
 
-    // Prüfe, ob gelöschte Kategorien/Personen verwendet werden
-    for (const cat of deletedCategories) {
-      if (usedCategoriesSet.has(cat)) {
-        return { 
-          success: false, 
-          error: `Die Kategorie "${cat}" kann nicht gelöscht werden, da sie noch in Mood-Einträgen verwendet wird.` 
-        };
-      }
-    }
+		const usedCategoriesSet = new Set(usedCategories.filter((c) => c && c.trim()));
+		const usedPersonsSet = new Set(usedPersons.filter((p) => p && p.trim()));
 
-    for (const person of deletedPersons) {
-      if (usedPersonsSet.has(person)) {
-        return { 
-          success: false, 
-          error: `Die Person "${person}" kann nicht gelöscht werden, da sie noch in Mood-Einträgen verwendet wird.` 
-        };
-      }
-    }
+		const deletedCategories = currentCategories.filter((c) => !formCategories.includes(c));
+		const deletedPersons = currentPersons.filter((p) => !formPersons.includes(p));
 
-    // Aktualisiere oder erstelle die Einstellungen
-    await db.collection('userSettings').updateOne(
-      { userId: 'demo-user' },
-      {
-        $set: {
-          userId: 'demo-user',
-          categories: formCategories,
-          persons: formPersons,
-          updatedAt: new Date()
-        }
-      },
-      { upsert: true } // Erstelle, wenn nicht vorhanden
-    );
+		for (const cat of deletedCategories) {
+			if (usedCategoriesSet.has(cat)) {
+				return {
+					success: false,
+					error: `Die Kategorie "${cat}" kann nicht gelöscht werden, da sie noch in Mood-Einträgen verwendet wird.`
+				};
+			}
+		}
 
-    return { success: true };
-  }
+		for (const person of deletedPersons) {
+			if (usedPersonsSet.has(person)) {
+				return {
+					success: false,
+					error: `Die Person "${person}" kann nicht gelöscht werden, da sie noch in Mood-Einträgen verwendet wird.`
+				};
+			}
+		}
+
+		await db.collection('userSettings').updateOne(
+			{ userId },
+			{
+				$set: {
+					userId,
+					categories: formCategories,
+					persons: formPersons,
+					updatedAt: new Date()
+				},
+				$setOnInsert: {
+					createdAt: new Date()
+				}
+			},
+			{ upsert: true }
+		);
+
+		return { success: true };
+	}
 };
