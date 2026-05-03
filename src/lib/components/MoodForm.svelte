@@ -1,48 +1,61 @@
 ﻿<script>
-  let { values = {}, buttonText = '+ Hinzufügen' } = $props();
+	let {
+		values = {},
+		buttonText = '+ Hinzufügen',
+		categories = [],
+		persons = [],
+		formAction = '?/create'
+	} = $props();
 </script>
 
-<form method="POST" class="mood-form">
-  <div class="field-pair">
-    <label>
-      Was?
-      <input type="text" name="title" required value={values.title ?? ''} />
-    </label>
-    <label>
-      Wann?
-      <input type="datetime-local" name="date" required value={values.date ?? ''} />
-    </label>
-  </div>
+<form method="POST" action={formAction} class="mood-form">
+	<div class="field-pair">
+		<label>
+			Was?
+			<input type="text" name="title" required value={values.title ?? ''} />
+		</label>
 
-  <div class="field-pair">
-    <label>
-      Personen
-      <input type="text" name="persons" value={values.persons ?? ''} />
-    </label>
-    <label>
-      Kategorie
-      <select name="category" value={values.category ?? ''}>
-        <option value="">Bitte wählen</option>
-        <option value="Arbeit">Arbeit</option>
-        <option value="Freizeit">Freizeit</option>
-        <option value="Familie">Familie</option>
-        <option value="Gesundheit">Gesundheit</option>
-      </select>
-    </label>
-  </div>
+		<label>
+			Wann?
+			<input type="datetime-local" name="date" required value={values.date ?? ''} />
+		</label>
+	</div>
 
-  <div class="range-row">
-    <span>Stimmungsskala</span>
-    <span>1–10</span>
-  </div>
-  <input class="range-input" type="range" name="mood" min="1" max="10" value={values.mood ?? 5} />
+	<div class="field-pair">
+		<label>
+			Person
+			<select name="persons" value={values.persons ?? ''}>
+				<option value="">Bitte wählen</option>
+				{#each persons as person}
+					<option value={person}>{person}</option>
+				{/each}
+			</select>
+		</label>
 
-  <label>
-    Beschreibung
-    <textarea name="description">{values.description ?? ''}</textarea>
-  </label>
+		<label>
+			Kategorie
+			<select name="category" value={values.category ?? ''}>
+				<option value="">Bitte wählen</option>
+				{#each categories as category}
+					<option value={category}>{category}</option>
+				{/each}
+			</select>
+		</label>
+	</div>
 
-  <button type="submit">{buttonText}</button>
+	<div class="range-row">
+		<span>Stimmungsskala</span>
+		<span>1–10</span>
+	</div>
+
+	<input class="range-input" type="range" name="mood" min="1" max="10" value={values.mood ?? 5} />
+
+	<label>
+		Beschreibung
+		<textarea name="description">{values.description ?? ''}</textarea>
+	</label>
+
+	<button type="submit">{buttonText}</button>
 </form>
 
 <style>

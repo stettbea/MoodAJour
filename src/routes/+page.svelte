@@ -1,7 +1,7 @@
 <script>
-	import MoodForm from '$lib/components/MoodForm.svelte';
-	import WarningBox from '$lib/components/WarningBox.svelte';
-	import EntryCard from '$lib/components/EntryCard.svelte';
+	import MoodForm from "$lib/components/MoodForm.svelte";
+	import WarningBox from "$lib/components/WarningBox.svelte";
+	import EntryCard from "$lib/components/EntryCard.svelte";
 
 	let { data, form } = $props();
 </script>
@@ -11,7 +11,7 @@
 		<div class="card-header">
 			<h2>Neuer Mood-Eintrag erstellen</h2>
 		</div>
-		<MoodForm />
+		<MoodForm categories={data.categories} persons={data.persons} />
 	</section>
 
 	{#if form?.showWarning}

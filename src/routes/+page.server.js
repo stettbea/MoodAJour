@@ -1,22 +1,36 @@
 import { redirect } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db.js';
 
-// Load-Funktion: Lädt die letzten 3 Mood-Einträge des eingeloggten Users
+const DEFAULT_CATEGORIES = ['Arbeit', 'Freizeit', 'Familie', 'Gesundheit'];
+const DEFAULT_PERSONS = ['Freund', 'Familie', 'Kollege', 'Partner'];
+
+// Load-Funktion: Lädt die letzten 3 Mood-Einträge und Settings des eingeloggten Users
 export async function load({ locals }) {
 	if (!locals.user) {
 		throw redirect(303, '/login');
 	}
 
 	const db = await getDb();
+	const userId = locals.user.id;
 
-	const entries = await db.collection('moodEntries')
-		.find({ userId: locals.user.id })
+	const entries = await db
+		.collection('moodEntries')
+		.find({ userId })
 		.sort({ createdAt: -1 })
 		.limit(3)
 		.toArray();
 
+	let settings = await db.collection('userSettings').findOne({ userId });
+
+	if (!settings) {
+		settings = {
+			categories: DEFAULT_CATEGORIES,
+			persons: DEFAULT_PERSONS
+		};
+	}
+
 	return {
-		entries: entries.map(entry => ({
+		entries: entries.map((entry) => ({
 			id: entry._id.toString(),
 			title: entry.title,
 			date: entry.date,
@@ -24,7 +38,9 @@ export async function load({ locals }) {
 			category: entry.category,
 			mood: entry.mood,
 			description: entry.description
-		}))
+		})),
+		categories: settings.categories || DEFAULT_CATEGORIES,
+		persons: settings.persons || DEFAULT_PERSONS
 	};
 }
 
@@ -37,15 +53,17 @@ export const actions = {
 
 		const data = await request.formData();
 
-		const title = data.get('title');
-		const date = data.get('date');
-		const persons = data.get('persons');
-		const category = data.get('category');
+		const title = data.get('title')?.toString();
+		const date = data.get('date')?.toString();
+		const persons = data.get('persons')?.toString();
+		const category = data.get('category')?.toString();
 		const mood = parseInt(data.get('mood'), 10);
-		const description = data.get('description');
+		const description = data.get('description')?.toString() ?? '';
 
-		const newEntry = {
-			userId: locals.user.id, // ✅ WICHTIG: echter eingeloggter User
+		const db = await getDb();
+
+		await db.collection('moodEntries').insertOne({
+			userId: locals.user.id,
 			title,
 			date,
 			persons,
@@ -54,10 +72,7 @@ export const actions = {
 			description,
 			createdAt: new Date(),
 			updatedAt: new Date()
-		};
-
-		const db = await getDb();
-		await db.collection('moodEntries').insertOne(newEntry);
+		});
 
 		const showWarning = mood < 5;
 
