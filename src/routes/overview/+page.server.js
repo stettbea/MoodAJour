@@ -1,81 +1,85 @@
+import { redirect } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db.js';
 
-// Defaultwerte für Einstellungen
 const DEFAULT_CATEGORIES = ['Arbeit', 'Freizeit', 'Familie', 'Gesundheit'];
 const DEFAULT_PERSONS = ['Freund', 'Familie', 'Kollege', 'Partner'];
 
-// Load-Funktion: Lädt gefilterte Mood-Einträge und Einstellungen aus MongoDB
-export async function load({ url }) {
-  const params = url.searchParams;
-  const query = { userId: 'demo-user' };
+export async function load({ url, locals }) {
+	if (!locals.user) {
+		throw redirect(303, '/login');
+	}
 
-  const filters = {
-    title: params.get('title') ?? '',
-    category: params.get('category') ?? '',
-    mood: params.get('mood') ?? '',
-    persons: params.get('persons') ?? '',
-    day: params.get('day') ?? '',
-    month: params.get('month') ?? '',
-    year: params.get('year') ?? ''
-  };
+	const params = url.searchParams;
+	const query = { userId: locals.user.id };
 
-  if (filters.title) {
-    query.title = { $regex: filters.title, $options: 'i' };
-  }
+	const filters = {
+		title: params.get('title') ?? '',
+		category: params.get('category') ?? '',
+		mood: params.get('mood') ?? '',
+		persons: params.get('persons') ?? '',
+		day: params.get('day') ?? '',
+		month: params.get('month') ?? '',
+		year: params.get('year') ?? ''
+	};
 
-  if (filters.persons) {
-    query.persons = { $regex: filters.persons, $options: 'i' };
-  }
+	if (filters.title) {
+		query.title = { $regex: filters.title, $options: 'i' };
+	}
 
-  if (filters.category) {
-    query.category = filters.category;
-  }
+	if (filters.persons) {
+		query.persons = { $regex: filters.persons, $options: 'i' };
+	}
 
-  if (filters.mood) {
-    const moodValue = Number(filters.mood);
-    if (!Number.isNaN(moodValue)) {
-      query.mood = moodValue;
-    }
-  }
+	if (filters.category) {
+		query.category = filters.category;
+	}
 
-  if (filters.day || filters.month || filters.year) {
-    const year = filters.year || '\\d{4}';
-    const month = filters.month ? String(filters.month).padStart(2, '0') : '\\d{2}';
-    const day = filters.day ? String(filters.day).padStart(2, '0') : '\\d{2}';
-    const datePattern = `^${year}-${month}-${day}`;
-    query.date = { $regex: new RegExp(datePattern) };
-  }
+	if (filters.mood) {
+		const moodValue = Number(filters.mood);
+		if (!Number.isNaN(moodValue)) {
+			query.mood = moodValue;
+		}
+	}
 
-  const db = await getDb();
-  const entries = await db.collection('moodEntries')
-    .find(query)
-    .sort({ createdAt: -1 })
-    .toArray();
+	if (filters.day || filters.month || filters.year) {
+		const year = filters.year || '\\d{4}';
+		const month = filters.month ? String(filters.month).padStart(2, '0') : '\\d{2}';
+		const day = filters.day ? String(filters.day).padStart(2, '0') : '\\d{2}';
+		const datePattern = `^${year}-${month}-${day}`;
+		query.date = { $regex: new RegExp(datePattern) };
+	}
 
-  // Lade Benutzer-Einstellungen (Kategorien und Personen)
-  let settings = await db.collection('userSettings').findOne({
-    userId: 'demo-user'
-  });
+	const db = await getDb();
 
-  if (!settings) {
-    settings = {
-      categories: DEFAULT_CATEGORIES,
-      persons: DEFAULT_PERSONS
-    };
-  }
+	const entries = await db
+		.collection('moodEntries')
+		.find(query)
+		.sort({ createdAt: -1 })
+		.toArray();
 
-  return {
-    entries: entries.map(entry => ({
-      id: entry._id.toString(),
-      title: entry.title,
-      date: entry.date,
-      persons: entry.persons,
-      category: entry.category,
-      mood: entry.mood,
-      description: entry.description
-    })),
-    filters,
-    categories: settings.categories || DEFAULT_CATEGORIES,
-    persons: settings.persons || DEFAULT_PERSONS
-  };
+	let settings = await db.collection('userSettings').findOne({
+		userId: locals.user.id
+	});
+
+	if (!settings) {
+		settings = {
+			categories: DEFAULT_CATEGORIES,
+			persons: DEFAULT_PERSONS
+		};
+	}
+
+	return {
+		entries: entries.map((entry) => ({
+			id: entry._id.toString(),
+			title: entry.title,
+			date: entry.date,
+			persons: entry.persons,
+			category: entry.category,
+			mood: entry.mood,
+			description: entry.description
+		})),
+		filters,
+		categories: settings.categories || DEFAULT_CATEGORIES,
+		persons: settings.persons || DEFAULT_PERSONS
+	};
 }
