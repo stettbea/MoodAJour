@@ -200,9 +200,4 @@
 		text-align: center;
 	}
 
-	a {
-		color: #7d4ec9;
-		font-weight: 700;
-		text-decoration: none;
-	}
 </style>
