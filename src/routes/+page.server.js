@@ -46,7 +46,7 @@ export async function load({ locals }) {
 
 // Actions: Verarbeitet das Formular zum Speichern eines neuen Eintrags
 export const actions = {
-	default: async ({ request, locals }) => {
+	create: async ({ request, locals }) => {
 		if (!locals.user) {
 			throw redirect(303, '/login');
 		}
