@@ -33,7 +33,7 @@ export async function load({ params, locals }) {
 		entry: {
 			id: entry._id.toString(),
 			title: entry.title,
-			date: entry.date,
+			date: entry.date ? entry.date.split('T')[0] : '',
 			persons: entry.persons,
 			category: entry.category,
 			mood: entry.mood,

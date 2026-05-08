@@ -39,13 +39,6 @@
 		persons = persons.filter((_, i) => i !== index);
 	}
 
-	function updateCategory(index, value) {
-		categories[index] = value;
-	}
-
-	function updatePerson(index, value) {
-		persons[index] = value;
-	}
 </script>
 
 <main class="settings-page">
@@ -82,10 +75,9 @@
 								<input
 									type="text"
 									name="category"
-									value={category}
-									onchange={(e) => updateCategory(index, e.target.value)}
+									bind:value={categories[index]}
 									placeholder="z. B. Arbeit"
-									disabled={used}
+									readonly={used}
 									required
 								/>
 								<button
@@ -120,10 +112,9 @@
 								<input
 									type="text"
 									name="person"
-									value={person}
-									onchange={(e) => updatePerson(index, e.target.value)}
+									bind:value={persons[index]}
 									placeholder="z. B. Freund"
-									disabled={used}
+									readonly={used}
 									required
 								/>
 								<button
@@ -269,7 +260,8 @@
 		min-height: 44px;
 	}
 
-	.item-row.used input {
+	.item-row.used input,
+	.item-row input[readonly] {
 		background: #f5f0ff;
 		border-color: #e6e0f4;
 		color: #9b8bb5;

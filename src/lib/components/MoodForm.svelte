@@ -9,6 +9,12 @@
 
 	let moodValue = $state(Number(values.mood ?? 5));
 
+	// Extrahiert nur den Datumsteil (YYYY-MM-DD) aus datetime-local oder date Strings
+	function toDateValue(raw) {
+		if (!raw) return new Date().toISOString().split('T')[0];
+		return raw.split('T')[0];
+	}
+
 	const moodLabel = $derived(
 		moodValue <= 2 ? 'Sehr schlecht' :
 		moodValue <= 4 ? 'Eher schlecht' :
@@ -32,7 +38,10 @@
 
 		<label>
 			<span class="label-text">Wann?</span>
-			<input type="datetime-local" name="date" required value={values.date ?? ''} />
+			<div class="date-wrapper">
+				<input type="date" name="date" required value={toDateValue(values.date)} />
+				<span class="date-icon" aria-hidden="true">📅</span>
+			</div>
 		</label>
 	</div>
 
@@ -74,9 +83,9 @@
 			bind:value={moodValue}
 		/>
 		<div class="range-labels">
-			<span>1</span>
-			<span>5</span>
-			<span>10</span>
+			<span class="label-start">1</span>
+			<span class="label-mid">5</span>
+			<span class="label-end">10</span>
 		</div>
 	</div>
 
@@ -119,8 +128,37 @@
 		color: #9b8bb5;
 	}
 
+	.date-wrapper {
+		position: relative;
+		display: flex;
+		align-items: center;
+	}
+
+	.date-wrapper input[type='date'] {
+		flex: 1;
+		padding-right: 40px;
+		cursor: pointer;
+	}
+
+	.date-wrapper input[type='date']::-webkit-calendar-picker-indicator {
+		opacity: 0;
+		position: absolute;
+		right: 0;
+		width: 40px;
+		height: 100%;
+		cursor: pointer;
+	}
+
+	.date-icon {
+		position: absolute;
+		right: 14px;
+		font-size: 1rem;
+		pointer-events: none;
+		line-height: 1;
+	}
+
 	input[type='text'],
-	input[type='datetime-local'],
+	input[type='date'],
 	select,
 	textarea {
 		padding: 12px 14px;
@@ -205,11 +243,33 @@
 	}
 
 	.range-labels {
-		display: flex;
-		justify-content: space-between;
+		position: relative;
+		height: 16px;
+		margin-top: 2px;
 		font-size: 0.75rem;
 		color: #9b8bb5;
-		padding: 0 2px;
+	}
+
+	.range-labels span {
+		position: absolute;
+		transform: translateX(-50%);
+	}
+
+	/* Wert 1 → 0/9 = 0 % des Sliders */
+	.label-start {
+		left: 0%;
+		transform: none;
+	}
+
+	/* Wert 5 → 4/9 ≈ 44.44 % des Sliders */
+	.label-mid {
+		left: 44.44%;
+	}
+
+	/* Wert 10 → 9/9 = 100 % des Sliders */
+	.label-end {
+		right: 0%;
+		transform: none;
 	}
 
 	button[type='submit'] {

@@ -5,12 +5,14 @@
 	function formatDate(dateStr) {
 		if (!dateStr) return '—';
 		try {
+			// Nur den Datumsteil verwenden, um Timezone-Verschiebungen zu vermeiden
+			const [year, month, day] = dateStr.split('T')[0].split('-').map(Number);
 			return new Intl.DateTimeFormat('de-CH', {
 				weekday: 'short',
 				day: '2-digit',
 				month: '2-digit',
 				year: 'numeric'
-			}).format(new Date(dateStr));
+			}).format(new Date(year, month - 1, day));
 		} catch {
 			return dateStr;
 		}
