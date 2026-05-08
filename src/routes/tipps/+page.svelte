@@ -19,10 +19,10 @@
 </script>
 
 <main class="tips-page">
-	<section class="intro">
+	<div class="page-header">
 		<h1>Tipps</h1>
 		<p>Kurze Impulse für belastende Situationen</p>
-	</section>
+	</div>
 
 	<section class="tips-list">
 		{#each tips as tip}
@@ -30,46 +30,47 @@
 		{/each}
 	</section>
 
-	<p class="disclaimer">
-		Diese Tipps ersetzen keine professionelle Unterstützung.
-	</p>
+	<p class="disclaimer">Diese Tipps ersetzen keine professionelle Unterstützung.</p>
 
 	<HelpBox />
 </main>
 
 <style>
 	.tips-page {
-		padding: 20px;
+		padding: 16px 16px 40px;
+		display: flex;
+		flex-direction: column;
+		gap: 0;
 	}
 
-	.intro {
+	.page-header {
 		margin-bottom: 20px;
 	}
 
 	h1 {
-		margin: 0 0 8px;
-		font-size: 1.7rem;
+		margin: 0 0 6px;
+		font-size: 1.4rem;
 		font-weight: 700;
 		color: #20182f;
 	}
 
-	.intro p {
+	.page-header p {
 		margin: 0;
 		color: #6b5a7a;
-		line-height: 1.5;
-		font-size: 0.95rem;
+		font-size: 0.9rem;
 	}
 
 	.tips-list {
 		display: flex;
 		flex-direction: column;
-		gap: 14px;
+		gap: 12px;
+		margin-bottom: 24px;
 	}
 
 	.disclaimer {
-		margin: 28px 0 20px;
-		color: #6b5a7a;
-		font-size: 0.9rem;
+		margin: 0 0 4px;
+		color: #9b8bb5;
+		font-size: 0.825rem;
 		line-height: 1.5;
 	}
 </style>

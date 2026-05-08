@@ -6,24 +6,39 @@
 		persons = [],
 		formAction = '?/create'
 	} = $props();
+
+	let moodValue = $state(Number(values.mood ?? 5));
+
+	const moodLabel = $derived(
+		moodValue <= 2 ? 'Sehr schlecht' :
+		moodValue <= 4 ? 'Eher schlecht' :
+		moodValue <= 6 ? 'Okay' :
+		moodValue <= 8 ? 'Gut' : 'Sehr gut'
+	);
+
+	const moodColor = $derived(
+		moodValue <= 3 ? '#c0392b' :
+		moodValue <= 5 ? '#e67e22' :
+		moodValue <= 7 ? '#2980b9' : '#27ae60'
+	);
 </script>
 
 <form method="POST" action={formAction} class="mood-form">
 	<div class="field-pair">
 		<label>
-			Was?
-			<input type="text" name="title" required value={values.title ?? ''} />
+			<span class="label-text">Was?</span>
+			<input type="text" name="title" required value={values.title ?? ''} placeholder="z. B. Stress im Meeting" />
 		</label>
 
 		<label>
-			Wann?
+			<span class="label-text">Wann?</span>
 			<input type="datetime-local" name="date" required value={values.date ?? ''} />
 		</label>
 	</div>
 
 	<div class="field-pair">
 		<label>
-			Person
+			<span class="label-text">Person</span>
 			<select name="persons">
 				<option value="">Bitte wählen</option>
 				{#each persons as person}
@@ -33,7 +48,7 @@
 		</label>
 
 		<label>
-			Kategorie
+			<span class="label-text">Kategorie</span>
 			<select name="category">
 				<option value="">Bitte wählen</option>
 				{#each categories as category}
@@ -43,16 +58,31 @@
 		</label>
 	</div>
 
-	<div class="range-row">
-		<span>Stimmungsskala</span>
-		<span>1–10</span>
+	<div class="mood-section">
+		<div class="mood-header">
+			<span class="label-text">Stimmung</span>
+			<span class="mood-badge" style="background: {moodColor}">
+				{moodValue}/10 · {moodLabel}
+			</span>
+		</div>
+		<input
+			class="range-input"
+			type="range"
+			name="mood"
+			min="1"
+			max="10"
+			bind:value={moodValue}
+		/>
+		<div class="range-labels">
+			<span>1</span>
+			<span>5</span>
+			<span>10</span>
+		</div>
 	</div>
 
-	<input class="range-input" type="range" name="mood" min="1" max="10" value={values.mood ?? 5} />
-
 	<label>
-		Beschreibung
-		<textarea name="description">{values.description ?? ''}</textarea>
+		<span class="label-text">Beschreibung <span class="optional">(optional)</span></span>
+		<textarea name="description" placeholder="Was ist passiert? Wie hast du dich gefühlt?">{values.description ?? ''}</textarea>
 	</label>
 
 	<button type="submit">{buttonText}</button>
@@ -63,66 +93,153 @@
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
-		padding: 22px;
+		padding: 20px;
 	}
 
 	.field-pair {
 		display: grid;
+		grid-template-columns: 1fr 1fr;
 		gap: 12px;
 	}
 
 	label {
 		display: flex;
 		flex-direction: column;
-		font-weight: 600;
-		color: #2c2c3a;
+		gap: 6px;
 	}
 
-	input,
+	.label-text {
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: #4c407d;
+	}
+
+	.optional {
+		font-weight: 400;
+		color: #9b8bb5;
+	}
+
+	input[type='text'],
+	input[type='datetime-local'],
 	select,
 	textarea {
-		margin-top: 8px;
-		padding: 14px;
-		border: 1px solid #e6e0f4;
-		border-radius: 16px;
-		font-size: 15px;
-		background: #faf7ff;
+		padding: 12px 14px;
+		border: 1.5px solid #e6e0f4;
+		border-radius: 12px;
+		font-size: 0.95rem;
+		background: white;
+		color: #2c2c3a;
+		width: 100%;
+		transition: border-color 0.15s;
+		-webkit-appearance: none;
+	}
+
+	input:focus,
+	select:focus,
+	textarea:focus {
+		outline: none;
+		border-color: #7d4ec9;
+		box-shadow: 0 0 0 3px rgba(125, 78, 201, 0.1);
 	}
 
 	textarea {
 		resize: vertical;
-		min-height: 100px;
+		min-height: 96px;
+		font-family: inherit;
 	}
 
-	.range-row {
+	.mood-section {
 		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.mood-header {
+		display: flex;
+		align-items: center;
 		justify-content: space-between;
+		gap: 12px;
+	}
+
+	.mood-badge {
+		padding: 4px 10px;
+		border-radius: 20px;
+		color: white;
+		font-size: 0.8rem;
 		font-weight: 700;
-		color: #4c407d;
+		white-space: nowrap;
+		transition: background 0.2s;
 	}
 
 	.range-input {
 		width: 100%;
-		margin-top: 6px;
+		height: 6px;
+		-webkit-appearance: none;
+		appearance: none;
+		background: #e6e0f4;
+		border-radius: 3px;
+		cursor: pointer;
+		padding: 0;
+		border: none;
 	}
 
-	button {
-		padding: 14px;
+	.range-input::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		background: #7d4ec9;
+		cursor: pointer;
+		box-shadow: 0 2px 6px rgba(125, 78, 201, 0.4);
+		border: 2px solid white;
+	}
+
+	.range-input::-moz-range-thumb {
+		width: 24px;
+		height: 24px;
+		border-radius: 50%;
+		background: #7d4ec9;
+		cursor: pointer;
+		border: 2px solid white;
+		box-shadow: 0 2px 6px rgba(125, 78, 201, 0.4);
+	}
+
+	.range-labels {
+		display: flex;
+		justify-content: space-between;
+		font-size: 0.75rem;
+		color: #9b8bb5;
+		padding: 0 2px;
+	}
+
+	button[type='submit'] {
+		padding: 15px;
 		background: #7d4ec9;
 		color: white;
 		border: none;
-		border-radius: 16px;
+		border-radius: 14px;
 		font-weight: 700;
+		font-size: 1rem;
 		cursor: pointer;
+		min-height: 52px;
+		transition: background 0.15s;
 	}
 
-	button:hover {
+	button[type='submit']:hover {
 		background: #6940b4;
 	}
 
-	@media (min-width: 520px) {
+	button[type='submit']:active {
+		background: #5c3399;
+	}
+
+	@media (max-width: 360px) {
 		.field-pair {
-			grid-template-columns: 1fr 1fr;
+			grid-template-columns: 1fr;
+		}
+
+		.mood-form {
+			padding: 16px;
 		}
 	}
 </style>

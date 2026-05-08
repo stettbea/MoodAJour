@@ -1,22 +1,56 @@
 <script>
 	let { entry, redirectTo = '/' } = $props();
 	let showDeleteModal = $state(false);
+
+	function formatDate(dateStr) {
+		if (!dateStr) return '—';
+		try {
+			return new Intl.DateTimeFormat('de-CH', {
+				weekday: 'short',
+				day: '2-digit',
+				month: '2-digit',
+				year: 'numeric'
+			}).format(new Date(dateStr));
+		} catch {
+			return dateStr;
+		}
+	}
+
+	function moodBg(mood) {
+		if (mood <= 3) return '#c0392b';
+		if (mood <= 5) return '#e67e22';
+		if (mood <= 7) return '#2980b9';
+		return '#27ae60';
+	}
 </script>
 
 <div class="entry-card">
 	<div class="entry-top">
 		<h3>{entry.title || 'Unbekannt'}</h3>
-		<div class="mood-badge">{entry.mood || 5}</div>
+		<div class="mood-badge" style="background: {moodBg(entry.mood)}">
+			{entry.mood ?? 5}/10
+		</div>
 	</div>
+
 	<div class="entry-meta">
-		<span>{entry.date || 'Unbekannt'}</span>
-		<span>{entry.category || 'Unbekannt'}</span>
-		<span>{entry.persons ? entry.persons : 'Personen: -'}</span>
+		{#if entry.date}
+			<span class="meta-item">📅 {formatDate(entry.date)}</span>
+		{/if}
+		{#if entry.category}
+			<span class="meta-item">🏷 {entry.category}</span>
+		{/if}
+		{#if entry.persons}
+			<span class="meta-item">👤 {entry.persons}</span>
+		{/if}
 	</div>
-	<p>{entry.description || 'Keine Beschreibung'}</p>
+
+	{#if entry.description}
+		<p class="description">{entry.description}</p>
+	{/if}
+
 	<div class="actions">
-		<a href="/entries/{entry.id}/edit" class="action-btn">Bearbeiten</a>
-		<button type="button" class="action-btn delete-btn" onclick={() => (showDeleteModal = true)}>
+		<a href="/entries/{entry.id}/edit" class="btn btn-secondary">Bearbeiten</a>
+		<button type="button" class="btn btn-danger" onclick={() => (showDeleteModal = true)}>
 			Löschen
 		</button>
 	</div>
@@ -25,19 +59,21 @@
 {#if showDeleteModal}
 	<div class="modal-overlay" onclick={() => (showDeleteModal = false)}>
 		<div class="modal" onclick={(e) => e.stopPropagation()}>
-			<button class="close-button" onclick={() => (showDeleteModal = false)}>&times;</button>
+			<button class="close-button" onclick={() => (showDeleteModal = false)} aria-label="Schliessen">
+				&times;
+			</button>
 			<h2>Eintrag löschen?</h2>
 			<p>
 				Bist du sicher, dass du diesen Eintrag löschen möchtest?<br />
 				Diese Aktion kann nicht rückgängig gemacht werden.
 			</p>
 			<div class="modal-actions">
-				<button type="button" class="btn-cancel" onclick={() => (showDeleteModal = false)}>
+				<button type="button" class="btn btn-secondary" onclick={() => (showDeleteModal = false)}>
 					Abbrechen
 				</button>
 				<form method="POST" action="/entries/{entry.id}/delete">
 					<input type="hidden" name="redirectTo" value={redirectTo} />
-					<button type="submit" class="btn-delete">Löschen</button>
+					<button type="submit" class="btn btn-delete">Löschen</button>
 				</form>
 			</div>
 		</div>
@@ -46,82 +82,100 @@
 
 <style>
 	.entry-card {
-		padding: 18px;
+		padding: 16px 20px;
 		background: #faf7ff;
-		border: 1px solid #ece6f2;
-		border-radius: 20px;
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+		border: 1px solid #e6e0f4;
+		border-radius: 16px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 	}
 
 	.entry-top {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
+		align-items: flex-start;
 		gap: 12px;
+		margin-bottom: 10px;
 	}
 
 	h3 {
 		margin: 0;
 		font-size: 1rem;
-		color: #2c2c3a;
+		font-weight: 700;
+		color: #20182f;
+		line-height: 1.35;
 	}
 
 	.mood-badge {
-		min-width: 42px;
-		padding: 10px 12px;
-		border-radius: 14px;
-		background: #7d4ec9;
+		flex-shrink: 0;
+		padding: 5px 10px;
+		border-radius: 10px;
 		color: white;
 		font-weight: 700;
-		text-align: center;
+		font-size: 0.8rem;
+		white-space: nowrap;
 	}
 
 	.entry-meta {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 12px;
-		font-size: 0.9rem;
-		color: #5e4e8b;
-		margin: 10px 0;
+		gap: 6px;
+		margin-bottom: 10px;
 	}
 
-	p {
-		margin: 0;
-		color: #2c2c3a;
-		line-height: 1.6;
+	.meta-item {
+		font-size: 0.8rem;
+		color: #6b5a7a;
+		background: #f0ebfa;
+		padding: 3px 8px;
+		border-radius: 6px;
+		white-space: nowrap;
+	}
+
+	.description {
+		margin: 0 0 14px;
+		font-size: 0.9rem;
+		color: #4c407d;
+		line-height: 1.5;
 	}
 
 	.actions {
-		margin-top: 14px;
 		display: flex;
 		gap: 10px;
 	}
 
-	.action-btn {
+	.btn {
 		flex: 1;
-		padding: 12px 14px;
-		background: white;
-		color: #4c407d;
-		border: 1px solid #dcd1f7;
-		border-radius: 14px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 44px;
+		padding: 0 16px;
+		border-radius: 12px;
+		font-weight: 600;
+		font-size: 0.9rem;
 		cursor: pointer;
-		font-weight: 700;
 		text-decoration: none;
-		text-align: center;
-		display: block;
-		font-size: 1rem;
+		border: 1.5px solid transparent;
+		transition: background 0.15s;
 	}
 
-	.action-btn:hover {
+	.btn-secondary {
+		background: white;
+		color: #4c407d;
+		border-color: #dcd1f7;
+	}
+
+	.btn-secondary:hover {
 		background: #f3ebfb;
 	}
 
-	.delete-btn {
+	.btn-danger {
+		background: white;
 		color: #c0392b;
-		border-color: #f3b6b6;
+		border-color: #f5c2c7;
 	}
 
-	.delete-btn:hover {
+	.btn-danger:hover {
 		background: #fdecea;
 	}
 
@@ -132,41 +186,47 @@
 		background: rgba(0, 0, 0, 0.45);
 		display: flex;
 		justify-content: center;
-		align-items: center;
+		align-items: flex-end;
 		z-index: 1000;
-		padding: 20px;
+		padding: 0;
 	}
 
 	.modal {
 		background: white;
-		border-radius: 22px;
-		padding: 28px 24px 24px;
-		width: min(100%, 390px);
+		border-radius: 20px 20px 0 0;
+		padding: 28px 24px 36px;
+		width: 100%;
+		max-width: 430px;
 		position: relative;
-		box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+		box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.15);
 	}
 
 	.close-button {
 		position: absolute;
-		top: 14px;
+		top: 16px;
 		right: 16px;
-		background: none;
+		background: #f0ebfa;
 		border: none;
-		font-size: 1.5rem;
+		width: 32px;
+		height: 32px;
+		border-radius: 50%;
+		font-size: 1.2rem;
 		cursor: pointer;
 		color: #6b5a7a;
-		padding: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		line-height: 1;
 	}
 
 	h2 {
-		margin: 0 0 12px;
-		font-size: 1.3rem;
+		margin: 0 0 10px;
+		font-size: 1.25rem;
 		color: #20182f;
 	}
 
 	.modal p {
-		color: #4c407d;
+		color: #6b5a7a;
 		font-size: 0.95rem;
 		line-height: 1.55;
 		margin: 0 0 24px;
@@ -181,35 +241,24 @@
 		flex: 1;
 	}
 
-	.btn-cancel,
 	.btn-delete {
 		width: 100%;
-		padding: 14px;
-		border-radius: 16px;
+		min-height: 48px;
+		border-radius: 12px;
 		font-weight: 700;
-		font-size: 1rem;
+		font-size: 0.95rem;
 		cursor: pointer;
-		border: 1px solid #d9c8f3;
-	}
-
-	.btn-cancel {
-		background: white;
-		color: #2c2c3a;
-		flex: 1;
-	}
-
-	.btn-cancel:hover {
-		background: #f3ebfb;
-	}
-
-	.btn-delete {
 		background: #20182f;
 		color: white;
-		border-color: #20182f;
+		border: none;
+		transition: background 0.15s;
 	}
 
 	.btn-delete:hover {
 		background: #c0392b;
-		border-color: #c0392b;
+	}
+
+	.modal-actions .btn-secondary {
+		min-height: 48px;
 	}
 </style>

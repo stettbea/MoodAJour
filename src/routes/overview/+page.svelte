@@ -6,41 +6,39 @@
 </script>
 
 <main class="overview-page">
-	<FilterBar
-		filters={data.filters}
-		categories={data.categories}
-		persons={data.persons}
-	/>
+	<FilterBar filters={data.filters} categories={data.categories} persons={data.persons} />
 
-	<section class="entries-list">
-		{#if data.entries.length === 0}
-			<p class="empty-state">Keine Einträge gefunden. Entferne die Filter oder füge neue Einträge hinzu.</p>
-		{:else}
+	{#if data.entries.length === 0}
+		<p class="empty-state">Keine Einträge gefunden. Filter entfernen oder neuen Eintrag erstellen.</p>
+	{:else}
+		<div class="entries-list">
 			{#each data.entries as entry}
 				<EntryCard {entry} redirectTo="/overview" />
 			{/each}
-		{/if}
-	</section>
+		</div>
+	{/if}
 </main>
 
 <style>
 	.overview-page {
-		width: min(100%, 430px);
-		margin: 0 auto;
-		padding: 20px 0 40px;
+		padding: 16px 16px 40px;
 	}
 
 	.entries-list {
-		display: grid;
-		gap: 16px;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
 	}
 
 	.empty-state {
-		padding: 18px;
-		background: #f5f0ff;
-		border: 1px solid #e9e0ff;
-		border-radius: 22px;
-		color: #5f4f8a;
+		margin: 0;
+		padding: 28px 20px;
+		background: #f6f1ff;
+		border: 1px solid #e6e0f4;
+		border-radius: 16px;
+		color: #6b5a7a;
+		font-size: 0.9rem;
 		text-align: center;
+		line-height: 1.5;
 	}
 </style>

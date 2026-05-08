@@ -1,15 +1,15 @@
 <script>
-	import MoodForm from "$lib/components/MoodForm.svelte";
-	import WarningBox from "$lib/components/WarningBox.svelte";
-	import EntryCard from "$lib/components/EntryCard.svelte";
+	import MoodForm from '$lib/components/MoodForm.svelte';
+	import WarningBox from '$lib/components/WarningBox.svelte';
+	import EntryCard from '$lib/components/EntryCard.svelte';
 
 	let { data, form } = $props();
 </script>
 
 <main class="home-page">
-	<section class="form-card">
+	<section class="card">
 		<div class="card-header">
-			<h2>Neuer Mood-Eintrag erstellen</h2>
+			<h2>Neuer Eintrag</h2>
 		</div>
 		<MoodForm categories={data.categories} persons={data.persons} />
 	</section>
@@ -18,63 +18,84 @@
 		<WarningBox isVisible={true} />
 	{/if}
 
-	<section class="recent-entries">
-		<div class="recent-header">
-			<h3>Letzte Einträge</h3>
+	<section class="card">
+		<div class="card-header">
+			<h2>Letzte Einträge</h2>
+			<a href="/overview" class="header-link">Alle anzeigen →</a>
 		</div>
-		{#each data.entries as entry}
-			<EntryCard {entry} />
-		{/each}
+
+		{#if data.entries.length === 0}
+			<p class="empty-state">Noch keine Einträge. Erstelle deinen ersten Mood-Eintrag oben.</p>
+		{:else}
+			<div class="entries-list">
+				{#each data.entries as entry}
+					<EntryCard {entry} />
+				{/each}
+			</div>
+		{/if}
 	</section>
 </main>
 
 <style>
 	.home-page {
-		width: min(100%, 430px);
-		margin: 0 auto;
-		padding: 20px 0 40px;
+		padding: 16px 16px 40px;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
 	}
 
-	.form-card,
-	.recent-entries {
-		background: white;
-		border-radius: 24px;
-		box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-		margin: 0 16px 20px;
+	.card {
+		background: #faf7ff;
+		border: 1px solid #e6e0f4;
+		border-radius: 20px;
+		overflow: hidden;
 	}
 
 	.card-header {
-		padding: 20px 20px 0;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 16px 20px;
+		border-bottom: 1px solid #e6e0f4;
 	}
 
-	.card-header h2 {
+	h2 {
 		margin: 0;
-		font-size: 1.2rem;
-		color: #2c2c3a;
+		font-size: 1.05rem;
+		font-weight: 700;
+		color: #20182f;
 	}
 
-	.recent-header {
-		padding: 20px 20px 0;
+	.header-link {
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: #7d4ec9;
+		text-decoration: none;
 	}
 
-	.recent-header h3 {
+	.entries-list {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.entries-list :global(.entry-card) {
+		border-radius: 0;
+		border: none;
+		border-bottom: 1px solid #e6e0f4;
+		box-shadow: none;
+		background: transparent;
+	}
+
+	.entries-list :global(.entry-card:last-child) {
+		border-bottom: none;
+	}
+
+	.empty-state {
 		margin: 0;
-		font-size: 1rem;
-		color: #4c407d;
-	}
-
-	.recent-entries > :global(.entry-card) {
-		margin: 12px 20px 16px;
-	}
-
-	@media (max-width: 360px) {
-		.home-page {
-			padding: 16px 0 32px;
-		}
-
-		.form-card,
-		.recent-entries {
-			margin: 0 12px 18px;
-		}
+		padding: 28px 20px;
+		color: #9b8bb5;
+		font-size: 0.9rem;
+		text-align: center;
+		line-height: 1.5;
 	}
 </style>
