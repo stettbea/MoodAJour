@@ -30,6 +30,7 @@ export async function load({ locals }) {
 	}
 
 	return {
+		username: locals.user.username,
 		entries: entries.map((entry) => ({
 			id: entry._id.toString(),
 			title: entry.title,

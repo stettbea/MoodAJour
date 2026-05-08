@@ -7,6 +7,11 @@
 </script>
 
 <main class="home-page">
+	<div class="greeting">
+		<h1>Hallo, <span class="username">{data.username}</span> 👋</h1>
+		<p>Wie geht es dir heute?</p>
+	</div>
+
 	<section class="card">
 		<div class="card-header">
 			<h2>Neuer Eintrag</h2>
@@ -42,6 +47,23 @@
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
+	}
+
+	.greeting h1 {
+		margin: 0 0 4px;
+		font-size: 1.4rem;
+		font-weight: 700;
+		color: #20182f;
+	}
+
+	.username {
+		color: #7d4ec9;
+	}
+
+	.greeting p {
+		margin: 0;
+		font-size: 0.95rem;
+		color: #6b5a7a;
 	}
 
 	.card {
