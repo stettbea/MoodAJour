@@ -111,12 +111,42 @@ Der Prototyp enthält einen einfachen Login- und Registrationsprozess mit klarer
 
 #### 3.4.2. Umsetzung (Technik)
 Fasst die technische Realisierung zusammen.
-- **Technologie-Stack:** _[SvelteKit, Bibliotheken falls genutzt]_
-- **Tooling:** _[IDE/Erweiterungen, lokale/Cloud-Tools; den Einsatz von KI beschreiben Sie im Kapitel **KI-Deklaration**]_  
-- **Struktur & Komponenten:** _[Seiten, Routen, State/Stores, wichtige Komponenten]_
-- **Daten & Schnittstellen:** _[Wie werden Daten gespeichert, verwaltet, abgerufen?]_
-- **Deployment:** _[URL]_  
-- **Besondere Entscheidungen:** _[z. B. Trade-offs, Vereinfachungen]_  
+- **Technologie-Stack:**
+  - **SvelteKit 2** mit **Svelte 5** (Runes Mode) als Frontend-Framework
+  - **Vite** als Build-Tool und Dev-Server
+  - **MongoDB Atlas** (Cloud) als Datenbank, angebunden über den offiziellen MongoDB Node.js-Treiber
+  - **adapter-auto** für das Deployment (erkennt die Plattform automatisch)
+  - Kein CSS-Framework; reines CSS mit mobilem Layout (Flexbox, Grid)
+  - Keine externe Icon-Library; Emojis für die Stimmungsvisualisierung
+
+- **Tooling:** Visual Studio Code als Entwicklungsumgebung; Vite Dev-Server für lokale Entwicklung; MongoDB Atlas als Cloud-Datenbank-Service; den Einsatz von KI ist im Kapitel **KI-Deklaration** beschrieben.
+
+- **Struktur & Komponenten:**
+  - **Routen (src/routes/):**
+    - `/` (Home): Neuen Moodeintrag erfassen, letzte 3 Einträge anzeigen
+    - `/overview`: Alle Einträge mit Filterung nach Titel, Kategorie, Stimmung, Person und Datum
+    - `/entries/[id]/edit`: Einzelnen Eintrag bearbeiten
+    - `/entries/[id]/delete`: Einzelnen Eintrag löschen
+    - `/tipps`: Reflexionsimpulse, Soforthilfe-Hinweise und Disclaimer
+    - `/settings`: Kategorien und Personen verwalten
+    - `/login` und `/logout`: Authentifizierung (Login und Registrierung)
+  - **Wichtige Komponenten (src/lib/components/):**
+    - `MoodForm.svelte`: Wiederverwendbares Formular zur Erfassung und Bearbeitung von Einträgen (Titel, Datum, Person, Kategorie, Stimmungsskala 1-10, Beschreibung)
+    - `EntryCard.svelte`: Darstellung eines einzelnen Eintrags mit Stimmungs-Badge, Metadaten und Aktionen (Bearbeiten, Löschen)
+    - `FilterBar.svelte`: Ausklappbare Filterleiste mit Zähler für aktive Filter
+    - `WarningBox.svelte`: Warnhinweis bei Stimmungswerten unter 5, mit Link zur Tipps-Seite
+    - `HelpBox.svelte`: Anzeige von Schweizer Krisentelefon-Nummern
+    - `TipCard.svelte`: Darstellung einzelner Reflexionstipps mit Icon, Farbe und Beschreibung
+  - **State-Management:** Kein separates Store-System; Reaktivität über native Svelte-5-Runes (`$state`, `$derived`, `$props`)
+
+- **Daten & Schnittstellen:** Alle Daten werden in einer **MongoDB Atlas Cloud-Datenbank** (Datenbankname: `moodajour`) gespeichert. Es gibt drei Collections: `users` (Nutzerdaten), `moodEntries` (Mood-Einträge mit Feldern wie Stimmungswert, Kategorie, Person, Beschreibung) und `userSettings` (individuelle Kategorien und Personen je Nutzerin). Die Authentifizierung erfolgt über ein `userId`-Cookie (httpOnly, 7 Tage Laufzeit), das serverseitig in `hooks.server.js` validiert wird. Alle Datenoperationen laufen über SvelteKit Form Actions in den jeweiligen `+page.server.js`-Dateien; es gibt keine separate REST-API.
+
+- **Deployment:** _[URL folgt nach Deployment einfügen]_
+
+- **Besondere Entscheidungen:**
+  - **Wiederverwendbare Komponenten:** Die UI wurde konsequent in eigenständige Komponenten aufgeteilt (z.B. `MoodForm.svelte`, `EntryCard.svelte`, `FilterBar.svelte`). Dies ermöglicht eine klare Trennung der Verantwortlichkeiten und erleichtert die Wartbarkeit, da Änderungen an einem Element nicht mehrfach vorgenommen werden müssen.
+  - **Form Actions statt API-Routen:** Alle Datenbankoperationen laufen über SvelteKit Form Actions (serverseitig), was keine separate API-Schicht erfordert und die Architektur einfach hält.
+  - **Passwörter im Klartext:** Im Rahmen des Prototypen wurde auf Passwort-Hashing verzichtet. Für eine produktive Version wäre dies zwingend nachzurüsten.
 
 ### 3.5 Validate
 - **URL der getesteten Version** (separat deployt)
@@ -126,7 +156,7 @@ Fasst die technische Realisierung zusammen.
 - **Aufgaben/Szenarien:** _[Ausformulierte Testaufgaben]_  
 - **Kennzahlen & Beobachtungen:** _[z. B. Erfolgsquote, Zeitbedarf, qualitative Findings]_  
 - **Zusammenfassung der Resultate:** _[Wichtigste Erkenntnisse; 2-4 Sätze]_  
-- **Abgeleitete Verbesserungen:** _[Anforderungen, die als nächstes umgesetzt werden sollten, priorisiert, kurz begründet; falls Verbesserungen im Prototyp konkret umgesetzt wurden: In Kap. 4 dokumentieren]_  
+- **Abgeleitete Verbesserungen:** Anforderung  _[Anforderungen, die als nächstes umgesetzt werden sollten, priorisiert, kurz begründet; falls Verbesserungen im Prototyp konkret umgesetzt wurden: In Kap. 4 dokumentieren]_  
 
 ## 4. Erweiterungen [Optional]
 Dokumentiert Erweiterungen über den Mindestumfang hinaus.
