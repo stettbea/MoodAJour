@@ -86,9 +86,28 @@ Die Durchführung erfolgt phasenbasiert; dokumentieren Sie die wichtigsten Ergeb
 #### 3.4.1. Entwurf (Design)
 Beschreibt die Gestaltung und Interaktion.
 > **Hinweis:** Hier wird der **Prototyp** beschrieben, nicht das **Mockup**.
-- **Informationsarchitektur:** _[z. B. Seiten/Navigation: Konzept, nicht die technische Umsetzung]_
-- **User Interface Design:** _[wichtige Screens: Screenshots mit kurzen Erläuterungen]_  
-- **Designentscheidungen:** _[zentrale Entscheidungen und Begründungen]_
+- **Informationsarchitektur:** Der Prototyp wurde als Mobile-First-Anwendung mit einer klaren Aufteilung in die drei Hauptbereiche „Home“, „Übersicht“ und „Tipps“ gestaltet. Die Navigation ermöglicht einen einfachen Wechsel zwischen den Bereichen und unterstützt eine intuitive Bedienung auf mobilen Geräten. Die Home-Seite dient als zentraler Einstiegspunkt zur schnellen Erfassung neuer Mood-Einträge. Die Übersichtsseite bündelt alle Einträge und bietet Funktionen zum Filtern, Bearbeiten und Löschen. Ergänzend enthält die Tipps-Seite Reflexionsimpulse sowie Hinweise für belastende Situationen. Die Struktur wurde bewusst einfach gehalten, damit Nutzer:innen ohne lange Einarbeitung mit der App interagieren können.
+- **User Interface Design:** 
+ - **Home-Seite:**
+Die Home-Seite fokussiert die schnelle Erfassung neuer Mood-Einträge. Eingabefelder, Stimmungsskala, Emojis und Kategorien sind übersichtlich angeordnet. Zusätzlich werden die letzten Einträge direkt angezeigt, um einen schnellen Überblick zu ermöglichen.
+ - **Übersichtsseite:**
+Die Übersicht zeigt alle gespeicherten Mood-Einträge in Form von strukturierten Cards. Nutzer:innen können Einträge filtern, öffnen, bearbeiten oder löschen. Für das Löschen wurde zusätzlich ein Bestätigungs-Modal integriert, um Fehlaktionen zu vermeiden.
+ - **Detailansicht:**
+Einzelne Mood-Einträge können geöffnet werden, damit alle Informationen wie Stimmung, Kategorie, beteiligte Personen und Notizen vollständig sichtbar sind.
+ - **Tipps-Seite:**
+Die Tipps-Seite enthält kurze Reflexionsimpulse und einfache Übungen zur Unterstützung im Alltag. Zusätzlich wurde ein kurzer Disclaimer integriert, der darauf hinweist, dass die App keine professionelle Hilfe ersetzt.
+ - **Login- und Registrationsseiten:**
+Der Prototyp enthält einen einfachen Login- und Registrationsprozess mit klarer Benutzerführung und mobilefreundlichen Formularen.
+- **Designentscheidungen:**
+- Mobile-First-Ansatz für eine einfache Nutzung auf Smartphones
+- Klare Trennung der Funktionen durch die drei Hauptbereiche
+- Reduziertes und ruhiges Design zur Unterstützung der Übersichtlichkeit
+- Einsatz von Emojis und Stimmungsskalen zur schnellen visuellen Erfassung der Stimmung
+- Verwendung von Cards für eine strukturierte Darstellung der Einträge
+- Einfache und intuitive Navigation ohne komplexe Untermenüs
+- Integration von Warnhinweisen und Tipps zur Unterstützung bei belastenden Situationen
+- Bestätigungs-Modal beim Löschen zur Vermeidung unbeabsichtigter Aktionen
+
 
 #### 3.4.2. Umsetzung (Technik)
 Fasst die technische Realisierung zusammen.
