@@ -10,6 +10,6 @@ export async function getDb() {
     client = new MongoClient(env.MONGODB_URI);
     await client.connect();
   }
-  db = client.db(env.MONGODB_DB);
+  db = client.db('moodajour');
   return db;
 }
