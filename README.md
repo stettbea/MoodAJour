@@ -54,17 +54,32 @@ Die Navigation erfolgt über eine Top Navigation Bar, die jederzeit erreichbar i
 Die Durchführung erfolgt phasenbasiert; dokumentieren Sie die wichtigsten Ergebnisse je Phase.
 
 ### 3.1 Understand & Define
-- **Zielgruppenverständnis:** _[Problemraumanalyse, Recherche, (Proto-)Personas]_
-- **Wesentliche Erkenntnisse:** _[Stichpunkte]_
+- **Zielgruppenverständnis:** Die Zielgruppe umfasst Studierende sowie junge Berufstätige im Alter von ca. 18 bis 35 Jahren, die unter hohem Leistungs- und Zeitdruck stehen. Die Problemraumanalyse zeigte, dass emotionale Reaktionen auf belastende Situationen wie Stress, Zeitdruck oder Konflikte im Alltag zwar häufig auftreten, aber selten systematisch festgehalten werden. Bestehende Apps wurden als zu komplex und zeitaufwendig bewertet, sodass sie im Alltag kaum konsequent genutzt werden.
+- **Wesentliche Erkenntnisse:**
+  - Emotionale Momente werden schnell vergessen oder verzerrt erinnert, wenn sie nicht direkt festgehalten werden
+  - Die Nutzung erfolgt spontan im Alltag, oft unterwegs oder zwischen Terminen, mit wenig Zeit und Aufmerksamkeit
+  - Viele bestehende Mood-Tracking-Apps sind funktionsreich, aber dadurch komplex und im Alltag schwer nutzbar
+  - Es besteht Potenzial für eine reduzierte Lösung mit Fokus auf schnelle Erfassung und klare Übersicht
+  - Wiederkehrende Muster in emotionalen Triggern sind für die Zielgruppe nur schwer erkennbar, weil eine strukturierte Übersicht fehlt
 
 ### 3.2 Sketch
-- **Variantenüberblick:** _[kurz]_
-- **Skizzen:** _[Mehrere Varianten; Unterschiede kurz dokumentieren.]_
+- **Variantenüberblick:** Im Rahmen der Crazy-8-Übung wurden verschiedene Ansätze für die Struktur und den Aufbau der Mood-Tracking-App skizziert. Der Fokus lag dabei auf einer einfachen mobilen Bedienung, einer klaren Navigation sowie einer übersichtlichen Darstellung der Mood-Einträge. Die Varianten unterschieden sich insbesondere in der Strukturierung der Inhalte, der Navigation sowie der Darstellung der Einträge und Zusatzfunktionen. Feedback aus der Übung wurde direkt in die Weiterentwicklung der Skizzen integriert.
+- **Skizzen:**
+  - **Variante A (Zentrale Eingabeseite):** Fokus auf eine schnelle Mood-Erfassung direkt auf der Startseite. Enthalten waren Eingabefelder für Titel, Beschreibung, Stimmungsskala und Kategorien. Zusätzlich wurden erste Ideen für die Anzeige letzter Einträge integriert. Vorteil dieser Variante war der schnelle Zugriff auf die Kernfunktion der App. Nachteil war die fehlende Trennung zwischen Eingabe und Verwaltung der Einträge.
+  - **Variante B (Übersichtsseite mit Verwaltung):** Diese Skizze konzentrierte sich auf eine strukturierte Übersicht aller Mood-Einträge. Ergänzt wurden Funktionen zum Filtern, Bearbeiten und Löschen der Einträge. Zudem wurden Kategorien, Emojis und eine Stimmungsskala von 1–10 ergänzt, um die Einträge verständlicher darzustellen. Feedback zur Übersichtlichkeit und Struktur wurde hier besonders berücksichtigt.
+  - **Variante C (Tipps- und Reflexionsbereich):** In dieser Variante wurde eine separate Tipps-Seite integriert. Die Seite enthielt erste Ideen für Reflexionsimpulse, kurze Übungen sowie Hinweise für belastende Situationen. Ziel war es, die App nicht nur als Erfassungstool, sondern zusätzlich als unterstützende Anwendung zur Selbstreflexion zu gestalten.
+  **Finale Skizze:** Die finale Lösung kombiniert die drei Hauptbereiche „Home“, „Übersicht“ und „Tipps“ in einer klar getrennten Struktur. Die Home-Seite ermöglicht die schnelle Erfassung neuer Mood-Einträge, während die Übersichtsseite gezielt für Verwaltung, Filterung und Bearbeitung genutzt wird. Ergänzend bietet die Tipps-Seite Reflexionshilfen und Soforthilfe-Hinweise. Das Feedback aus der Crazy-8-Übung führte insbesondere zu einer klareren Navigation, einer einheitlichen Inhaltsstruktur sowie einer besseren Übersichtlichkeit der Einträge.
 
 ### 3.3 Decide
-- **Gewählte Variante & Begründung:** _[Entscheidkriterien nennen]_  
-- **End-to-End-Ablauf:** _[Beschreibung inkl. User Journey Map]_  
-- **Mockup:** _[URL, z. B. Figma; Screenshots mit kurzen Beschreibungen]_  
+- **Gewählte Variante & Begründung:** Gewählt wurde die Variante mit den drei Hauptbereichen „Home“, „Übersicht“ und „Tipps“. Die Struktur ermöglicht eine klare Trennung der Funktionen und eine einfache Navigation innerhalb der App. Die Home-Seite fokussiert die schnelle Erfassung neuer Mood-Einträge, während die Übersichtsseite alle Einträge strukturiert darstellt und Funktionen wie Filtern, Bearbeiten und Löschen ermöglicht. Ergänzend bietet die Tipps-Seite kurze Reflexionsimpulse und Unterstützung für belastende Situationen. Das Feedback aus der Crazy-8-Übung bestätigte insbesondere die klare Aufteilung der Inhalte sowie die Ergänzung von Kategorien und Stimmungsskalen zur besseren Übersichtlichkeit.
+- **End-to-End-Ablauf:**
+  1. Nutzer:innen öffnen die App und gelangen auf die Home-Seite
+  2. Über „Neuer Moodeintrag“ wird die aktuelle Stimmung erfasst (Skala 1–10, Emoji, Kategorie, optionale Notiz)
+  3. Bei tiefen Stimmungswerten erscheint ein kurzer Warnhinweis mit einem Soforthilfe-Hinweis
+  4. Der Eintrag wird gespeichert und erscheint bei den letzten Einträgen auf der Home-Seite
+  5. Über die Navigation gelangen Nutzer:innen zur Übersicht, wo Einträge gefiltert, geöffnet, bearbeitet oder gelöscht werden können
+  6. Auf der Tipps-Seite finden Nutzer:innen Reflexionsimpulse sowie einen kurzen Disclaimer zur Nutzung der App
+- **Mockup:** _: https://www.figma.com/design/sg85DclAWST4hlpy6nVeN2/Arbeitsbereich--Prototyping?node-id=1-350&t=5o3vSToOC39dZPeY-1
 
 ### 3.4 Prototype
 
