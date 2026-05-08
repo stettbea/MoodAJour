@@ -24,13 +24,21 @@
 		if (mood <= 7) return '#2980b9';
 		return '#27ae60';
 	}
+
+	function moodEmoji(mood) {
+		if (mood <= 2) return '😢';
+		if (mood <= 4) return '😕';
+		if (mood <= 6) return '😐';
+		if (mood <= 8) return '🙂';
+		return '😄';
+	}
 </script>
 
 <div class="entry-card">
 	<div class="entry-top">
 		<h3>{entry.title || 'Unbekannt'}</h3>
 		<div class="mood-badge" style="background: {moodBg(entry.mood)}">
-			{entry.mood ?? 5}/10
+			{moodEmoji(entry.mood)} {entry.mood ?? 5}/10
 		</div>
 	</div>
 

@@ -15,6 +15,13 @@
 		return raw.split('T')[0];
 	}
 
+	const moodEmoji = $derived(
+		moodValue <= 2 ? '😢' :
+		moodValue <= 4 ? '😕' :
+		moodValue <= 6 ? '😐' :
+		moodValue <= 8 ? '🙂' : '😄'
+	);
+
 	const moodLabel = $derived(
 		moodValue <= 2 ? 'Sehr schlecht' :
 		moodValue <= 4 ? 'Eher schlecht' :
@@ -71,7 +78,7 @@
 		<div class="mood-header">
 			<span class="label-text">Stimmung</span>
 			<span class="mood-badge" style="background: {moodColor}">
-				{moodValue}/10 · {moodLabel}
+				{moodEmoji} {moodValue}/10 · {moodLabel}
 			</span>
 		</div>
 		<input
@@ -136,7 +143,7 @@
 
 	.date-wrapper input[type='date'] {
 		flex: 1;
-		padding-right: 40px;
+		padding-right: 44px;
 		cursor: pointer;
 	}
 
@@ -144,17 +151,18 @@
 		opacity: 0;
 		position: absolute;
 		right: 0;
-		width: 40px;
+		width: 44px;
 		height: 100%;
 		cursor: pointer;
 	}
 
 	.date-icon {
 		position: absolute;
-		right: 14px;
-		font-size: 1rem;
+		right: 13px;
+		font-size: 1.05rem;
 		pointer-events: none;
 		line-height: 1;
+		color: #4c407d;
 	}
 
 	input[type='text'],
@@ -170,6 +178,15 @@
 		width: 100%;
 		transition: border-color 0.15s;
 		-webkit-appearance: none;
+		appearance: none;
+	}
+
+	select {
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234c407d' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+		background-repeat: no-repeat;
+		background-position: right 14px center;
+		padding-right: 38px;
+		cursor: pointer;
 	}
 
 	input:focus,
