@@ -1,18 +1,15 @@
 import { MongoClient } from 'mongodb';
-import { MONGODB_URI, MONGODB_DB } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
-// Singleton-Verbindung: Client wird nur einmal erstellt und wiederverwendet
 let client;
-let clientPromise;
+let db;
 
-if (!globalThis.__mongoClientPromise) {
-  client = new MongoClient(MONGODB_URI);
-  globalThis.__mongoClientPromise = client.connect();
-}
-clientPromise = globalThis.__mongoClientPromise;
-
-// Funktion, um die Datenbank-Verbindung zu bekommen
 export async function getDb() {
-  const client = await clientPromise;
-  return client.db(MONGODB_DB);
+  if (db) return db;
+  if (!client) {
+    client = new MongoClient(env.MONGODB_URI);
+    await client.connect();
+  }
+  db = client.db(env.MONGODB_DB);
+  return db;
 }
