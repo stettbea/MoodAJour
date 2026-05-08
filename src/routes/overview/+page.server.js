@@ -1,6 +1,39 @@
 import { redirect } from '@sveltejs/kit';
 import { getDb } from '$lib/server/db.js';
 
+export const actions = {
+	create: async ({ request, locals }) => {
+		if (!locals.user) {
+			throw redirect(303, '/login');
+		}
+
+		const data = await request.formData();
+
+		const title = data.get('title')?.toString();
+		const date = data.get('date')?.toString();
+		const persons = data.get('persons')?.toString();
+		const category = data.get('category')?.toString();
+		const mood = parseInt(data.get('mood'), 10);
+		const description = data.get('description')?.toString() ?? '';
+
+		const db = await getDb();
+
+		await db.collection('moodEntries').insertOne({
+			userId: locals.user.id,
+			title,
+			date,
+			persons,
+			category,
+			mood,
+			description,
+			createdAt: new Date(),
+			updatedAt: new Date()
+		});
+
+		throw redirect(303, '/overview');
+	}
+};
+
 const DEFAULT_CATEGORIES = ['Arbeit', 'Freizeit', 'Familie', 'Gesundheit'];
 const DEFAULT_PERSONS = ['Freund', 'Familie', 'Kollege', 'Partner'];
 

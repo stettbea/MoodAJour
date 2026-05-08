@@ -1,5 +1,5 @@
 <script>
-	let { filters = {}, categories = [], persons = [] } = $props();
+	let { filters = {}, categories = [], persons = [], onAddEntry = null } = $props();
 
 	const activeCount = $derived(
 		[filters.title, filters.category, filters.mood,
@@ -36,7 +36,11 @@
 				Filter
 				<span class="toggle-arrow" class:open={isOpen}>↓</span>
 			</button>
+			{#if onAddEntry}
+			<button type="button" class="add-button" onclick={onAddEntry}>+ Eintrag</button>
+		{:else}
 			<a class="add-button" href="/">+ Eintrag</a>
+		{/if}
 		</div>
 	</div>
 

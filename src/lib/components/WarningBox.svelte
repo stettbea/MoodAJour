@@ -1,4 +1,4 @@
-﻿<script>
+<script>
 	let { isVisible = true } = $props();
 	let visible = $state(isVisible);
 
@@ -8,90 +8,123 @@
 </script>
 
 {#if visible}
-	<div class="warning-notification" role="alert">
-		<div class="notification-header">
-			<h3>Hinweis: Du hast gerade ein belastendes Erlebnis erfasst.</h3>
-			<button class="close-btn" onclick={dismiss} aria-label="Schließen">
-				✕
-			</button>
+	<div class="modal-overlay" onclick={dismiss}>
+		<div class="modal" onclick={(e) => e.stopPropagation()} role="alert">
+			<button class="close-btn" onclick={dismiss} aria-label="Schliessen">&times;</button>
+
+			<div class="icon">💡</div>
+			<h2>Stimmung unter 5 erfasst</h2>
+			<p>
+				Bei tiefen Stimmungswerten stehen dir Tipps und Notfallkontakte zur Verfügung.
+			</p>
+
+			<div class="actions">
+				<a href="/tipps" class="btn-primary">Tipps anzeigen</a>
+				<button type="button" class="btn-secondary" onclick={dismiss}>Schliessen</button>
+			</div>
 		</div>
-		<p class="notification-text">
-			Wenn du möchtest, kannst du dir jetzt passende Tipps oder Unterstützung anzeigen lassen.
-		</p>
-		<a href="/tipps" class="tip-button">Tipps anzeigen</a>
 	</div>
 {/if}
 
 <style>
-	.warning-notification {
-		margin: 0 16px 20px;
-		padding: 18px;
-		background: #f8d7da;
-		border: 1px solid #f5c2c7;
-		border-radius: 20px;
-		color: #842029;
-		animation: slideIn 0.3s ease-out;
-	}
-
-	@keyframes slideIn {
-		from {
-			opacity: 0;
-			transform: translateY(-10px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	.notification-header {
+	.modal-overlay {
+		position: fixed;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.45);
 		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
-		gap: 12px;
-		margin-bottom: 12px;
+		justify-content: center;
+		align-items: center;
+		z-index: 1000;
+		padding: 16px;
 	}
 
-	h3 {
-		margin: 0;
-		font-size: 1rem;
-		font-weight: 700;
-		color: #842029;
+	.modal {
+		background: white;
+		border-radius: 20px;
+		padding: 28px 24px;
+		width: 100%;
+		max-width: 390px;
+		position: relative;
+		box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+		text-align: center;
 	}
 
 	.close-btn {
-		background: none;
+		position: absolute;
+		top: 14px;
+		right: 14px;
+		width: 32px;
+		height: 32px;
+		background: #f0ebfa;
 		border: none;
-		color: #842029;
-		font-size: 1.4rem;
+		border-radius: 50%;
+		font-size: 1.2rem;
 		cursor: pointer;
-		padding: 0;
-		line-height: 1;
+		color: #6b5a7a;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.close-btn:hover {
-		opacity: 0.7;
+		background: #e6ddf7;
 	}
 
-	.notification-text {
-		margin: 0 0 14px 0;
-		font-size: 0.95rem;
-		line-height: 1.5;
-		color: #842029;
+	.icon {
+		font-size: 2rem;
+		margin-bottom: 12px;
 	}
 
-	.tip-button {
+	h2 {
+		margin: 0 0 12px;
+		font-size: 1.15rem;
+		font-weight: 700;
+		color: #20182f;
+	}
+
+	p {
+		margin: 0 0 24px;
+		font-size: 0.9rem;
+		color: #6b5a7a;
+		line-height: 1.55;
+	}
+
+	.actions {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.btn-primary,
+	.btn-secondary {
 		display: inline-flex;
-		padding: 12px 18px;
-		background: #842029;
-		color: white;
-		text-decoration: none;
+		align-items: center;
+		justify-content: center;
+		min-height: 48px;
 		border-radius: 14px;
 		font-weight: 700;
 		font-size: 0.95rem;
+		cursor: pointer;
+		text-decoration: none;
+		transition: background 0.15s;
+		border: none;
 	}
 
-	.tip-button:hover {
-		background: #6f1f2e;
+	.btn-primary {
+		background: #7d4ec9;
+		color: white;
+	}
+
+	.btn-primary:hover {
+		background: #6940b4;
+	}
+
+	.btn-secondary {
+		background: #f0ebfa;
+		color: #4c407d;
+	}
+
+	.btn-secondary:hover {
+		background: #e6ddf7;
 	}
 </style>

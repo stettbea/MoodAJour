@@ -188,19 +188,19 @@
 		background: rgba(0, 0, 0, 0.45);
 		display: flex;
 		justify-content: center;
-		align-items: flex-end;
+		align-items: center;
 		z-index: 1000;
-		padding: 0;
+		padding: 16px;
 	}
 
 	.modal {
 		background: white;
-		border-radius: 20px 20px 0 0;
-		padding: 28px 24px 36px;
+		border-radius: 20px;
+		padding: 28px 24px;
 		width: 100%;
 		max-width: 430px;
 		position: relative;
-		box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.15);
+		box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
 	}
 
 	.close-button {
