@@ -2,10 +2,17 @@
 	import EntryCard from '$lib/components/EntryCard.svelte';
 	import FilterBar from '$lib/components/FilterBar.svelte';
 	import MoodForm from '$lib/components/MoodForm.svelte';
+	import WarningBox from '$lib/components/WarningBox.svelte';
 
-	let { data } = $props();
+	let { data, form } = $props();
 
 	let showCreateModal = $state(false);
+
+	$effect(() => {
+		if (form?.success) {
+			showCreateModal = false;
+		}
+	});
 
 	function openModal() {
 		showCreateModal = true;
@@ -34,6 +41,10 @@
 		</div>
 	{/if}
 </main>
+
+{#if form?.showWarning}
+	<WarningBox isVisible={true} />
+{/if}
 
 {#if showCreateModal}
 	<div class="modal-overlay" onclick={closeModal}>

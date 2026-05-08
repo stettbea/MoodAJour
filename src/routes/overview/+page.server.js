@@ -30,7 +30,7 @@ export const actions = {
 			updatedAt: new Date()
 		});
 
-		throw redirect(303, '/overview');
+		return { success: true, showWarning: mood < 5 };
 	}
 };
 
