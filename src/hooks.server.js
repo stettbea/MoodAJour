@@ -7,18 +7,23 @@ export async function handle({ event, resolve }) {
 	event.locals.user = null;
 
 	if (userId) {
-		const db = await getDb();
+		try {
+			const db = await getDb();
+			const user = await db.collection('users').findOne({
+				_id: new ObjectId(userId)
+			});
 
-		const user = await db.collection('users').findOne({
-			_id: new ObjectId(userId)
-		});
-
-		if (user) {
-			event.locals.user = {
-				id: user._id.toString(),
-				username: user.username,
-				email: user.email
-			};
+			if (user) {
+				event.locals.user = {
+					id: user._id.toString(),
+					username: user.username,
+					email: user.email
+				};
+			} else {
+				event.cookies.delete('userId', { path: '/' });
+			}
+		} catch {
+			event.cookies.delete('userId', { path: '/' });
 		}
 	}
 

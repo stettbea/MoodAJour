@@ -10,6 +10,7 @@ export const actions = {
 
 		if (!input || !password) {
 			return fail(400, {
+				action: 'login',
 				error: 'Bitte E-Mail/Benutzername und Passwort eingeben.'
 			});
 		}
@@ -20,6 +21,7 @@ export const actions = {
 
 		if (!user || user.password !== password) {
 			return fail(400, {
+				action: 'login',
 				error: 'E-Mail/Benutzername oder Passwort ist falsch.'
 			});
 		}
@@ -32,10 +34,10 @@ export const actions = {
 			maxAge: 60 * 60 * 24 * 7
 		});
 
-		throw redirect(303, '/');
+		redirect(303, '/');
 	},
 
-	register: async ({ request }) => {
+	register: async ({ request, cookies }) => {
 		const data = await request.formData();
 
 		const username = data.get('username')?.toString().trim();
@@ -45,6 +47,7 @@ export const actions = {
 
 		if (!username || !email || !password || !passwordConfirm) {
 			return fail(400, {
+				action: 'register',
 				error: 'Bitte alle Felder ausfüllen.',
 				values: { username, email }
 			});
@@ -52,6 +55,7 @@ export const actions = {
 
 		if (password !== passwordConfirm) {
 			return fail(400, {
+				action: 'register',
 				error: 'Passwörter müssen übereinstimmen.',
 				values: { username, email }
 			});
@@ -66,18 +70,27 @@ export const actions = {
 		if (existingUser) {
 			const field = existingUser.email === email ? 'E-Mail' : 'Benutzername';
 			return fail(400, {
+				action: 'register',
 				error: `Diese ${field} ist bereits registriert.`,
 				values: { username, email }
 			});
 		}
 
-		await db.collection('users').insertOne({
+		const result = await db.collection('users').insertOne({
 			username,
 			email,
 			password,
 			createdAt: new Date()
 		});
 
-		throw redirect(303, '/login');
+		cookies.set('userId', result.insertedId.toString(), {
+			httpOnly: true,
+			sameSite: 'strict',
+			secure: false,
+			path: '/',
+			maxAge: 60 * 60 * 24 * 7
+		});
+
+		redirect(303, '/');
 	}
 };

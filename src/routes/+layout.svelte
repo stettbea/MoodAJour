@@ -1,8 +1,7 @@
 <script>
 	import favicon from '$lib/assets/favicon.svg';
 
-	// In Svelte 5 wird der Seiteninhalt über $props() bereitgestellt.
-	let { children } = $props();
+	let { children, data } = $props();
 </script>
 
 <svelte:head>
@@ -13,18 +12,45 @@
 	<header class="topbar">
 		<a class="brand" href="/">MoodAJour</a>
 		<div class="topbar-actions">
-			<a class="icon-button" href="/login" aria-label="Login">
-				<span class="icon user-icon">👤</span>
-			</a>
+			<div class="user-icon-wrapper">
+				{#if data.user}
+					<span class="icon-button user-logged-in" title={data.user.username}>👤</span>
+					<span class="status-dot logged-in" aria-label="Eingeloggt"></span>
+				{:else}
+					<a class="icon-button" href="/login" aria-label="Login">
+						<span class="icon user-icon">👤</span>
+					</a>
+					<span class="status-dot logged-out" aria-label="Nicht eingeloggt"></span>
+				{/if}
+			</div>
 			<div class="menu-wrapper">
 				<details>
 					<summary class="icon-button menu-button" aria-label="Menü öffnen">
 						<span class="menu-icon"></span>
 					</summary>
 					<nav class="dropdown">
-						<a href="/overview">Übersicht</a>
+						{#if data.user}
+							<a href="/overview">Übersicht</a>
+						{:else}
+							<span class="dropdown-locked" title="Bitte zuerst einloggen">
+								Übersicht <span class="lock-icon">🔒</span>
+							</span>
+						{/if}
 						<a href="/tipps">Tipps</a>
-						<a href="/settings">Einstellungen</a>
+						{#if data.user}
+							<a href="/settings">Einstellungen</a>
+						{:else}
+							<span class="dropdown-locked" title="Bitte zuerst einloggen">
+								Einstellungen <span class="lock-icon">🔒</span>
+							</span>
+						{/if}
+						{#if data.user}
+							<form method="POST" action="/logout">
+								<button type="submit" class="dropdown-logout">Ausloggen</button>
+							</form>
+						{:else}
+							<a href="/login">Einloggen</a>
+						{/if}
 					</nav>
 				</details>
 			</div>
@@ -93,13 +119,41 @@
 		text-decoration: none;
 	}
 
+	.user-icon-wrapper {
+		position: relative;
+		display: inline-flex;
+	}
+
+	.user-logged-in {
+		cursor: default;
+		font-size: 1.1rem;
+	}
+
+	.status-dot {
+		position: absolute;
+		bottom: 1px;
+		right: 1px;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		border: 2px solid #ece6f2;
+	}
+
+	.status-dot.logged-in {
+		background: #22c55e;
+	}
+
+	.status-dot.logged-out {
+		background: #d1d5db;
+	}
+
 	.menu-button {
 		padding: 0;
-		list-style: none; /* Entfernt den Standard-Pfeil von <summary> */
+		list-style: none;
 	}
 
 	.menu-button::-webkit-details-marker {
-		display: none; /* Versteckt den Standard-Pfeil in Webkit-Browsern */
+		display: none;
 	}
 
 	.menu-wrapper {
@@ -157,6 +211,46 @@
 
 	.dropdown a:hover {
 		background: #f3ebfb;
+	}
+
+	.dropdown-locked {
+		padding: 12px 16px;
+		color: #b0a8c0;
+		font-weight: 600;
+		border-radius: 12px;
+		cursor: not-allowed;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		font-size: 1rem;
+	}
+
+	.lock-icon {
+		font-size: 0.8rem;
+		opacity: 0.7;
+	}
+
+	.dropdown form {
+		margin: 0;
+		padding: 0 4px;
+	}
+
+	.dropdown-logout {
+		width: 100%;
+		padding: 12px 12px;
+		text-align: left;
+		background: none;
+		border: none;
+		color: #c0392b;
+		font-weight: 600;
+		font-size: 1rem;
+		cursor: pointer;
+		border-radius: 12px;
+		margin-top: 0;
+	}
+
+	.dropdown-logout:hover {
+		background: #fdecea;
 	}
 
 	.content {

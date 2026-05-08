@@ -1,9 +1,7 @@
 <script>
-	import { page } from '$app/state';
-
 	let { form } = $props();
 
-	let showRegisterModal = $state(false);
+	let showRegisterModal = $state(form?.action === 'register');
 </script>
 
 <main class="auth-page">
@@ -11,7 +9,7 @@
 		<h1>Willkommen zurück</h1>
 		<p>Logge dich ein, um deine Mood-Einträge zu sehen.</p>
 
-		{#if form?.error}
+		{#if form?.action === 'login' && form?.error}
 			<div class="error-message">{form.error}</div>
 		{/if}
 
@@ -27,18 +25,20 @@
 
 		<p class="switch-link">
 			Noch kein Konto?
-			<button type="button" class="link-button" on:click={() => showRegisterModal = true}>Registrieren</button>
+			<button type="button" class="link-button" onclick={() => (showRegisterModal = true)}>
+				Registrieren
+			</button>
 		</p>
 	</section>
 
 	{#if showRegisterModal}
-		<div class="modal-overlay" on:click={() => showRegisterModal = false}>
-			<div class="modal" on:click|stopPropagation>
-				<button class="close-button" on:click={() => showRegisterModal = false}>&times;</button>
+		<div class="modal-overlay" onclick={() => (showRegisterModal = false)}>
+			<div class="modal" onclick={(e) => e.stopPropagation()}>
+				<button class="close-button" onclick={() => (showRegisterModal = false)}>&times;</button>
 				<h1>Konto erstellen</h1>
 				<p>Erstelle ein Konto, damit deine Einträge persönlich gespeichert werden.</p>
 
-				{#if form?.error}
+				{#if form?.action === 'register' && form?.error}
 					<div class="error-message">{form.error}</div>
 				{/if}
 
@@ -199,5 +199,4 @@
 		margin: 18px 0 0;
 		text-align: center;
 	}
-
 </style>
