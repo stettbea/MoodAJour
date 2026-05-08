@@ -1,4 +1,4 @@
-﻿<script>
+<script>
 	let {
 		values = {},
 		buttonText = '+ Hinzufügen',
@@ -24,20 +24,20 @@
 	<div class="field-pair">
 		<label>
 			Person
-			<select name="persons" value={values.persons ?? ''}>
+			<select name="persons">
 				<option value="">Bitte wählen</option>
 				{#each persons as person}
-					<option value={person}>{person}</option>
+					<option value={person} selected={person === values.persons}>{person}</option>
 				{/each}
 			</select>
 		</label>
 
 		<label>
 			Kategorie
-			<select name="category" value={values.category ?? ''}>
+			<select name="category">
 				<option value="">Bitte wählen</option>
 				{#each categories as category}
-					<option value={category}>{category}</option>
+					<option value={category} selected={category === values.category}>{category}</option>
 				{/each}
 			</select>
 		</label>
@@ -59,70 +59,70 @@
 </form>
 
 <style>
-.mood-form {
-display: flex;
-flex-direction: column;
-gap: 16px;
-padding: 22px;
-}
+	.mood-form {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		padding: 22px;
+	}
 
-.field-pair {
-display: grid;
-gap: 12px;
-}
+	.field-pair {
+		display: grid;
+		gap: 12px;
+	}
 
-label {
-display: flex;
-flex-direction: column;
-font-weight: 600;
-color: #2c2c3a;
-}
+	label {
+		display: flex;
+		flex-direction: column;
+		font-weight: 600;
+		color: #2c2c3a;
+	}
 
-input,
-select,
-textarea {
-margin-top: 8px;
-padding: 14px;
-border: 1px solid #e6e0f4;
-border-radius: 16px;
-font-size: 15px;
-background: #faf7ff;
-}
+	input,
+	select,
+	textarea {
+		margin-top: 8px;
+		padding: 14px;
+		border: 1px solid #e6e0f4;
+		border-radius: 16px;
+		font-size: 15px;
+		background: #faf7ff;
+	}
 
-textarea {
-resize: vertical;
-min-height: 100px;
-}
+	textarea {
+		resize: vertical;
+		min-height: 100px;
+	}
 
-.range-row {
-display: flex;
-justify-content: space-between;
-font-weight: 700;
-color: #4c407d;
-}
+	.range-row {
+		display: flex;
+		justify-content: space-between;
+		font-weight: 700;
+		color: #4c407d;
+	}
 
-.range-input {
-width: 100%;
-margin-top: 6px;
-}
+	.range-input {
+		width: 100%;
+		margin-top: 6px;
+	}
 
-button {
-padding: 14px;
-background: #7d4ec9;
-color: white;
-border: none;
-border-radius: 16px;
-font-weight: 700;
-cursor: pointer;
-}
+	button {
+		padding: 14px;
+		background: #7d4ec9;
+		color: white;
+		border: none;
+		border-radius: 16px;
+		font-weight: 700;
+		cursor: pointer;
+	}
 
-button:hover {
-background: #6940b4;
-}
+	button:hover {
+		background: #6940b4;
+	}
 
-@media (min-width: 520px) {
-.field-pair {
-grid-template-columns: 1fr 1fr;
-}
-}
+	@media (min-width: 520px) {
+		.field-pair {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
 </style>

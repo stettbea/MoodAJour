@@ -6,12 +6,18 @@
 
 <main class="edit-page">
 	<a class="back-link" href="/overview">← Zurück zur Übersicht</a>
-	
+
 	<section class="edit-card">
 		<div class="card-header">
 			<h1>Mood-Eintrag bearbeiten</h1>
 		</div>
-		<MoodForm values={data.entry} buttonText="Speichern" />
+		<MoodForm
+			values={data.entry}
+			categories={data.categories}
+			persons={data.persons}
+			formAction="?/save"
+			buttonText="Speichern"
+		/>
 	</section>
 </main>
 
@@ -24,7 +30,7 @@
 
 	.back-link {
 		display: inline-block;
-		margin-bottom: 18px;
+		margin: 0 0 18px 16px;
 		color: #4c407d;
 		text-decoration: none;
 		font-weight: 700;

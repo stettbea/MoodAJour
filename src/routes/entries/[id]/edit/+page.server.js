@@ -2,27 +2,32 @@ import { error, redirect } from '@sveltejs/kit';
 import { ObjectId } from 'mongodb';
 import { getDb } from '$lib/server/db.js';
 
-// Load-Funktion: Lade den Mood-Eintrag für den eingeloggten User
+const DEFAULT_CATEGORIES = ['Arbeit', 'Freizeit', 'Familie', 'Gesundheit'];
+const DEFAULT_PERSONS = ['Freund', 'Familie', 'Kollege', 'Partner'];
+
 export async function load({ params, locals }) {
 	if (!locals.user) {
-		throw redirect(303, '/login');
+		redirect(303, '/login');
 	}
 
 	const db = await getDb();
+	const userId = locals.user.id;
 
 	let entry;
 	try {
 		entry = await db.collection('moodEntries').findOne({
 			_id: new ObjectId(params.id),
-			userId: locals.user.id // ✅ statt demo-user
+			userId
 		});
-	} catch (err) {
+	} catch {
 		throw error(400, 'Ungültige Eintrags-ID');
 	}
 
 	if (!entry) {
 		throw error(404, 'Mood-Eintrag nicht gefunden');
 	}
+
+	const settings = await db.collection('userSettings').findOne({ userId });
 
 	return {
 		entry: {
@@ -33,44 +38,32 @@ export async function load({ params, locals }) {
 			category: entry.category,
 			mood: entry.mood,
 			description: entry.description
-		}
+		},
+		categories: settings?.categories ?? DEFAULT_CATEGORIES,
+		persons: settings?.persons ?? DEFAULT_PERSONS
 	};
 }
 
-// Actions: Aktualisiere den Mood-Eintrag
 export const actions = {
-	default: async ({ request, params, locals }) => {
+	save: async ({ request, params, locals }) => {
 		if (!locals.user) {
 			throw redirect(303, '/login');
 		}
 
 		const data = await request.formData();
 
-		const title = data.get('title');
-		const date = data.get('date');
-		const persons = data.get('persons');
-		const category = data.get('category');
+		const title = data.get('title')?.toString();
+		const date = data.get('date')?.toString();
+		const persons = data.get('persons')?.toString();
+		const category = data.get('category')?.toString();
 		const mood = Number(data.get('mood'));
-		const description = data.get('description');
+		const description = data.get('description')?.toString() ?? '';
 
 		const db = await getDb();
 
 		const result = await db.collection('moodEntries').updateOne(
-			{
-				_id: new ObjectId(params.id),
-				userId: locals.user.id // ✅ statt demo-user
-			},
-			{
-				$set: {
-					title,
-					date,
-					persons,
-					category,
-					mood,
-					description,
-					updatedAt: new Date()
-				}
-			}
+			{ _id: new ObjectId(params.id), userId: locals.user.id },
+			{ $set: { title, date, persons, category, mood, description, updatedAt: new Date() } }
 		);
 
 		if (result.matchedCount === 0) {

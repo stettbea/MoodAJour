@@ -6,7 +6,7 @@
 	<div class="panel-header">
 		<div>
 			<h2>Übersicht</h2>
-			<p>Alle Einträge aus MongoDB anzeigen und filtern</p>
+			<p>Alle Einträge anzeigen und filtern</p>
 		</div>
 		<a class="add-button" href="/">+ Eintrag</a>
 	</div>

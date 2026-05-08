@@ -17,7 +17,7 @@
 			<p class="empty-state">Keine Einträge gefunden. Entferne die Filter oder füge neue Einträge hinzu.</p>
 		{:else}
 			{#each data.entries as entry}
-				<EntryCard {entry} />
+				<EntryCard {entry} redirectTo="/overview" />
 			{/each}
 		{/if}
 	</section>
