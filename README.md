@@ -1,4 +1,4 @@
-# Projektdokumentation - [Projekttitel]
+# Projektdokumentation - MoodAJour
 
 ## Inhaltsverzeichnis
 
@@ -144,19 +144,76 @@ Fasst die technische Realisierung zusammen.
 - **Deployment:** _[URL folgt nach Deployment einfügen]_
 
 - **Besondere Entscheidungen:**
-  - **Wiederverwendbare Komponenten:** Die UI wurde konsequent in eigenständige Komponenten aufgeteilt (z.B. `MoodForm.svelte`, `EntryCard.svelte`, `FilterBar.svelte`). Dies ermöglicht eine klare Trennung der Verantwortlichkeiten und erleichtert die Wartbarkeit, da Änderungen an einem Element nicht mehrfach vorgenommen werden müssen.
+  - **Wiederverwendbare Komponenten:** Das UI wurde konsequent in eigenständige Komponenten aufgeteilt (z.B. `MoodForm.svelte`, `EntryCard.svelte`, `FilterBar.svelte`). Dies ermöglicht eine klare Trennung der Verantwortlichkeiten und erleichtert die Wartbarkeit, da Änderungen an einem Element nicht mehrfach vorgenommen werden müssen.
   - **Form Actions statt API-Routen:** Alle Datenbankoperationen laufen über SvelteKit Form Actions (serverseitig), was keine separate API-Schicht erfordert und die Architektur einfach hält.
   - **Passwörter im Klartext:** Im Rahmen des Prototypen wurde auf Passwort-Hashing verzichtet. Für eine produktive Version wäre dies zwingend nachzurüsten.
 
 ### 3.5 Validate
 - **URL der getesteten Version** (separat deployt)
-- **Ziele der Prüfung:** _[welche Fragen sollen beantwortet werden?]_  
-- **Vorgehen:** _[moderiert/unmoderiert; remote/on-site]_  
-- **Stichprobe:** _[Mit wem wurde getestet? Profil; Anzahl]_  
-- **Aufgaben/Szenarien:** _[Ausformulierte Testaufgaben]_  
-- **Kennzahlen & Beobachtungen:** _[z. B. Erfolgsquote, Zeitbedarf, qualitative Findings]_  
-- **Zusammenfassung der Resultate:** _[Wichtigste Erkenntnisse; 2-4 Sätze]_  
-- **Abgeleitete Verbesserungen:** Anforderung  _[Anforderungen, die als nächstes umgesetzt werden sollten, priorisiert, kurz begründet; falls Verbesserungen im Prototyp konkret umgesetzt wurden: In Kap. 4 dokumentieren]_  
+- **Ziele der Prüfung:** 
+Die Evaluation sollte folgende Fragen beantworten:
+  - Verstehen Nutzer:innen ohne Erklärung, wie ein neuer Moodeintrag erfasst wird
+  - Werden Warnhinweise bei belastenden Stimmungen wahrgenommen und richtig interpretiert?
+  - Lassen sich vorhandene Einträge in der Übersicht leicht finden, filtern, öffnen, bearbeiten und löschen?
+  - Sind die Inhalte auf der Tipps-Seite hilfreich und verständlich?
+  - Ist die Gesamtbedienung der App intuitiv und alltagstauglich? 
+- **Vorgehen:**<br>
+**Methode:** Moderierter Usability-Test mit Think-Aloud-Verfahren <br>
+**Setting:** On-site (persönlich vor Ort) <br>
+**Durchführung:** Die Testpersonen haben nacheinander 5 Szenarien gelöst, während sie laut dachten. Die Testleitung beobachtete, notierte Auffälligkeiten und griff nur bei technischen Problemen oder Unklarheiten ein. Im Anschluss wurde ein kurzes strukturiertes Interview geführt.
+- **Stichprobe:** 
+**Anzahl:** 2 Testpersonen
+**Profil:** Studierende bzw. junge Berufstätige im Alter von 18-35 Jahren (Zielgruppe der App)
+**Namen/Codes:** Kristina (TP1), Andrea (TP2)
+**Dauer:** ca. 10 Minuten pro Session 
+- **Aufgaben/Szenarien:** 
+Vorbedingung: Bereits registrierte Person mit Login
+  - *S1: Neuer Eintrag erfassen:* Sie hatten einen anstrengenden Tag. Erfassen Sie einen neuen Eintrag mit einer eher schlechten Stimmung und einer kurzen Notiz.
+  - *S2: Warnhinweis verstehen:* Sie merken, dass es Ihnen nicht gut geht. Schauen Sie nach, welche Unterstützung die App Ihnen anbietet.
+  - *S3: Eintrag finden und öffnen:* Sie möchten einen früheren Eintrag anschauen. Suchen Sie einen Eintrag und öffnen Sie ihn vollständig.
+  - *S4: Eintrag bearbeiten:* Beim Nachlesen fällt Ihnen auf, dass eine Information nicht stimmt. Passen Sie den Eintrag an.
+  - *S5: Eintrag löschen:* Sie sehen einen Eintrag, den Sie nicht mehr behalten möchten. Entfernen Sie ihn aus Ihrer Sammlung.
+
+- **Kennzahlen & Beobachtungen:** _ <br>
+Erfolgsquote pro Szenario (TP1 (Kristina)	 | TP2 (Andrea) |	Erfolgsquote)
+  - S1: Neuer Eintrag erfassen	(Erfolgreich	|	Erfolgreich	|	100%)
+  - S2: Warnhinweis verstehen	(Erfolgreich |	Erfolgreich |	100%)
+  - S3: Eintrag finden & öffnen	(Erfolgreich |	Erfolgreich |	100%)
+  - S4: Eintrag bearbeiten	(Erfolgreich |	Erfolgreich |	100%)
+  - S5: Eintrag löschen	(Erfolgreich |	Erfolgreich |	100%)
+
+  Durchschnittliche Erfolgsquote: 100% <br>
+Alle Testpersonen konnten alle Szenarien erfolgreich abschließen.
+
+- **Qualitative Findings:**
+
+  **Schweregrad:** 4 = Kritisch | 3 = Hoch | 2 = Mittel | 1 = Tief
+
+  | ID | Bereich | Finding | Betroffene Testpersonen | Schweregrad | Empfehlung |
+  |----|---------|---------|-------------------------|-------------|------------|
+  | F1 | Erfassung | Kategorien und Personen wurden als unpassend oder unflexibel wahrgenommen. | TP1, TP2 | 3 | Kategorien und Personen besser anpassbar machen |
+  | F2 | Erfassung | Die Auswahl eines zukünftigen Datums war irritierend. | TP2 | 2 | Datumsauswahl auf sinnvolle Werte beschränken |
+  | F3 | Erfassung | Beim Verwenden des Stimmungsreglers wurde der Titel gelöscht. | TP2 | 4 | Fehler im Formular beheben |
+  | F4 | Übersicht | Die Card wurde als direkt anklickbar zum Bearbeiten erwartet. | TP1 | 2 | Klickverhalten bei Einträgen klarer gestalten |
+  | F5 | Übersicht | Der Löschen-Button wirkte zu dominant. | TP1 | 1 | Löschen-Button visuell reduzieren |
+  | F6 | Tipps | Tipps wurden positiv bewertet, aber es wurden spezifischere Inhalte gewünscht. | TP1, TP2 | 2 | Tipps konkreter und nützlicher ausformulieren |
+  | F7 | Navigation | Das Menüband störte teilweise die Nutzung. | TP1 | 3 | Menüband und Navigationsverhalten optimieren |
+
+[z. B. Erfolgsquote, Zeitbedarf, qualitative Findings]_
+
+- **Zusammenfassung der Resultate:** 
+Beide Testpersonen konnten alle Szenarien erfolgreich abschliessen. Die Kernfunktionen wie Erfassen, Übersicht, Bearbeiten und Löschen wurden insgesamt als verständlich und übersichtlich wahrgenommen. Positiv bewertet wurde auch der Warnhinweis, der von beiden Testpersonen bemerkt und als hilfreich eingeschätzt wurde. Verbesserungsbedarf zeigte sich vor allem bei der Anpassbarkeit von Kategorien und Personen, bei einzelnen UI-Bugs, bei der Interaktion mit den Cards sowie bei der inhaltlichen Ausgestaltung der Tipps.
+
+- **Abgeleitete Verbesserungen:** 
+  - **Hoch:** Kategorien und Personen besser anpassbar machen, da sie nicht immer zur erfassten Situation passen.  
+  - **Hoch:** Formularfehler beheben, da beim Verändern der Stimmung Eingaben verloren gehen können.  
+  - **Hoch:** Menüband und weitere UI-Probleme korrigieren, da sie die Nutzung unnötig stören.  
+  - **Mittel:** Klickverhalten bei Einträgen klarer gestalten, da die Interaktion nicht immer intuitiv war.  
+  - **Mittel:** Tipps konkreter und nützlicher ausformulieren, da sich die Testpersonen mehr Orientierung wünschten.  
+  - **Tief:** Datumsauswahl und Löschen-Button anpassen, da beide Punkte vereinzelt irritierten.
+  <br>
+  
+  Anforderung  _[Anforderungen, die als nächstes umgesetzt werden sollten, priorisiert, kurz begründet; falls Verbesserungen im Prototyp konkret umgesetzt wurden: In Kap. 4 dokumentieren]_  
 
 ## 4. Erweiterungen [Optional]
 Dokumentiert Erweiterungen über den Mindestumfang hinaus.
@@ -180,10 +237,12 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Aus Evaluation abgeleitet?:** Ja, Issue x.y
 
 ## 5. Projektorganisation [Optional]
-Beispiele:
-- **Repository & Struktur:** _[Link; kurze Strukturübersicht]_  
-- **Issue-Management:** _[Vorgehen kurz beschreiben]_  
-- **Commit-Praxis:** _[z. B. sprechende Commits]_
+
+- **Repository & Struktur:** Das Projekt wird in einem privaten GitHub-Repository verwaltet. Die Struktur folgt dem SvelteKit-Standard mit den Hauptverzeichnissen `src/routes/` für die Seiten und Server-Logik sowie `src/lib/components/` für wiederverwendbare UI-Komponenten. Konfigurationsdateien wie `svelte.config.js` und `vite.config.js` liegen im Projektstamm.
+
+- **Issue-Management:** Auf ein formelles Issue-Tracking in GitHub wurde bewusst verzichtet. Aufgaben, Korrekturen und nächste Schritte wurden direkt im Entwicklungsprozess mitgeführt und über die Commit-Nachrichten dokumentiert.
+
+- **Commit-Praxis:** Commits wurden konsequent klein und häufig erstellt, sodass jede Änderung sofort versioniert ist. Die Commit-Nachrichten sind sprechend gehalten und beschreiben klar, was geändert wurde, zum Beispiel „Löschen von Einträgen", „Login/Logoutprozess Finalschliff" oder „Netlify Integrationsfehlerbehebung". Dadurch lässt sich der Entwicklungsfortschritt direkt aus der Commit-Historie nachvollziehen, ohne separates Issue-Management.
 
 ## 6. KI-Deklaration
 Die folgende Deklaration ist verpflichtend und beschreibt den Einsatz von KI im Projekt.
