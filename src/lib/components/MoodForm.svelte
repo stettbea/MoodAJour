@@ -8,6 +8,7 @@
 	} = $props();
 
 	let moodValue = $state(Number(values.mood ?? 5));
+	let titleValue = $state(values.title ?? '');
 
 	// Extrahiert nur den Datumsteil (YYYY-MM-DD) aus datetime-local oder date Strings
 	function toDateValue(raw) {
@@ -40,7 +41,7 @@
 	<div class="field-pair">
 		<label>
 			<span class="label-text">Was?</span>
-			<input type="text" name="title" required value={values.title ?? ''} placeholder="z. B. Stress im Meeting" />
+			<input type="text" name="title" required bind:value={titleValue} placeholder="z. B. Stress im Meeting" />
 		</label>
 
 		<label>

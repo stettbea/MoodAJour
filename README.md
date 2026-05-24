@@ -236,6 +236,13 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Referenz:** Screenshot in Kap. x.y
 - **Aus Evaluation abgeleitet?:** Ja, Issue x.y
 
+### 4.2 Formularfehler beim Stimmungsschieberegler behoben
+- **Beschreibung & Nutzen:** Beim Erstellen eines neuen Eintrags wurde das Titelfeld geleert, sobald der Stimmungsschieberegler bewegt wurde. Dies führte dazu, dass Nutzende ihren Titel erneut eingeben mussten, was frustrierend war und zu unvollständigen Einträgen führen konnte. Mit der Behebung bleibt der Titel beim Verschieben des Schiebereglers erhalten.
+- **Wo umgesetzt:**
+  - **Frontend:** In `src/lib/components/MoodForm.svelte` wurde für das Titelfeld eine eigene lokale Zustandsvariable `titleValue` mit `$state()` eingeführt und das Input-Feld auf `bind:value={titleValue}` umgestellt. Vorher war das Feld mit `value={values.title ?? ''}` direkt an die Prop gebunden, was in Svelte 5 bei reaktiven Neu-Renderings durch den Schieberegler-State (`moodValue`) zum Zurücksetzen des Feldes auf den ursprünglichen Prop-Wert führte.
+- **Referenz:** Evaluation Issue F5 (Kap. 3.3)
+- **Aus Evaluation abgeleitet?:** Ja, Issue F5
+
 ## 5. Projektorganisation [Optional]
 
 - **Repository & Struktur:** Das Projekt wird in einem privaten GitHub-Repository verwaltet. Die Struktur folgt dem SvelteKit-Standard mit den Hauptverzeichnissen `src/routes/` für die Seiten und Server-Logik sowie `src/lib/components/` für wiederverwendbare UI-Komponenten. Konfigurationsdateien wie `svelte.config.js` und `vite.config.js` liegen im Projektstamm.
