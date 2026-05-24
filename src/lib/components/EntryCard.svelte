@@ -58,6 +58,11 @@
 		{#if entry.persons}
 			<span class="meta-item">👤 {entry.persons}</span>
 		{/if}
+		{#if entry.usedTips?.length > 0}
+			{#each entry.usedTips as tip}
+				<span class="meta-item meta-tip">💡 {tip}</span>
+			{/each}
+		{/if}
 	</div>
 
 	{#if entry.description}
@@ -179,6 +184,11 @@
 		padding: 3px 8px;
 		border-radius: 6px;
 		white-space: nowrap;
+	}
+
+	.meta-tip {
+		color: #4c407d;
+		background: #ede6fb;
 	}
 
 	.description {

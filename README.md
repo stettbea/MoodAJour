@@ -238,14 +238,14 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Beschreibung & Nutzen:** Beim Erstellen eines neuen Eintrags wurde das Titelfeld geleert, sobald der Stimmungsschieberegler bewegt wurde. Dies führte dazu, dass Nutzende ihren Titel erneut eingeben mussten, was frustrierend war und zu unvollständigen Einträgen führen konnte. Mit der Behebung bleibt der Titel beim Verschieben des Schiebereglers erhalten.
 - **Wo umgesetzt:**
   - **Frontend:** In `src/lib/components/MoodForm.svelte` wurde für das Titelfeld eine eigene lokale Zustandsvariable `titleValue` mit `$state()` eingeführt und das Input-Feld auf `bind:value={titleValue}` umgestellt. Vorher war das Feld mit `value={values.title ?? ''}` direkt an die Prop gebunden, was in Svelte 5 bei reaktiven Neu-Renderings durch den Schieberegler-State (`moodValue`) zum Zurücksetzen des Feldes auf den ursprünglichen Prop-Wert führte.
-- **Referenz:** Evaluation Issue F5 (Kap. 3.3)
+- **Referenz:** Evaluation Issue F5 (Kap. 3.3), keine visuelle Darstellung möglich da reine Logik angepasst wurde
 - **Aus Evaluation abgeleitet?:** Ja, Issue F5 (Kap. 3.3)
 
 ### 4.3 Menüband-Verhalten verbessert
 - **Beschreibung & Nutzen:** Testperson TP1 bemängelte, dass das Navigationsmenü die Nutzung störte, weil es sich nach dem Antippen eines Links nicht schloss und auch durch einen Klick ausserhalb nicht geschlossen werden konnte. Das führte dazu, dass das Dropdown offen blieb und Inhalte verdeckte. Neu schliesst das Menü in allen relevanten Situationen automatisch: beim Klick auf einen Menüpunkt, beim Klick ausserhalb des Menüs sowie beim Drücken der Escape-Taste.
 - **Wo umgesetzt:**
   - **Frontend:** In `src/routes/+layout.svelte` wurde das `<details>`/`<summary>`-Element durch einen zustandsgesteuerten `<button>` mit `menuOpen`-State (`$state`) ersetzt. Ein `svelte:window`-Handler erkennt Klicks ausserhalb des Menüs via `menuWrapper.contains(e.target)` und Escape-Tastendruck. Jeder Navigationslink und der Ausloggen-Button schliesst das Menü zusätzlich per `onclick`.
-- **Referenz:** Evaluation Issue F7 (Kap. 3.3)
+- **Referenz:** Evaluation Issue F7 (Kap. 3.3), keine visuelle Darstellung möglich da reine Logik angepasst wurde
 - **Aus Evaluation abgeleitet?:** Ja, Issue F7
 
 ### 4.4 Löschen-Button visuell reduziert und Datumsauswahl eingeschränkt
@@ -270,6 +270,15 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
   - **Frontend:** In `src/lib/components/EntryCard.svelte` wurde ein unsichtbarer `<a class="card-link">` mit `position: absolute; inset: 0` über die gesamte Card gelegt (Stretched-Link-Technik). Der Löschen-Button liegt mit `position: relative; z-index: 1` darüber und bleibt so unabhängig klickbar. Der "Bearbeiten"-Button wurde entfernt. Hover-Effekt auf `.entry-card` signalisiert die Interaktivität.
 - **Referenz:** Evaluation Issue F4 (Kap. 3.3)
 - **Aus Evaluation abgeleitet?:** Ja, Issue F4
+
+### 4.6 Tipps konkretisiert und mit Einträgen verknüpft
+- **Beschreibung & Nutzen:** Testpersonen wünschten sich konkretere und nützlichere Tipps. Zusätzlich wurde eine direkte Verknüpfung zwischen einem Mooodeintrag und den Tipps geschaffen: Erfasst die Nutzerin eine Stimmung unter 5, erscheint der Warnhinweis mit "Tipps anzeigen". Dieser Link führt nun direkt zur Tipps-Seite mit dem Kontext des soeben erstellten Eintrags. Dort kann die Nutzerin auswählen, welche Tipps sie ausprobiert hat. Die gespeicherten Tipps erscheinen danach als Tags auf der Eintragskarte, sodass im Rückblick sichtbar ist, was in belastenden Momenten geholfen hat.
+- **Wo umgesetzt:**
+  - **Frontend:** `src/lib/components/WarningBox.svelte` nimmt neu den Prop `entryId` entgegen und setzt den "Tipps anzeigen"-Link auf `/tipps?entryId=…`. `src/lib/components/TipCard.svelte` unterstützt neu den `selectable`-Modus mit visueller Auswahl. `src/routes/tipps/+page.svelte` zeigt bei vorhandenem `entryId` ein Auswahlbanner und eine Speichern-Schaltfläche. Alle Tipp-Texte wurden ausführlicher und praxisnäher formuliert. Verwendete Tipps erscheinen als 💡-Tags in `EntryCard.svelte`.
+  - **Backend:** `src/routes/tipps/+page.server.js` (neu) lädt die bereits gespeicherten Tipps eines Eintrags und stellt die `saveTips`-Action bereit, welche die ausgewählten Tipps als Array im Feld `usedTips` im Dokument `moodEntries` speichert. Die Create-Actions in `+page.server.js` und `overview/+page.server.js` geben neu die `insertedId` zurück.
+  - **Datenbank:** Feld `usedTips` (Array von Strings) auf `moodEntries`-Dokumente ergänzt.
+- **Referenz:** Evaluation Issue F6 (Kap. 3.3)
+- **Aus Evaluation abgeleitet?:** Ja, Issue F6
 
 ## 5. Projektorganisation [Optional]
 

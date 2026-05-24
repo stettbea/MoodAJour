@@ -1,16 +1,35 @@
 <script>
-	let { icon, title, text, color = '#f3ebfb', featured = false } = $props();
+	let { icon, title, text, color = '#f3ebfb', featured = false, selectable = false, selected = false, ontoggle } = $props();
 </script>
 
-<article class="tip-card" class:featured>
-	<div class="tip-icon" style="background: {color}">
-		<span>{icon}</span>
-	</div>
-	<div class="tip-content">
-		<h3>{title}</h3>
-		<p>{text}</p>
-	</div>
-</article>
+{#if selectable}
+	<button
+		type="button"
+		class="tip-card selectable"
+		class:featured
+		class:selected
+		onclick={() => ontoggle?.(title)}
+		aria-pressed={selected}
+	>
+		<div class="tip-icon" style="background: {selected ? '#7d4ec9' : color}">
+			<span>{selected ? '✓' : icon}</span>
+		</div>
+		<div class="tip-content">
+			<h3>{title}</h3>
+			<p>{text}</p>
+		</div>
+	</button>
+{:else}
+	<article class="tip-card" class:featured>
+		<div class="tip-icon" style="background: {color}">
+			<span>{icon}</span>
+		</div>
+		<div class="tip-content">
+			<h3>{title}</h3>
+			<p>{text}</p>
+		</div>
+	</article>
+{/if}
 
 <style>
 	.tip-card {
@@ -21,13 +40,32 @@
 		background: white;
 		border: 1.5px solid #e6e0f4;
 		border-radius: 16px;
-		transition: box-shadow 0.15s;
+		transition: box-shadow 0.15s, border-color 0.15s;
+		width: 100%;
+		text-align: left;
+		cursor: default;
+		font-family: inherit;
 	}
 
 	.tip-card.featured {
 		background: #faf7ff;
 		border-color: #7d4ec9;
 		box-shadow: 0 4px 16px rgba(125, 78, 201, 0.12);
+	}
+
+	.tip-card.selectable {
+		cursor: pointer;
+	}
+
+	.tip-card.selectable:hover {
+		border-color: #c9b9f0;
+		box-shadow: 0 2px 8px rgba(125, 78, 201, 0.1);
+	}
+
+	.tip-card.selectable.selected {
+		background: #faf7ff;
+		border-color: #7d4ec9;
+		box-shadow: 0 2px 10px rgba(125, 78, 201, 0.15);
 	}
 
 	.tip-icon {

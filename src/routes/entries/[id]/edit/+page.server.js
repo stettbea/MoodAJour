@@ -45,7 +45,8 @@ export async function load({ params, locals }) {
 			persons: entry.persons,
 			category: entry.category,
 			mood: entry.mood,
-			description: entry.description
+			description: entry.description,
+			usedTips: entry.usedTips ?? []
 		},
 		categories: settings?.categories ?? DEFAULT_CATEGORIES,
 		persons: settings?.persons ?? DEFAULT_PERSONS,
@@ -81,5 +82,20 @@ export const actions = {
 		}
 
 		throw redirect(303, '/overview');
+	},
+
+	saveTips: async ({ request, params, locals }) => {
+		if (!locals.user) throw redirect(303, '/login');
+
+		const data = await request.formData();
+		const selectedTips = data.getAll('tip').map((t) => t.toString());
+
+		const db = await getDb();
+		await db.collection('moodEntries').updateOne(
+			{ _id: new ObjectId(params.id), userId: locals.user.id },
+			{ $set: { usedTips: selectedTips, updatedAt: new Date() } }
+		);
+
+		return { tipsSaved: true };
 	}
 };

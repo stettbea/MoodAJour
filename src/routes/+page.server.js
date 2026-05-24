@@ -46,7 +46,8 @@ export async function load({ locals }) {
 			persons: entry.persons,
 			category: entry.category,
 			mood: entry.mood,
-			description: entry.description
+			description: entry.description,
+			usedTips: entry.usedTips ?? []
 		})),
 		categories: settings.categories || DEFAULT_CATEGORIES,
 		persons: settings.persons || DEFAULT_PERSONS,
@@ -73,7 +74,7 @@ export const actions = {
 
 		const db = await getDb();
 
-		await db.collection('moodEntries').insertOne({
+		const result = await db.collection('moodEntries').insertOne({
 			userId: locals.user.id,
 			title,
 			date,
@@ -87,6 +88,6 @@ export const actions = {
 
 		const showWarning = mood < 5;
 
-		return { success: true, showWarning };
+		return { success: true, showWarning, entryId: result.insertedId.toString() };
 	}
 };

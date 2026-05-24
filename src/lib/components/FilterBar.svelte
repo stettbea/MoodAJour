@@ -1,11 +1,21 @@
 <script>
-	let { filters = {}, categories = [], persons = [], onAddEntry = null } = $props();
+	let { filters = {}, categories = [], persons = [], tips = [], onAddEntry = null } = $props();
+
+	let selectedTips = $state(new Set(filters.tips ?? []));
 
 	const activeCount = $derived(
 		[filters.title, filters.category, filters.mood,
 		 filters.persons, filters.day, filters.month, filters.year]
 			.filter((v) => v && v !== '').length
+		+ selectedTips.size
 	);
+
+	function toggleTip(tip) {
+		const next = new Set(selectedTips);
+		if (next.has(tip)) next.delete(tip);
+		else next.add(tip);
+		selectedTips = next;
+	}
 
 	// null = Standardverhalten (offen wenn Filter aktiv), true/false = User-Override
 	let filterOverride = $state(null);
@@ -83,6 +93,26 @@
 						</select>
 					</label>
 				</div>
+
+				{#if tips.length > 0}
+					<div class="tip-filter-group">
+						<span class="tip-filter-label">Tipps</span>
+						<div class="tip-chips">
+							{#each tips as tip}
+								<label class="tip-chip" class:active={selectedTips.has(tip)}>
+									<input
+										type="checkbox"
+										name="tip"
+										value={tip}
+										checked={selectedTips.has(tip)}
+										onchange={() => toggleTip(tip)}
+									/>
+									{tip}
+								</label>
+							{/each}
+						</div>
+					</div>
+				{/if}
 
 				<div class="date-group">
 					<span class="date-label">Datum</span>
@@ -326,5 +356,54 @@
 
 	.btn-reset:hover {
 		background: #f3ebfb;
+	}
+
+	.tip-filter-group {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.tip-filter-label {
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: #4c407d;
+	}
+
+	.tip-chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px;
+	}
+
+	.tip-chip {
+		display: inline-flex;
+		align-items: center;
+		min-height: 32px;
+		padding: 0 12px;
+		border: 1.5px solid #e6e0f4;
+		border-radius: 20px;
+		background: white;
+		color: #4c407d;
+		font-size: 0.8rem;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.15s;
+		user-select: none;
+	}
+
+	.tip-chip input {
+		display: none;
+	}
+
+	.tip-chip.active {
+		background: #7d4ec9;
+		border-color: #7d4ec9;
+		color: white;
+	}
+
+	.tip-chip:hover:not(.active) {
+		background: #f3ebfb;
+		border-color: #d4c5f0;
 	}
 </style>

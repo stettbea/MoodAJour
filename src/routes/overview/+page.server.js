@@ -18,7 +18,7 @@ export const actions = {
 
 		const db = await getDb();
 
-		await db.collection('moodEntries').insertOne({
+		const result = await db.collection('moodEntries').insertOne({
 			userId: locals.user.id,
 			title,
 			date,
@@ -30,7 +30,7 @@ export const actions = {
 			updatedAt: new Date()
 		});
 
-		return { success: true, showWarning: mood < 5 };
+		return { success: true, showWarning: mood < 5, entryId: result.insertedId.toString() };
 	}
 };
 
@@ -52,7 +52,8 @@ export async function load({ url, locals }) {
 		persons: params.get('persons') ?? '',
 		day: params.get('day') ?? '',
 		month: params.get('month') ?? '',
-		year: params.get('year') ?? ''
+		year: params.get('year') ?? '',
+		tips: params.getAll('tip')
 	};
 
 	if (filters.title) {
@@ -72,6 +73,10 @@ export async function load({ url, locals }) {
 		if (!Number.isNaN(moodValue)) {
 			query.mood = moodValue;
 		}
+	}
+
+	if (filters.tips?.length > 0) {
+		query.usedTips = { $in: filters.tips };
 	}
 
 	if (filters.day || filters.month || filters.year) {
@@ -117,7 +122,8 @@ export async function load({ url, locals }) {
 			persons: entry.persons,
 			category: entry.category,
 			mood: entry.mood,
-			description: entry.description
+			description: entry.description,
+			usedTips: entry.usedTips ?? []
 		})),
 		filters,
 		categories: settings.categories || DEFAULT_CATEGORIES,

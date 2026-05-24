@@ -3,6 +3,7 @@
 	import FilterBar from '$lib/components/FilterBar.svelte';
 	import MoodForm from '$lib/components/MoodForm.svelte';
 	import WarningBox from '$lib/components/WarningBox.svelte';
+	import { tips } from '$lib/tips.js';
 
 	let { data, form } = $props();
 
@@ -28,6 +29,7 @@
 		filters={data.filters}
 		categories={data.categories}
 		persons={data.persons}
+		tips={tips.map((t) => t.title)}
 		onAddEntry={openModal}
 	/>
 
@@ -43,7 +45,7 @@
 </main>
 
 {#if form?.showWarning}
-	<WarningBox isVisible={true} />
+	<WarningBox isVisible={true} entryId={form.entryId} />
 {/if}
 
 {#if showCreateModal}

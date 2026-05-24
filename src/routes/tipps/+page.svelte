@@ -1,70 +1,16 @@
 <script>
 	import TipCard from '$lib/components/TipCard.svelte';
 	import HelpBox from '$lib/components/HelpBox.svelte';
+	import { enhance } from '$app/forms';
+	import { tips } from '$lib/tips.js';
 
-	const tips = [
-		{
-			icon: '🌬️',
-			title: 'Atemübung',
-			text: 'Atme 4 Sekunden ein, halte kurz inne und atme langsam wieder aus.',
-			category: 'Atmung',
-			color: '#e8f4fd'
-		},
-		{
-			icon: '✏️',
-			title: 'Gedanken aufschreiben',
-			text: 'Schreibe deine Gedanken kurz auf, um sie aus dem Kopf zu bekommen.',
-			category: 'Gedanken',
-			color: '#fef9e7'
-		},
-		{
-			icon: '☕',
-			title: 'Kurze Pause',
-			text: 'Lege das Handy kurz weg, strecke dich und gönne dir einen Moment Ruhe.',
-			category: 'Bewegung',
-			color: '#fdf2e9'
-		},
-		{
-			icon: '💬',
-			title: 'Mit jemandem sprechen',
-			text: 'Schreibe oder rufe eine Person an, der du vertraust. Manchmal hilft schon ein kurzes Gespräch.',
-			category: 'Sozial',
-			color: '#e8f8f5'
-		},
-		{
-			icon: '🌿',
-			title: 'Kurz rausgehen',
-			text: 'Öffne das Fenster oder gehe kurz an die frische Luft. Neue Umgebung kann Gedanken beruhigen.',
-			category: 'Bewegung',
-			color: '#e9f7ef'
-		},
-		{
-			icon: '🎵',
-			title: 'Musik hören',
-			text: 'Höre einen Song, der dich beruhigt oder gute Erinnerungen auslöst.',
-			category: 'Ablenkung',
-			color: '#f5eef8'
-		},
-		{
-			icon: '👁️',
-			title: '5 Dinge wahrnehmen',
-			text: 'Nenne 5 Dinge, die du sehen kannst, 4 die du fühlen kannst und 3 die du hören kannst.',
-			category: 'Gedanken',
-			color: '#e8f4fd'
-		},
-		{
-			icon: '🔢',
-			title: 'Rückwärts zählen',
-			text: 'Zähle von 100 in 3er-Schritten rückwärts. Das hilft, den Fokus auf den Moment zu lenken.',
-			category: 'Gedanken',
-			color: '#eaf2fb'
-		}
-	];
+	let { data, form } = $props();
 
 	const categories = ['Alle', 'Atmung', 'Gedanken', 'Bewegung', 'Sozial', 'Ablenkung'];
 
 	let selectedCategory = $state('Alle');
 	let randomTip = $state(null);
+	let selectedTips = $state(new Set(data.usedTips ?? []));
 
 	const filteredTips = $derived(
 		selectedCategory === 'Alle' ? tips : tips.filter((t) => t.category === selectedCategory)
@@ -80,6 +26,13 @@
 	function dismissRandom() {
 		randomTip = null;
 	}
+
+	function toggleTip(title) {
+		const next = new Set(selectedTips);
+		if (next.has(title)) next.delete(title);
+		else next.add(title);
+		selectedTips = next;
+	}
 </script>
 
 <main class="tips-page">
@@ -88,12 +41,27 @@
 			<h1>Tipps</h1>
 			<p>Impulse für belastende Momente</p>
 		</div>
-		<button type="button" class="btn-random" onclick={showRandomTip}>
-			🎲 Zufällig
-		</button>
+		{#if !data.entryId}
+			<button type="button" class="btn-random" onclick={showRandomTip}>
+				🎲 Zufällig
+			</button>
+		{/if}
 	</div>
 
-	{#if randomTip}
+	{#if data.entryId}
+		<div class="assign-banner">
+			<div class="assign-banner-text">
+				<span class="assign-title">Welche Tipps hast du ausprobiert?</span>
+				<span class="assign-sub">Wähle die Tipps aus, die dir geholfen haben – sie werden an deinen Eintrag gespeichert.</span>
+			</div>
+		</div>
+
+		{#if form?.success}
+			<div class="alert-success">Tipps wurden gespeichert. ✓</div>
+		{/if}
+	{/if}
+
+	{#if randomTip && !data.entryId}
 		<div class="random-section">
 			<div class="random-label">
 				<span>Zufälliger Tipp</span>
@@ -124,11 +92,38 @@
 		{/each}
 	</div>
 
-	<section class="tips-list">
-		{#each filteredTips as tip (tip.title)}
-			<TipCard icon={tip.icon} title={tip.title} text={tip.text} color={tip.color} />
-		{/each}
-	</section>
+	{#if data.entryId}
+		<form method="POST" action="?/saveTips" use:enhance>
+			<input type="hidden" name="entryId" value={data.entryId} />
+			{#each [...selectedTips] as tip}
+				<input type="hidden" name="tip" value={tip} />
+			{/each}
+
+			<section class="tips-list">
+				{#each filteredTips as tip (tip.title)}
+					<TipCard
+						icon={tip.icon}
+						title={tip.title}
+						text={tip.text}
+						color={tip.color}
+						selectable={true}
+						selected={selectedTips.has(tip.title)}
+						ontoggle={toggleTip}
+					/>
+				{/each}
+			</section>
+
+			<button type="submit" class="btn-save">
+				{selectedTips.size > 0 ? `${selectedTips.size} Tipp${selectedTips.size > 1 ? 's' : ''} speichern` : 'Speichern'}
+			</button>
+		</form>
+	{:else}
+		<section class="tips-list">
+			{#each filteredTips as tip (tip.title)}
+				<TipCard icon={tip.icon} title={tip.title} text={tip.text} color={tip.color} />
+			{/each}
+		</section>
+	{/if}
 
 	<p class="disclaimer">Diese Tipps ersetzen keine professionelle Unterstützung.</p>
 
@@ -163,6 +158,41 @@
 		font-size: 0.875rem;
 	}
 
+	.assign-banner {
+		background: #faf7ff;
+		border: 1.5px solid #7d4ec9;
+		border-radius: 16px;
+		padding: 14px 16px;
+	}
+
+	.assign-banner-text {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.assign-title {
+		font-size: 0.95rem;
+		font-weight: 700;
+		color: #4c407d;
+	}
+
+	.assign-sub {
+		font-size: 0.825rem;
+		color: #6b5a7a;
+		line-height: 1.45;
+	}
+
+	.alert-success {
+		padding: 12px 16px;
+		background: #d4edda;
+		border: 1px solid #c3e6cb;
+		color: #155724;
+		border-radius: 12px;
+		font-size: 0.9rem;
+		font-weight: 600;
+	}
+
 	.btn-random {
 		flex-shrink: 0;
 		min-height: 38px;
@@ -179,6 +209,23 @@
 	}
 
 	.btn-random:hover {
+		background: #6940b4;
+	}
+
+	.btn-save {
+		width: 100%;
+		min-height: 50px;
+		background: #7d4ec9;
+		color: white;
+		border: none;
+		border-radius: 14px;
+		font-weight: 700;
+		font-size: 1rem;
+		cursor: pointer;
+		transition: background 0.15s;
+	}
+
+	.btn-save:hover {
 		background: #6940b4;
 	}
 
@@ -262,6 +309,12 @@
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
+	}
+
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
 	}
 
 	.disclaimer {

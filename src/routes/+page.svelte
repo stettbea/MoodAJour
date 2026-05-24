@@ -20,7 +20,7 @@
 	</section>
 
 	{#if form?.showWarning}
-		<WarningBox isVisible={true} />
+		<WarningBox isVisible={true} entryId={form.entryId} />
 	{/if}
 
 	<section class="card">

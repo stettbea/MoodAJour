@@ -1,5 +1,5 @@
 <script>
-	let { isVisible = true } = $props();
+	let { isVisible = true, entryId = null } = $props();
 	let visible = $state(isVisible);
 
 	function dismiss() {
@@ -19,7 +19,7 @@
 			</p>
 
 			<div class="actions">
-				<a href="/tipps" class="btn-primary">Tipps anzeigen</a>
+				<a href="/tipps{entryId ? `?entryId=${entryId}` : ''}" class="btn-primary">Tipps anzeigen</a>
 				<button type="button" class="btn-secondary" onclick={dismiss}>Schliessen</button>
 			</div>
 		</div>
