@@ -101,6 +101,14 @@ export async function load({ url, locals }) {
 		};
 	}
 
+	const usedCategories = await db
+		.collection('moodEntries')
+		.distinct('category', { userId: locals.user.id });
+
+	const usedPersons = await db
+		.collection('moodEntries')
+		.distinct('persons', { userId: locals.user.id });
+
 	return {
 		entries: entries.map((entry) => ({
 			id: entry._id.toString(),
@@ -113,6 +121,8 @@ export async function load({ url, locals }) {
 		})),
 		filters,
 		categories: settings.categories || DEFAULT_CATEGORIES,
-		persons: settings.persons || DEFAULT_PERSONS
+		persons: settings.persons || DEFAULT_PERSONS,
+		usedCategories: usedCategories.filter((c) => c && c.trim()),
+		usedPersons: usedPersons.filter((p) => p && p.trim())
 	};
 }

@@ -227,21 +227,19 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 
 > Das folgende **Beispiel** wurde bewusst kurz gehalten. Erweiterungen dürfen auch ausführlicher beschrieben werden.
 
-### 4.1 Tabelle nach Kategorien filtern
-- **Beschreibung & Nutzen:** Tabelle X kann nach Kategorie gefiltert werden, weil User typischerweise nur an einer bestimmten Kategorie interessiert sind.  
-- **Wo umgesetzt:** 
-  - **Frontend:** Tabelle mit Dropdown in Datei ...
-  - **Backend:** Form Action ... in Datei ...
-  - **Datenbank:** MongoDB-Query in Datei ...
-- **Referenz:** Screenshot in Kap. x.y
-- **Aus Evaluation abgeleitet?:** Ja, Issue x.y
+### 4.1 Kategorien und Personen direkt im Formular anpassbar
+- **Beschreibung & Nutzen:** Testpersonen bemängelten, dass die vordefinierten Kategorien und Personen nicht immer zur erfassten Situation passten. Die Einstellungsseite zum Verwalten eigener Listen existierte bereits, aber das Navigieren dorthin hätte alle Formular-Eingaben gelöscht. Neu erscheint neben den Labels "Person" und "Kategorie" ein "Anpassen"-Button, der ein Modal öffnet. Im Modal können Einträge hinzugefügt und entfernt werden, ohne die Seite zu verlassen. Nach dem Speichern werden die Dropdowns sofort aktualisiert und die Nutzerin kann die neue Option direkt auswählen.
+- **Wo umgesetzt:**
+  - **Frontend:** In `src/lib/components/MoodForm.svelte` wurden ein Modal-Dialog mit eigenem Formular, lokale Zustandsvariablen für Kategorien und Personen sowie eine `handleModalSubmit`-Funktion mit `use:enhance` ergänzt. Das Modal-Formular postet an die bestehende `/settings`-Action. Bei Erfolg werden die lokalen Listen aktualisiert und das Modal geschlossen, ohne die Seite neu zu laden.
+- **Referenz:** Evaluation Issue F4 (Kap. 3.3)
+- **Aus Evaluation abgeleitet?:** Ja, Issue F4
 
 ### 4.2 Formularfehler beim Stimmungsschieberegler behoben
 - **Beschreibung & Nutzen:** Beim Erstellen eines neuen Eintrags wurde das Titelfeld geleert, sobald der Stimmungsschieberegler bewegt wurde. Dies führte dazu, dass Nutzende ihren Titel erneut eingeben mussten, was frustrierend war und zu unvollständigen Einträgen führen konnte. Mit der Behebung bleibt der Titel beim Verschieben des Schiebereglers erhalten.
 - **Wo umgesetzt:**
   - **Frontend:** In `src/lib/components/MoodForm.svelte` wurde für das Titelfeld eine eigene lokale Zustandsvariable `titleValue` mit `$state()` eingeführt und das Input-Feld auf `bind:value={titleValue}` umgestellt. Vorher war das Feld mit `value={values.title ?? ''}` direkt an die Prop gebunden, was in Svelte 5 bei reaktiven Neu-Renderings durch den Schieberegler-State (`moodValue`) zum Zurücksetzen des Feldes auf den ursprünglichen Prop-Wert führte.
 - **Referenz:** Evaluation Issue F5 (Kap. 3.3)
-- **Aus Evaluation abgeleitet?:** Ja, Issue F5
+- **Aus Evaluation abgeleitet?:** Ja, Issue F5 (Kap. 3.3)
 
 ## 5. Projektorganisation [Optional]
 

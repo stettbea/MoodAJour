@@ -16,7 +16,7 @@
 		<div class="card-header">
 			<h2>Neuer Eintrag</h2>
 		</div>
-		<MoodForm categories={data.categories} persons={data.persons} />
+		<MoodForm categories={data.categories} persons={data.persons} usedCategories={data.usedCategories} usedPersons={data.usedPersons} />
 	</section>
 
 	{#if form?.showWarning}

@@ -59,6 +59,8 @@
 				<MoodForm
 					categories={data.categories}
 					persons={data.persons}
+					usedCategories={data.usedCategories}
+					usedPersons={data.usedPersons}
 					formAction="?/create"
 					buttonText="Eintrag speichern"
 				/>

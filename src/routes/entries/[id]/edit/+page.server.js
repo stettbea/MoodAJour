@@ -29,6 +29,14 @@ export async function load({ params, locals }) {
 
 	const settings = await db.collection('userSettings').findOne({ userId });
 
+	const usedCategories = await db
+		.collection('moodEntries')
+		.distinct('category', { userId });
+
+	const usedPersons = await db
+		.collection('moodEntries')
+		.distinct('persons', { userId });
+
 	return {
 		entry: {
 			id: entry._id.toString(),
@@ -40,7 +48,9 @@ export async function load({ params, locals }) {
 			description: entry.description
 		},
 		categories: settings?.categories ?? DEFAULT_CATEGORIES,
-		persons: settings?.persons ?? DEFAULT_PERSONS
+		persons: settings?.persons ?? DEFAULT_PERSONS,
+		usedCategories: usedCategories.filter((c) => c && c.trim()),
+		usedPersons: usedPersons.filter((p) => p && p.trim())
 	};
 }
 

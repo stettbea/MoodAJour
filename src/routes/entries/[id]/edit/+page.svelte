@@ -15,6 +15,8 @@
 			values={data.entry}
 			categories={data.categories}
 			persons={data.persons}
+			usedCategories={data.usedCategories}
+			usedPersons={data.usedPersons}
 			formAction="?/save"
 			buttonText="Speichern"
 		/>

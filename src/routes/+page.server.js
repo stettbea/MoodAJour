@@ -29,6 +29,14 @@ export async function load({ locals }) {
 		};
 	}
 
+	const usedCategories = await db
+		.collection('moodEntries')
+		.distinct('category', { userId });
+
+	const usedPersons = await db
+		.collection('moodEntries')
+		.distinct('persons', { userId });
+
 	return {
 		username: locals.user.username,
 		entries: entries.map((entry) => ({
@@ -41,7 +49,9 @@ export async function load({ locals }) {
 			description: entry.description
 		})),
 		categories: settings.categories || DEFAULT_CATEGORIES,
-		persons: settings.persons || DEFAULT_PERSONS
+		persons: settings.persons || DEFAULT_PERSONS,
+		usedCategories: usedCategories.filter((c) => c && c.trim()),
+		usedPersons: usedPersons.filter((p) => p && p.trim())
 	};
 }
 

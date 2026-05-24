@@ -1,14 +1,85 @@
 <script>
+	import { enhance } from '$app/forms';
+
 	let {
 		values = {},
 		buttonText = '+ Hinzufügen',
 		categories = [],
 		persons = [],
+		usedCategories = [],
+		usedPersons = [],
 		formAction = '?/create'
 	} = $props();
 
 	let moodValue = $state(Number(values.mood ?? 5));
 	let titleValue = $state(values.title ?? '');
+	let localCategories = $state([...categories]);
+	let localPersons = $state([...persons]);
+
+	let showModal = $state(false);
+	let modalCategories = $state([]);
+	let modalPersons = $state([]);
+	let modalError = $state('');
+	let frozenUsedCategories = $state(new Set());
+	let frozenUsedPersons = $state(new Set());
+
+	function openModal() {
+		modalCategories = [...localCategories];
+		modalPersons = [...localPersons];
+		frozenUsedCategories = new Set(usedCategories);
+		frozenUsedPersons = new Set(usedPersons);
+		modalError = '';
+		showModal = true;
+	}
+
+	function closeModal() {
+		showModal = false;
+	}
+
+	function addModalCategory() {
+		modalCategories = [...modalCategories, ''];
+	}
+
+	function removeModalCategory(index) {
+		const val = modalCategories[index];
+		if (frozenUsedCategories.has(val)) {
+			modalError = `„${val}" wird noch in Einträgen verwendet und kann nicht gelöscht werden.`;
+			return;
+		}
+		modalError = '';
+		modalCategories = modalCategories.filter((_, i) => i !== index);
+	}
+
+	function addModalPerson() {
+		modalPersons = [...modalPersons, ''];
+	}
+
+	function removeModalPerson(index) {
+		const val = modalPersons[index];
+		if (frozenUsedPersons.has(val)) {
+			modalError = `„${val}" wird noch in Einträgen verwendet und kann nicht gelöscht werden.`;
+			return;
+		}
+		modalError = '';
+		modalPersons = modalPersons.filter((_, i) => i !== index);
+	}
+
+	function handleModalSubmit() {
+		modalError = '';
+		return async ({ result }) => {
+			if (result.type === 'success') {
+				if (result.data?.error) {
+					modalError = result.data.error;
+				} else {
+					localCategories = modalCategories.filter((c) => c.trim());
+					localPersons = modalPersons.filter((p) => p.trim());
+					showModal = false;
+				}
+			} else if (result.type === 'failure') {
+				modalError = result.data?.error || 'Fehler beim Speichern.';
+			}
+		};
+	}
 
 	// Extrahiert nur den Datumsteil (YYYY-MM-DD) aus datetime-local oder date Strings
 	function toDateValue(raw) {
@@ -55,20 +126,26 @@
 
 	<div class="field-pair">
 		<label>
-			<span class="label-text">Person</span>
+			<span class="label-text">
+				Person
+				<button type="button" class="customize-link" onclick={openModal}>Anpassen</button>
+			</span>
 			<select name="persons">
 				<option value="">Bitte wählen</option>
-				{#each persons as person}
+				{#each localPersons as person}
 					<option value={person} selected={person === values.persons}>{person}</option>
 				{/each}
 			</select>
 		</label>
 
 		<label>
-			<span class="label-text">Kategorie</span>
+			<span class="label-text">
+				Kategorie
+				<button type="button" class="customize-link" onclick={openModal}>Anpassen</button>
+			</span>
 			<select name="category">
 				<option value="">Bitte wählen</option>
-				{#each categories as category}
+				{#each localCategories as category}
 					<option value={category} selected={category === values.category}>{category}</option>
 				{/each}
 			</select>
@@ -105,6 +182,84 @@
 	<button type="submit">{buttonText}</button>
 </form>
 
+<svelte:window onkeydown={(e) => showModal && e.key === 'Escape' && closeModal()} />
+
+{#if showModal}
+<div class="modal-overlay" onclick={closeModal} role="presentation">
+	<div class="modal-card" onclick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="Kategorien und Personen anpassen">
+		<div class="modal-header">
+			<h2>Anpassen</h2>
+			<button type="button" class="modal-close" onclick={closeModal} aria-label="Schliessen">✕</button>
+		</div>
+
+		{#if modalError}
+			<div class="modal-alert-error">{modalError}</div>
+		{/if}
+
+		<form method="POST" action="/settings" use:enhance={handleModalSubmit} class="modal-form">
+			<div class="modal-section">
+				<div class="modal-section-header">
+					<span>Kategorien</span>
+					<button type="button" class="modal-btn-add" onclick={addModalCategory}>+ Hinzufügen</button>
+				</div>
+				{#if modalCategories.length === 0}
+					<p class="modal-empty">Keine Kategorien vorhanden.</p>
+				{:else}
+					<div class="modal-items">
+						{#each modalCategories as cat, i (i)}
+							{@const used = frozenUsedCategories.has(cat)}
+							<div class="modal-item-row" class:used>
+								<input type="text" name="category" bind:value={modalCategories[i]} placeholder="z. B. Arbeit" readonly={used} required />
+								<button
+									type="button"
+									class="modal-btn-remove"
+									onclick={() => removeModalCategory(i)}
+									disabled={used}
+									aria-label="Entfernen"
+									title={used ? 'Wird noch verwendet' : 'Entfernen'}
+								>✕</button>
+							</div>
+						{/each}
+					</div>
+				{/if}
+			</div>
+
+			<div class="modal-section">
+				<div class="modal-section-header">
+					<span>Personen</span>
+					<button type="button" class="modal-btn-add" onclick={addModalPerson}>+ Hinzufügen</button>
+				</div>
+				{#if modalPersons.length === 0}
+					<p class="modal-empty">Keine Personen vorhanden.</p>
+				{:else}
+					<div class="modal-items">
+						{#each modalPersons as person, i (i)}
+							{@const used = frozenUsedPersons.has(person)}
+							<div class="modal-item-row" class:used>
+								<input type="text" name="person" bind:value={modalPersons[i]} placeholder="z. B. Freund" readonly={used} required />
+								<button
+									type="button"
+									class="modal-btn-remove"
+									onclick={() => removeModalPerson(i)}
+									disabled={used}
+									aria-label="Entfernen"
+									title={used ? 'Wird noch verwendet' : 'Entfernen'}
+								>✕</button>
+							</div>
+						{/each}
+					</div>
+				{/if}
+			</div>
+
+			<div class="modal-actions">
+				<button type="submit" class="modal-btn-save">Speichern</button>
+				<button type="button" class="modal-btn-cancel" onclick={closeModal}>Abbrechen</button>
+			</div>
+		</form>
+	</div>
+</div>
+{/if}
+
 <style>
 	.mood-form {
 		display: flex;
@@ -129,6 +284,238 @@
 		font-size: 0.875rem;
 		font-weight: 600;
 		color: #4c407d;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.customize-link {
+		font-size: 0.75rem;
+		font-weight: 500;
+		color: #9b8bb5;
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+		font-family: inherit;
+	}
+
+	.customize-link:hover {
+		color: #7d4ec9;
+		text-decoration: underline;
+	}
+
+	.modal-overlay {
+		position: fixed;
+		inset: 0;
+		background: rgba(0, 0, 0, 0.45);
+		z-index: 200;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 16px;
+	}
+
+	.modal-card {
+		background: white;
+		border-radius: 20px;
+		width: min(100%, 430px);
+		max-height: 85vh;
+		overflow-y: auto;
+		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+	}
+
+	.modal-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 16px 20px;
+		border-bottom: 1px solid #e6e0f4;
+		position: sticky;
+		top: 0;
+		background: white;
+		z-index: 1;
+	}
+
+	.modal-header h2 {
+		margin: 0;
+		font-size: 1rem;
+		font-weight: 700;
+		color: #20182f;
+	}
+
+	.modal-close {
+		background: none;
+		border: none;
+		font-size: 1rem;
+		color: #9b8bb5;
+		cursor: pointer;
+		padding: 4px 8px;
+		border-radius: 8px;
+	}
+
+	.modal-close:hover {
+		background: #f3ebfb;
+		color: #4c407d;
+	}
+
+	.modal-alert-error {
+		margin: 12px 20px 0;
+		padding: 10px 14px;
+		border-radius: 10px;
+		background: #fdecea;
+		border: 1px solid #f5c2c7;
+		color: #842029;
+		font-size: 0.875rem;
+		font-weight: 600;
+	}
+
+	.modal-form {
+		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+	}
+
+	.modal-section {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.modal-section-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.modal-section-header span {
+		font-size: 0.875rem;
+		font-weight: 700;
+		color: #2c2c3a;
+	}
+
+	.modal-btn-add {
+		min-height: 34px;
+		padding: 0 12px;
+		background: #7d4ec9;
+		color: white;
+		border: none;
+		border-radius: 10px;
+		font-weight: 700;
+		font-size: 0.8rem;
+		cursor: pointer;
+	}
+
+	.modal-btn-add:hover {
+		background: #6940b4;
+	}
+
+	.modal-items {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.modal-item-row {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+	}
+
+	.modal-item-row input {
+		flex: 1;
+		padding: 10px 12px;
+		border: 1.5px solid #dcd1f7;
+		border-radius: 10px;
+		background: white;
+		color: #2c2c3a;
+		font-size: 0.9rem;
+		min-height: 42px;
+		font-family: inherit;
+	}
+
+	.modal-item-row input:focus {
+		outline: none;
+		border-color: #7d4ec9;
+		box-shadow: 0 0 0 3px rgba(125, 78, 201, 0.1);
+	}
+
+	.modal-item-row.used input,
+	.modal-item-row input[readonly] {
+		background: #f5f0ff;
+		border-color: #e6e0f4;
+		color: #9b8bb5;
+		cursor: not-allowed;
+	}
+
+	.modal-btn-remove {
+		flex-shrink: 0;
+		width: 42px;
+		height: 42px;
+		border: 1.5px solid #dcd1f7;
+		background: white;
+		color: #c0392b;
+		border-radius: 10px;
+		cursor: pointer;
+		font-size: 0.9rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.modal-btn-remove:hover:not(:disabled) {
+		background: #fdecea;
+		border-color: #f5c2c7;
+	}
+
+	.modal-btn-remove:disabled {
+		cursor: not-allowed;
+		color: #c0b8d4;
+		background: #f5f0ff;
+		border-color: #e6e0f4;
+	}
+
+	.modal-empty {
+		margin: 0;
+		color: #9b8bb5;
+		font-size: 0.875rem;
+	}
+
+	.modal-actions {
+		display: flex;
+		gap: 10px;
+	}
+
+	.modal-btn-save,
+	.modal-btn-cancel {
+		flex: 1;
+		min-height: 46px;
+		border-radius: 12px;
+		font-weight: 700;
+		font-size: 0.95rem;
+		cursor: pointer;
+		font-family: inherit;
+	}
+
+	.modal-btn-save {
+		background: #7d4ec9;
+		color: white;
+		border: none;
+	}
+
+	.modal-btn-save:hover {
+		background: #6940b4;
+	}
+
+	.modal-btn-cancel {
+		background: white;
+		color: #4c407d;
+		border: 1.5px solid #dcd1f7;
+	}
+
+	.modal-btn-cancel:hover {
+		background: #f3ebfb;
 	}
 
 	.optional {
