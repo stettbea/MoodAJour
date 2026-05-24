@@ -118,7 +118,7 @@
 		<label>
 			<span class="label-text">Wann?</span>
 			<div class="date-wrapper">
-				<input type="date" name="date" required value={toDateValue(values.date)} />
+				<input type="date" name="date" required value={toDateValue(values.date)} max={new Date().toLocaleDateString('sv-SE')} />
 				<span class="date-icon" aria-hidden="true">📅</span>
 			</div>
 		</label>

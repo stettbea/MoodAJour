@@ -241,6 +241,29 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Referenz:** Evaluation Issue F5 (Kap. 3.3)
 - **Aus Evaluation abgeleitet?:** Ja, Issue F5 (Kap. 3.3)
 
+### 4.3 Menüband-Verhalten verbessert
+- **Beschreibung & Nutzen:** Testperson TP1 bemängelte, dass das Navigationsmenü die Nutzung störte, weil es sich nach dem Antippen eines Links nicht schloss und auch durch einen Klick ausserhalb nicht geschlossen werden konnte. Das führte dazu, dass das Dropdown offen blieb und Inhalte verdeckte. Neu schliesst das Menü in allen relevanten Situationen automatisch: beim Klick auf einen Menüpunkt, beim Klick ausserhalb des Menüs sowie beim Drücken der Escape-Taste.
+- **Wo umgesetzt:**
+  - **Frontend:** In `src/routes/+layout.svelte` wurde das `<details>`/`<summary>`-Element durch einen zustandsgesteuerten `<button>` mit `menuOpen`-State (`$state`) ersetzt. Ein `svelte:window`-Handler erkennt Klicks ausserhalb des Menüs via `menuWrapper.contains(e.target)` und Escape-Tastendruck. Jeder Navigationslink und der Ausloggen-Button schliesst das Menü zusätzlich per `onclick`.
+- **Referenz:** Evaluation Issue F7 (Kap. 3.3)
+- **Aus Evaluation abgeleitet?:** Ja, Issue F7
+
+### 4.4 Löschen-Button visuell reduziert und Datumsauswahl eingeschränkt
+
+**Löschen-Button (F5):**
+- **Beschreibung & Nutzen:** Der Löschen-Button wirkte auf TP1 zu dominant, da er gleich gross wie der Bearbeiten-Button war und mit roter Farbe sofort ins Auge fiel. Neu ist er ein kompaktes Icon-Only-Symbol (🗑), das standardmässig in einem unauffälligen Grauton erscheint. Rot wird nur beim Hover angezeigt. Die Lösch-Bestätigung bleibt weiterhin als Sicherheitsabfrage erhalten.
+- **Wo umgesetzt:**
+  - **Frontend:** In `src/lib/components/EntryCard.svelte` wurde `.btn-danger` von `flex: 1` auf `flex: none` mit fixer Breite umgestellt und die Farbe auf ein neutrales Grau reduziert. Der Button zeigt nur noch ein Papierkorb-Icon statt dem Text "Löschen".
+- **Referenz:** Evaluation Issue F5 (Kap. 3.3)
+- **Aus Evaluation abgeleitet?:** Ja, Issue F5
+
+**Datumsauswahl eingeschränkt (F2):**
+- **Beschreibung & Nutzen:** TP2 fand es irritierend, dass beim Erfassen eines Eintrags ein zukünftiges Datum ausgewählt werden konnte, da Mood-Einträge typischerweise aktuelle oder vergangene Situationen beschreiben. Das Datumfeld ist jetzt auf heute als Maximum beschränkt.
+- **Wo umgesetzt:**
+  - **Frontend:** In `src/lib/components/MoodForm.svelte` wurde dem Datumsinput das Attribut `max={new Date().toLocaleDateString('sv-SE')}` hinzugefügt. Das `sv-SE`-Locale liefert das heutige Datum in der lokalen Zeitzone im Format `YYYY-MM-DD`, das der Browser als `max`-Wert erwartet.
+- **Referenz:** Evaluation Issue F2 (Kap. 3.3)
+- **Aus Evaluation abgeleitet?:** Ja, Issue F2
+
 ## 5. Projektorganisation [Optional]
 
 - **Repository & Struktur:** Das Projekt wird in einem privaten GitHub-Repository verwaltet. Die Struktur folgt dem SvelteKit-Standard mit den Hauptverzeichnissen `src/routes/` für die Seiten und Server-Logik sowie `src/lib/components/` für wiederverwendbare UI-Komponenten. Konfigurationsdateien wie `svelte.config.js` und `vite.config.js` liegen im Projektstamm.

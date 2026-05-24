@@ -60,8 +60,8 @@
 
 	<div class="actions">
 		<a href="/entries/{entry.id}/edit" class="btn btn-secondary">Bearbeiten</a>
-		<button type="button" class="btn btn-danger" onclick={() => (showDeleteModal = true)}>
-			Löschen
+		<button type="button" class="btn btn-danger" onclick={() => (showDeleteModal = true)} aria-label="Eintrag löschen">
+			🗑
 		</button>
 	</div>
 </div>
@@ -180,13 +180,19 @@
 	}
 
 	.btn-danger {
-		background: white;
-		color: #c0392b;
-		border-color: #f5c2c7;
+		flex: none;
+		width: 44px;
+		padding: 0;
+		background: transparent;
+		color: #b8aed4;
+		border-color: #e6e0f4;
+		font-size: 1rem;
 	}
 
 	.btn-danger:hover {
 		background: #fdecea;
+		color: #c0392b;
+		border-color: #f5c2c7;
 	}
 
 	/* Modal */

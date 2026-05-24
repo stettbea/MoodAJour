@@ -3,7 +3,21 @@
 	import { page } from '$app/state';
 
 	let { children, data } = $props();
+
+	let menuOpen = $state(false);
+	let menuWrapper;
+
+	function handleOutsideClick(e) {
+		if (menuOpen && menuWrapper && !menuWrapper.contains(e.target)) {
+			menuOpen = false;
+		}
+	}
 </script>
+
+<svelte:window
+	onkeydown={(e) => e.key === 'Escape' && (menuOpen = false)}
+	onclick={handleOutsideClick}
+/>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
@@ -25,24 +39,29 @@
 				{/if}
 			</div>
 
-			<div class="menu-wrapper">
-				<details>
-					<summary class="icon-button menu-button" aria-label="Menü öffnen">
-						<span class="menu-icon"></span>
-					</summary>
+			<div class="menu-wrapper" bind:this={menuWrapper}>
+				<button
+					class="icon-button menu-button"
+					aria-label="Menü öffnen"
+					aria-expanded={menuOpen}
+					onclick={() => menuOpen = !menuOpen}
+				>
+					<span class="menu-icon"></span>
+				</button>
+				{#if menuOpen}
 					<nav class="dropdown">
 						{#if data.user}
-							<a href="/overview" class:active={page.url.pathname === '/overview'}>Übersicht</a>
+							<a href="/overview" class:active={page.url.pathname === '/overview'} onclick={() => menuOpen = false}>Übersicht</a>
 						{:else}
 							<span class="dropdown-locked" title="Bitte zuerst einloggen">
 								Übersicht <span class="lock-icon">🔒</span>
 							</span>
 						{/if}
 
-						<a href="/tipps" class:active={page.url.pathname === '/tipps'}>Tipps</a>
+						<a href="/tipps" class:active={page.url.pathname === '/tipps'} onclick={() => menuOpen = false}>Tipps</a>
 
 						{#if data.user}
-							<a href="/settings" class:active={page.url.pathname === '/settings'}>Einstellungen</a>
+							<a href="/settings" class:active={page.url.pathname === '/settings'} onclick={() => menuOpen = false}>Einstellungen</a>
 						{:else}
 							<span class="dropdown-locked" title="Bitte zuerst einloggen">
 								Einstellungen <span class="lock-icon">🔒</span>
@@ -53,13 +72,13 @@
 
 						{#if data.user}
 							<form method="POST" action="/logout">
-								<button type="submit" class="dropdown-logout">Ausloggen</button>
+								<button type="submit" class="dropdown-logout" onclick={() => menuOpen = false}>Ausloggen</button>
 							</form>
 						{:else}
-							<a href="/login" class:active={page.url.pathname === '/login'}>Einloggen</a>
+							<a href="/login" class:active={page.url.pathname === '/login'} onclick={() => menuOpen = false}>Einloggen</a>
 						{/if}
 					</nav>
-				</details>
+				{/if}
 			</div>
 		</div>
 	</header>
@@ -165,11 +184,7 @@
 
 	.menu-button {
 		padding: 0;
-		list-style: none;
-	}
-
-	.menu-button::-webkit-details-marker {
-		display: none;
+		cursor: pointer;
 	}
 
 	.menu-wrapper {
