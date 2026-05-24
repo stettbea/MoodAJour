@@ -232,6 +232,10 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Wo umgesetzt:**
   - **Frontend:** In `src/lib/components/MoodForm.svelte` wurden ein Modal-Dialog mit eigenem Formular, lokale Zustandsvariablen für Kategorien und Personen sowie eine `handleModalSubmit`-Funktion mit `use:enhance` ergänzt. Das Modal-Formular postet an die bestehende `/settings`-Action. Bei Erfolg werden die lokalen Listen aktualisiert und das Modal geschlossen, ohne die Seite neu zu laden.
 - **Referenz:** Evaluation Issue F4 (Kap. 3.3)
+
+  <img src="src/lib/img/4.1Kategorie und Personen/Home Verlinkung.png" alt="Home Verlinkung" width="280">  <img src="src/lib/img/4.1Kategorie und Personen/Home Möglichkeit für Anpassung Settings.png" alt="Anpassungsmöglichkeit in Settings" width="280">
+  <br>*Abgebildet: Verbesserte Screens nach der Evaluation*
+
 - **Aus Evaluation abgeleitet?:** Ja, Issue F4
 
 ### 4.2 Formularfehler beim Stimmungsschieberegler behoben
@@ -255,6 +259,10 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Wo umgesetzt:**
   - **Frontend:** In `src/lib/components/EntryCard.svelte` wurde `.btn-danger` von `flex: 1` auf `flex: none` mit fixer Breite umgestellt und die Farbe auf ein neutrales Grau reduziert. Der Button zeigt nur noch ein Papierkorb-Icon statt dem Text "Löschen".
 - **Referenz:** Evaluation Issue F5 (Kap. 3.3)
+
+  <img src="src/lib/img/4.4Löschen und Datumsauswahl/Löschen.png" alt="Löschen-Button reduziert" width="280">
+  <br>*Abgebildet: Verbesserte Screens nach der Evaluation*
+
 - **Aus Evaluation abgeleitet?:** Ja, Issue F5
 
 **Datumsauswahl eingeschränkt (F2):**
@@ -262,6 +270,10 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Wo umgesetzt:**
   - **Frontend:** In `src/lib/components/MoodForm.svelte` wurde dem Datumsinput das Attribut `max={new Date().toLocaleDateString('sv-SE')}` hinzugefügt. Das `sv-SE`-Locale liefert das heutige Datum in der lokalen Zeitzone im Format `YYYY-MM-DD`, das der Browser als `max`-Wert erwartet.
 - **Referenz:** Evaluation Issue F2 (Kap. 3.3)
+
+  <img src="src/lib/img/4.4Löschen und Datumsauswahl/Datumsauswahl.png" alt="Datumsauswahl eingeschränkt" width="280">
+  <br>*Abgebildet: Verbesserte Screens nach der Evaluation*
+
 - **Aus Evaluation abgeleitet?:** Ja, Issue F2
 
 ### 4.5 Eintrags-Card vollständig anklickbar
@@ -269,6 +281,10 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Wo umgesetzt:**
   - **Frontend:** In `src/lib/components/EntryCard.svelte` wurde ein unsichtbarer `<a class="card-link">` mit `position: absolute; inset: 0` über die gesamte Card gelegt (Stretched-Link-Technik). Der Löschen-Button liegt mit `position: relative; z-index: 1` darüber und bleibt so unabhängig klickbar. Der "Bearbeiten"-Button wurde entfernt. Hover-Effekt auf `.entry-card` signalisiert die Interaktivität.
 - **Referenz:** Evaluation Issue F4 (Kap. 3.3)
+
+  <img src="src/lib/img/4.5Card/direkt klickbar.png" alt="Card vollständig anklickbar" width="280">
+  <br>*Abgebildet: Verbesserte Screens nach der Evaluation*
+
 - **Aus Evaluation abgeleitet?:** Ja, Issue F4
 
 ### 4.6 Tipps konkretisiert und mit Einträgen verknüpft
@@ -278,6 +294,12 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
   - **Backend:** `src/routes/tipps/+page.server.js` (neu) lädt die bereits gespeicherten Tipps eines Eintrags und stellt die `saveTips`-Action bereit, welche die ausgewählten Tipps als Array im Feld `usedTips` im Dokument `moodEntries` speichert. Die Create-Actions in `+page.server.js` und `overview/+page.server.js` geben neu die `insertedId` zurück.
   - **Datenbank:** Feld `usedTips` (Array von Strings) auf `moodEntries`-Dokumente ergänzt.
 - **Referenz:** Evaluation Issue F6 (Kap. 3.3)
+
+  <img src="src/lib/img/4.6Tipps/Darstellung auf Card.png" alt="Tipps Darstellung auf Card" width="280">  <img src="src/lib/img/4.6Tipps/Speichermöglichkeit Tipps.png" alt="Speichermöglichkeit Tipps" width="280">
+
+  <img src="src/lib/img/4.6Tipps/Ergänzung Informationen Tippsübersicht.png" alt="Ergänzung Informationen Tippsübersicht" width="280">  <img src="src/lib/img/4.6Tipps/Filtermöglichkeit.png" alt="Filtermöglichkeit Tipps" width="280">
+  <br>*Abgebildet: Verbesserte Screens nach der Evaluation*
+
 - **Aus Evaluation abgeleitet?:** Ja, Issue F6
 
 ## 5. Projektorganisation [Optional]
