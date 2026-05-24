@@ -35,6 +35,12 @@
 </script>
 
 <div class="entry-card">
+	<a href="/entries/{entry.id}/edit" class="card-link" aria-label="{entry.title || 'Eintrag'} bearbeiten"></a>
+
+	<button type="button" class="btn-delete-corner" onclick={() => (showDeleteModal = true)} aria-label="Eintrag löschen">
+		🗑
+	</button>
+
 	<div class="entry-top">
 		<h3>{entry.title || 'Unbekannt'}</h3>
 		<div class="mood-badge" style="background: {moodBg(entry.mood)}">
@@ -57,13 +63,6 @@
 	{#if entry.description}
 		<p class="description">{entry.description}</p>
 	{/if}
-
-	<div class="actions">
-		<a href="/entries/{entry.id}/edit" class="btn btn-secondary">Bearbeiten</a>
-		<button type="button" class="btn btn-danger" onclick={() => (showDeleteModal = true)} aria-label="Eintrag löschen">
-			🗑
-		</button>
-	</div>
 </div>
 
 {#if showDeleteModal}
@@ -92,19 +91,60 @@
 
 <style>
 	.entry-card {
-		padding: 16px 20px;
+		position: relative;
+		padding: 16px 14px 16px 16px;
 		background: #faf7ff;
 		border: 1px solid #e6e0f4;
 		border-radius: 16px;
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+		transition: border-color 0.15s, box-shadow 0.15s;
+		cursor: pointer;
+	}
+
+	.entry-card:hover {
+		border-color: #c9b9f0;
+		box-shadow: 0 4px 14px rgba(125, 78, 201, 0.12);
+	}
+
+	.card-link {
+		position: absolute;
+		inset: 0;
+		border-radius: 16px;
+		z-index: 0;
+	}
+
+	.btn-delete-corner {
+		position: absolute;
+		top: 12px;
+		right: 12px;
+		z-index: 1;
+		width: 30px;
+		height: 30px;
+		padding: 0;
+		background: transparent;
+		border: none;
+		border-radius: 8px;
+		font-size: 0.85rem;
+		color: #c0b8d4;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: background 0.15s, color 0.15s;
+	}
+
+	.btn-delete-corner:hover {
+		background: #fdecea;
+		color: #c0392b;
 	}
 
 	.entry-top {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		gap: 12px;
+		gap: 8px;
 		margin-bottom: 10px;
+		padding-right: 24px;
 	}
 
 	h3 {
@@ -128,8 +168,8 @@
 	.entry-meta {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 6px;
-		margin-bottom: 10px;
+		gap: 5px;
+		margin-bottom: 0;
 	}
 
 	.meta-item {
@@ -142,19 +182,13 @@
 	}
 
 	.description {
-		margin: 0 0 14px;
-		font-size: 0.9rem;
+		margin: 6px 0 0;
+		font-size: 0.875rem;
 		color: #4c407d;
-		line-height: 1.5;
+		line-height: 1.45;
 	}
 
-	.actions {
-		display: flex;
-		gap: 10px;
-	}
-
-	.btn {
-		flex: 1;
+	.btn-secondary {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
@@ -165,34 +199,14 @@
 		font-size: 0.9rem;
 		cursor: pointer;
 		text-decoration: none;
-		border: 1.5px solid transparent;
-		transition: background 0.15s;
-	}
-
-	.btn-secondary {
+		border: 1.5px solid #dcd1f7;
 		background: white;
 		color: #4c407d;
-		border-color: #dcd1f7;
+		transition: background 0.15s;
 	}
 
 	.btn-secondary:hover {
 		background: #f3ebfb;
-	}
-
-	.btn-danger {
-		flex: none;
-		width: 44px;
-		padding: 0;
-		background: transparent;
-		color: #b8aed4;
-		border-color: #e6e0f4;
-		font-size: 1rem;
-	}
-
-	.btn-danger:hover {
-		background: #fdecea;
-		color: #c0392b;
-		border-color: #f5c2c7;
 	}
 
 	/* Modal */

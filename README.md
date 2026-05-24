@@ -264,6 +264,13 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 - **Referenz:** Evaluation Issue F2 (Kap. 3.3)
 - **Aus Evaluation abgeleitet?:** Ja, Issue F2
 
+### 4.5 Eintrags-Card vollständig anklickbar
+- **Beschreibung & Nutzen:** Testperson TP1 erwartete, dass die gesamte Eintrags-Card direkt anklickbar ist um zum Bearbeitungsformular zu gelangen, und suchte vergeblich nach einer Möglichkeit den Eintrag zu öffnen. Der separate "Bearbeiten"-Button war nicht intuitiv genug. Neu ist die gesamte Card ein Link auf die Bearbeitungsseite. Beim Hovern hebt sich die Card visuell ab (lila Rahmen, leichter Schatten), was die Klickbarkeit signalisiert. Der Löschen-Button bleibt als Icon oben rechts weiterhin separat bedienbar.
+- **Wo umgesetzt:**
+  - **Frontend:** In `src/lib/components/EntryCard.svelte` wurde ein unsichtbarer `<a class="card-link">` mit `position: absolute; inset: 0` über die gesamte Card gelegt (Stretched-Link-Technik). Der Löschen-Button liegt mit `position: relative; z-index: 1` darüber und bleibt so unabhängig klickbar. Der "Bearbeiten"-Button wurde entfernt. Hover-Effekt auf `.entry-card` signalisiert die Interaktivität.
+- **Referenz:** Evaluation Issue F4 (Kap. 3.3)
+- **Aus Evaluation abgeleitet?:** Ja, Issue F4
+
 ## 5. Projektorganisation [Optional]
 
 - **Repository & Struktur:** Das Projekt wird in einem privaten GitHub-Repository verwaltet. Die Struktur folgt dem SvelteKit-Standard mit den Hauptverzeichnissen `src/routes/` für die Seiten und Server-Logik sowie `src/lib/components/` für wiederverwendbare UI-Komponenten. Konfigurationsdateien wie `svelte.config.js` und `vite.config.js` liegen im Projektstamm.
