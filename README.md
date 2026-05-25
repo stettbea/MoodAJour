@@ -1,4 +1,4 @@
-# Projektdokumentation - MoodAJour
+﻿# Projektdokumentation - MoodAJour
 
 ## Inhaltsverzeichnis
 
@@ -14,12 +14,6 @@
 5. [Projektorganisation [Optional]](#5-projektorganisation-optional)
 6. [KI-Deklaration](#6-ki-deklaration)
 7. [Anhang [Optional]](#7-anhang-optional)
-
-> **Hinweis:** Massgeblich sind die im **Unterricht** und auf **Moodle** kommunizierten Anforderungen.
-
-<!-- WICHTIG: DIE KAPITELSTRUKTUR DARF NICHT VERÄNDERT WERDEN! -->
-
-<!-- Diese Vorlage ist für eine README.md im Repository gedacht. Abschnitte mit [Optional] können weggelassen werden, wenn in den Übungen nichts anderes verlangt wird. -->
 
 ## 1. Ausgangslage
 Studierende und junge Berufstätige reagieren im Alltag häufig emotional auf belastende Situationen wie Stress, Zeitdruck oder zwischenmenschliche Konflikte. Diese Reaktionen werden jedoch selten festgehalten und können im Nachhinein kaum eingeordnet oder reflektiert werden. Bestehende digitale Lösungen sind in solchen Momenten oft zu komplex und zeitintensiv, weshalb sie im Alltag kaum konsequent genutzt werden.
@@ -51,10 +45,19 @@ Die Navigation erfolgt über eine Top Navigation Bar, die jederzeit erreichbar i
 - **Abgrenzung:** Die App ist bewusst als mobile Anwendung konzipiert. Eine Desktop-Version ist nicht Teil des Umfangs. Komplexe Analyse- oder Auswertungsfunktionen (z.B. Diagramme, Statistiken) sind ebenfalls nicht enthalten.
 
 ## 3. Vorgehen & Artefakte
-Die Durchführung erfolgt phasenbasiert; dokumentieren Sie die wichtigsten Ergebnisse je Phase.
 
 ### 3.1 Understand & Define
 - **Zielgruppenverständnis:** Die Zielgruppe umfasst Studierende sowie junge Berufstätige im Alter von ca. 18 bis 35 Jahren, die unter hohem Leistungs- und Zeitdruck stehen. Die Problemraumanalyse zeigte, dass emotionale Reaktionen auf belastende Situationen wie Stress, Zeitdruck oder Konflikte im Alltag zwar häufig auftreten, aber selten systematisch festgehalten werden. Bestehende Apps wurden als zu komplex und zeitaufwendig bewertet, sodass sie im Alltag kaum konsequent genutzt werden.
+
+  - **Recherche:** Die Erkenntnisse über die Zielgruppe wurden durch eigene Beobachtungen im Studienumfeld, informelle Gespräche mit Kommilitoninnen und Kommilitonen sowie einen Vergleich bestehender Mood-Tracking-Apps (z.B. Daylio, Reflectly) gewonnen. Dabei zeigte sich, dass der Alltag der Zielgruppe wenig Raum für aufwendige Reflexion lässt und einfache, schnelle Lösungen bevorzugt werden.
+
+  - **Proto-Persona:**
+    - **Name:** Lena, 23 Jahre
+    - **Situation:** Studentin im 4. Semester, wohnt in einer WG, pendelt täglich zur Hochschule. Neben dem Studium arbeitet sie 60% in einem Büro.
+    - **Ziele:** Lena möchte verstehen, warum sie in bestimmten Situationen überreagiert oder sich ausgelaugt fühlt. Sie vermutet, dass Stress und bestimmte Personen eine Rolle spielen, kann aber keine Muster erkennen, weil sie nichts festhält.
+    - **Frustrationen:** Sie hat bereits zwei Mood-Apps ausprobiert, beide aber nach wenigen Tagen wieder aufgehört zu nutzen, weil das Ausfüllen zu lange dauerte. Sie braucht etwas, das in zwei Minuten erledigt ist.
+    - **Nutzungskontext:** Unterwegs im Zug, zwischen Vorlesungen oder nach einem stressigen Gespräch. Immer am Smartphone.
+
 - **Wesentliche Erkenntnisse:**
   - Emotionale Momente werden schnell vergessen oder verzerrt erinnert, wenn sie nicht direkt festgehalten werden
   - Die Nutzung erfolgt spontan im Alltag, oft unterwegs oder zwischen Terminen, mit wenig Zeit und Aufmerksamkeit
@@ -65,10 +68,17 @@ Die Durchführung erfolgt phasenbasiert; dokumentieren Sie die wichtigsten Ergeb
 ### 3.2 Sketch
 - **Variantenüberblick:** Im Rahmen der Crazy-8-Übung wurden verschiedene Ansätze für die Struktur und den Aufbau der Mood-Tracking-App skizziert. Der Fokus lag dabei auf einer einfachen mobilen Bedienung, einer klaren Navigation sowie einer übersichtlichen Darstellung der Mood-Einträge. Die Varianten unterschieden sich insbesondere in der Strukturierung der Inhalte, der Navigation sowie der Darstellung der Einträge und Zusatzfunktionen. Feedback aus der Übung wurde direkt in die Weiterentwicklung der Skizzen integriert.
 - **Skizzen:**
+
+  **Crazy-8: Übung** <br>
+  <img src="src/lib/img/Skizze/Crazy8.png" alt="Crazy-8-Skizzen">
+
   - **Variante A (Zentrale Eingabeseite):** Fokus auf eine schnelle Mood-Erfassung direkt auf der Startseite. Enthalten waren Eingabefelder für Titel, Beschreibung, Stimmungsskala und Kategorien. Zusätzlich wurden erste Ideen für die Anzeige letzter Einträge integriert. Vorteil dieser Variante war der schnelle Zugriff auf die Kernfunktion der App. Nachteil war die fehlende Trennung zwischen Eingabe und Verwaltung der Einträge.
   - **Variante B (Übersichtsseite mit Verwaltung):** Diese Skizze konzentrierte sich auf eine strukturierte Übersicht aller Mood-Einträge. Ergänzt wurden Funktionen zum Filtern, Bearbeiten und Löschen der Einträge. Zudem wurden Kategorien, Emojis und eine Stimmungsskala von 1–10 ergänzt, um die Einträge verständlicher darzustellen. Feedback zur Übersichtlichkeit und Struktur wurde hier besonders berücksichtigt.
   - **Variante C (Tipps- und Reflexionsbereich):** In dieser Variante wurde eine separate Tipps-Seite integriert. Die Seite enthielt erste Ideen für Reflexionsimpulse, kurze Übungen sowie Hinweise für belastende Situationen. Ziel war es, die App nicht nur als Erfassungstool, sondern zusätzlich als unterstützende Anwendung zur Selbstreflexion zu gestalten.
   **Finale Skizze:** Die finale Lösung kombiniert die drei Hauptbereiche „Home“, „Übersicht“ und „Tipps“ in einer klar getrennten Struktur. Die Home-Seite ermöglicht die schnelle Erfassung neuer Mood-Einträge, während die Übersichtsseite gezielt für Verwaltung, Filterung und Bearbeitung genutzt wird. Ergänzend bietet die Tipps-Seite Reflexionshilfen und Soforthilfe-Hinweise. Das Feedback aus der Crazy-8-Übung führte insbesondere zu einer klareren Navigation, einer einheitlichen Inhaltsstruktur sowie einer besseren Übersichtlichkeit der Einträge.
+  <br>
+  **Skizze: final** <br>
+  <img src="src/lib/img/Skizze/finale Skizze.png" alt="Finale Skizze">
 
 ### 3.3 Decide
 - **Gewählte Variante & Begründung:** Gewählt wurde die Variante mit den drei Hauptbereichen „Home“, „Übersicht“ und „Tipps“. Die Struktur ermöglicht eine klare Trennung der Funktionen und eine einfache Navigation innerhalb der App. Die Home-Seite fokussiert die schnelle Erfassung neuer Mood-Einträge, während die Übersichtsseite alle Einträge strukturiert darstellt und Funktionen wie Filtern, Bearbeiten und Löschen ermöglicht. Ergänzend bietet die Tipps-Seite kurze Reflexionsimpulse und Unterstützung für belastende Situationen. Das Feedback aus der Crazy-8-Übung bestätigte insbesondere die klare Aufteilung der Inhalte sowie die Ergänzung von Kategorien und Stimmungsskalen zur besseren Übersichtlichkeit.
@@ -79,13 +89,24 @@ Die Durchführung erfolgt phasenbasiert; dokumentieren Sie die wichtigsten Ergeb
   4. Der Eintrag wird gespeichert und erscheint bei den letzten Einträgen auf der Home-Seite
   5. Über die Navigation gelangen Nutzer:innen zur Übersicht, wo Einträge gefiltert, geöffnet, bearbeitet oder gelöscht werden können
   6. Auf der Tipps-Seite finden Nutzer:innen Reflexionsimpulse sowie einen kurzen Disclaimer zur Nutzung der App
-- **Mockup:** _: https://www.figma.com/design/sg85DclAWST4hlpy6nVeN2/Arbeitsbereich--Prototyping?node-id=1-350&t=5o3vSToOC39dZPeY-1
+
+  Die folgenden Workflows visualisieren die drei Kernabläufe der App. Eine formale User Journey Map wurde nicht erstellt.
+
+  **Workflow 1: Neuer Moodeintrag und Warnhinweis**
+  <img src="src/lib/img/workflows/Neuer Moodeintrag und Warnhinweis.png" alt="Workflow Neuer Moodeintrag und Warnhinweis">
+
+  **Workflow 2: Moodeinträge verwalten (Übersicht und Detail)**
+  <img src="src/lib/img/workflows/Moodeinträge verwalten (Übersicht und Detail).png" alt="Workflow Moodeinträge verwalten">
+
+  **Workflow 3: Navigation zwischen Home, Übersicht und Tipps**
+  <img src="src/lib/img/workflows/Navigation.png" alt="Workflow Navigation">
+
+- **Mockup:** https://www.figma.com/design/sg85DclAWST4hlpy6nVeN2/Arbeitsbereich--Prototyping?node-id=1-350&t=5o3vSToOC39dZPeY-1
 
 ### 3.4 Prototype
 
 #### 3.4.1. Entwurf (Design)
-Beschreibt die Gestaltung und Interaktion.
-> **Hinweis:** Hier wird der **Prototyp** beschrieben, nicht das **Mockup**.
+
 - **Informationsarchitektur:** Der Prototyp wurde als Mobile-First-Anwendung mit einer klaren Aufteilung in die drei Hauptbereiche „Home“, „Übersicht“ und „Tipps“ gestaltet. Die Navigation ermöglicht einen einfachen Wechsel zwischen den Bereichen und unterstützt eine intuitive Bedienung auf mobilen Geräten. Die Home-Seite dient als zentraler Einstiegspunkt zur schnellen Erfassung neuer Mood-Einträge. Die Übersichtsseite bündelt alle Einträge und bietet Funktionen zum Filtern, Bearbeiten und Löschen. Ergänzend enthält die Tipps-Seite Reflexionsimpulse sowie Hinweise für belastende Situationen. Die Struktur wurde bewusst einfach gehalten, damit Nutzer:innen ohne lange Einarbeitung mit der App interagieren können.
 - **User Interface Design:** 
   - **Home-Seite:**
@@ -141,7 +162,7 @@ Fasst die technische Realisierung zusammen.
 
 - **Daten & Schnittstellen:** Alle Daten werden in einer **MongoDB Atlas Cloud-Datenbank** (Datenbankname: `moodajour`) gespeichert. Es gibt drei Collections: `users` (Nutzerdaten), `moodEntries` (Mood-Einträge mit Feldern wie Stimmungswert, Kategorie, Person, Beschreibung) und `userSettings` (individuelle Kategorien und Personen je Nutzerin). Die Authentifizierung erfolgt über ein `userId`-Cookie (httpOnly, 7 Tage Laufzeit), das serverseitig in `hooks.server.js` validiert wird. Alle Datenoperationen laufen über SvelteKit Form Actions in den jeweiligen `+page.server.js`-Dateien; es gibt keine separate REST-API.
 
-- **Deployment:** _[URL folgt nach Deployment einfügen]_
+- **Deployment:** https://moodajour.netlify.app/login
 
 - **Besondere Entscheidungen:**
   - **Wiederverwendbare Komponenten:** Das UI wurde konsequent in eigenständige Komponenten aufgeteilt (z.B. `MoodForm.svelte`, `EntryCard.svelte`, `FilterBar.svelte`). Dies ermöglicht eine klare Trennung der Verantwortlichkeiten und erleichtert die Wartbarkeit, da Änderungen an einem Element nicht mehrfach vorgenommen werden müssen.
@@ -152,6 +173,7 @@ Fasst die technische Realisierung zusammen.
 - **URL der getesteten Version** https://69fe172475268a0008685a2d--moodajour.netlify.app/login
 <br> 
 Ansonsten Screenshots der Änderungen in Kapitel 4 dokumentiert.
+
 - **Ziele der Prüfung:** 
 Die Evaluation sollte folgende Fragen beantworten:
   - Verstehen Nutzer:innen ohne Erklärung, wie ein neuer Moodeintrag erfasst wird
@@ -201,8 +223,6 @@ Alle Testpersonen konnten alle Szenarien erfolgreich abschließen.
   | F6 | Tipps | Tipps wurden positiv bewertet, aber es wurden spezifischere Inhalte gewünscht. | TP1, TP2 | 2 | Tipps konkreter und nützlicher ausformulieren |
   | F7 | Navigation | Das Menüband störte teilweise die Nutzung. | TP1 | 3 | Menüband und Navigationsverhalten optimieren |
 
-[z. B. Erfolgsquote, Zeitbedarf, qualitative Findings]_
-
 - **Zusammenfassung der Resultate:** 
 Beide Testpersonen konnten alle Szenarien erfolgreich abschliessen. Die Kernfunktionen wie Erfassen, Übersicht, Bearbeiten und Löschen wurden insgesamt als verständlich und übersichtlich wahrgenommen. Positiv bewertet wurde auch der Warnhinweis, der von beiden Testpersonen bemerkt und als hilfreich eingeschätzt wurde. Verbesserungsbedarf zeigte sich vor allem bei der Anpassbarkeit von Kategorien und Personen, bei einzelnen UI-Bugs, bei der Interaktion mit den Cards sowie bei der inhaltlichen Ausgestaltung der Tipps.
 
@@ -215,19 +235,7 @@ Beide Testpersonen konnten alle Szenarien erfolgreich abschliessen. Die Kernfunk
   - **Tief:** Datumsauswahl und Löschen-Button anpassen, da beide Punkte vereinzelt irritierten.
   <br>
   
-  Anforderung  _[Anforderungen, die als nächstes umgesetzt werden sollten, priorisiert, kurz begründet; falls Verbesserungen im Prototyp konkret umgesetzt wurden: In Kap. 4 dokumentieren]_  
-
 ## 4. Erweiterungen [Optional]
-Dokumentiert Erweiterungen über den Mindestumfang hinaus.
-> **Hinweis:** Jede Erweiterung ist separat nach dem folgenden Schema zu beschreiben.
-
-### _[4.x Kurzbeschreibung / Titel]_  
-- **Beschreibung & Nutzen:** _[Was wurde erweitert? Warum?]_  
-- **Wo umgesetzt:** _[Wie und wo wurde es gemacht? Frontend, Backend, Datenbank?]_  
-- **Referenz:** _[Wo wird die Erweiterung auch noch beschrieben, z.B. Screenshot oder Beschreibung in einem anderen Kapitel]_  
-- **Aus Evaluation abgeleitet?:** _[Wurde diese Erweiterung als Folge eines in der Evaluation identifizierten Issues implementiert?]_  
-
-> Das folgende **Beispiel** wurde bewusst kurz gehalten. Erweiterungen dürfen auch ausführlicher beschrieben werden.
 
 ### 4.1 Kategorien und Personen direkt im Formular anpassbar
 - **Beschreibung & Nutzen:** Testpersonen bemängelten, dass die vordefinierten Kategorien und Personen nicht immer zur erfassten Situation passten. Die Einstellungsseite zum Verwalten eigener Listen existierte bereits, aber das Navigieren dorthin hätte alle Formular-Eingaben gelöscht. Neu erscheint neben den Labels "Person" und "Kategorie" ein "Anpassen"-Button, der ein Modal öffnet. Im Modal können Einträge hinzugefügt und entfernt werden, ohne die Seite zu verlassen. Nach dem Speichern werden die Dropdowns sofort aktualisiert und die Nutzerin kann die neue Option direkt auswählen.
@@ -370,15 +378,35 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
 Die folgende Deklaration ist verpflichtend und beschreibt den Einsatz von KI im Projekt.
 
 ### 6.1 KI-Tools
-- **Eingesetzte Tools**: _[z. B. Copilot, ChatGPT, Claude, lokale Modelle; Version/Variante wenn bekannt]_
-- **Zweck & Umfang**: _[wie, wofür und in welchem Ausmass wurde KI eingesetzt (z. B. Textentwürfe, Codevorschläge, Tests, Refactoring); welche Teile stammen (ganz/teilweise) aus KI-Unterstützung?]_
-- **Eigene Leistung (Abgrenzung):** _[was ist eigenständig erarbeitet/überarbeitet worden?]_
+- **Eingesetzte Tools**:
+  - **GitHub Copilot** (in VS Code integriert): in der frühen Entwicklungsphase für erste Code-Vorschläge und das Aufsetzen von Grundstrukturen eingesetzt.
+  - **ChatGPT** (GPT-4, OpenAI): für die initiale Projektformulierung, die Strukturierung des Vorgehens sowie erste Textentwürfe für Prompts.
+  - **Claude** (Sonnet, Anthropic, via Claude Code): ab der Umsetzungsphase als primäres KI-Tool für die gesamte Weiterentwicklung des Prototyps eingesetzt, konkret für Komponentenentwicklung, Bugfixes, Formularlogik, Authentifizierung, Datenbankanbindung und die Umsetzung der aus der Evaluation abgeleiteten Verbesserungen.
+
+- **Zweck & Umfang**:
+  - **Codevorschläge und Umsetzung:** Der Grossteil des Frontend- und Backend-Codes entstand in enger Zusammenarbeit mit Claude. Betroffen sind insbesondere die SvelteKit-Routen, die wiederverwendbaren Komponenten (`MoodForm.svelte`, `EntryCard.svelte`, `FilterBar.svelte`, `TipCard.svelte`), die Datenbankoperationen sowie die Authentifizierungslogik.
+  - **Fehlerbehebung:** Gefundene Bugs (z. B. Formularfehler beim Stimmungsschieberegler, Menüband-Verhalten, Logout-Problem) wurden gemeinsam mit Claude analysiert und behoben.
+  - **Dokumentation:** Teile der README wurden mit Unterstützung von ChatGPT und Claude formuliert und strukturiert.
+  - **Inhaltliche Konzeption:** Die grundlegende Idee, der Aufbau der App sowie die Designentscheidungen wurden eigenständig erarbeitet. KI diente dabei als Unterstützung bei der Formulierung, nicht als Quelle der Konzeptideen.
+
+- **Eigene Leistung (Abgrenzung):**
+  - Eigenständig erarbeitet wurden: die Problemdefinition und Zielgruppenanalyse, das Konzept der drei Hauptbereiche (Home, Übersicht, Tipps), die Designentscheidungen (Mobile-First, reduziertes UI, Card-Darstellung), die Durchführung und Auswertung der Usability-Tests sowie die Priorisierung der Verbesserungen.
+  - Alle KI-generierten Code-Vorschläge wurden geprüft, verstanden und wo nötig angepasst. Nicht passende Vorschläge wurden verworfen oder umformuliert.
 
 ### 6.2 Prompt-Vorgehen
-_[Überlegungen zu Prompt-Vorgehen, Qualität und Urheberrecht/Quellen. Wie wurde beim Prompting vorgegangen? Zu beschreiben ist die grundlegende Vorgehensweise. Einzelne, konkrete Prompts sollten höchstens als Beispiele aufgeführt werden. ]_
+Das Prompting erfolgte kontextbezogen und iterativ. Zu Beginn wurde ChatGPT genutzt, um die Projektstruktur und erste Formulierungen zu entwickeln. Für die technische Umsetzung wurde danach auf Claude gewechselt, da dieses Tool besser für längere Konversationen mit Codekontext geeignet ist.
+
+Die grundlegende Vorgehensweise beim Prompting:
+- **Kontext mitliefern:** Prompts enthielten jeweils den relevanten bestehenden Code, die verwendete Technologie (SvelteKit 5, Svelte Runes, MongoDB) sowie eine klare Beschreibung des gewünschten Verhaltens oder Problems.
+- **Iterativ vorgehen:** Ergebnisse wurden direkt getestet. Bei Fehlern oder unpassendem Verhalten wurde das Problem beschrieben und eine Korrektur angefragt, anstatt von vorne zu beginnen.
+- **Eigene Kontrolle behalten:** Vorgeschlagener Code wurde vor dem Einfügen gelesen und verstanden. Unklare Teile wurden nachgefragt oder eigenständig angepasst.
+
+Beispiel für einen typischen Prompt: "In `MoodForm.svelte` wird das Titelfeld geleert, sobald der Stimmungsschieberegler bewegt wird. Wie kann ich das beheben, ohne die restliche Formularlogik zu ändern?"
 
 ### 6.3 Reflexion
-_[Nutzen, Grenzen, Risiken/Qualitätssicherung, ...]_
+- **Nutzen:** Der Einsatz von KI hat die Entwicklungsgeschwindigkeit deutlich erhöht, besonders bei wiederkehrenden Mustern wie Formularlogik, Datenbankoperationen und Komponentenstruktur. Fehlersuche und Debugging profitierten ebenfalls stark, da Ursachen schneller identifiziert und Lösungen direkt im Kontext des bestehenden Codes erarbeitet werden konnten.
+- **Grenzen:** KI-generierter Code erfordert immer eine eigene Prüfung. Gelegentlich wurden Vorschläge gemacht, die zwar technisch fehlerfrei waren, aber nicht zum restlichen Aufbau des Projekts passten oder unnötige Komplexität einführten. Auch bei sehr spezifischen Svelte-5-Eigenheiten (Runes Mode) lieferte die KI nicht immer auf Anhieb korrekte Antworten.
+- **Risiken und Qualitätssicherung:** Um die Qualität sicherzustellen, wurde jede Änderung manuell getestet, insbesondere die zentralen Workflows (Eintrag erfassen, bearbeiten, löschen, navigieren). Sicherheitsrelevante Aspekte wie die Cookie-basierte Authentifizierung wurden grundlegend nachvollzogen. Der Verzicht auf Passwort-Hashing wurde bewusst als Prototyp-Entscheidung getroffen und dokumentiert. 
 
 ## 7. Anhang [Optional]
 Beispiele:

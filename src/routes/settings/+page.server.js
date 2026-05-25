@@ -50,8 +50,8 @@ export const actions = {
 
 		const data = await request.formData();
 
-		const formCategories = data.getAll('category').filter((c) => c.trim());
-		const formPersons = data.getAll('person').filter((p) => p.trim());
+		const formCategories = [...new Set(data.getAll('category').map((c) => c.trim()).filter(Boolean))];
+		const formPersons = [...new Set(data.getAll('person').map((p) => p.trim()).filter(Boolean))];
 
 		const db = await getDb();
 		const userId = locals.user.id;

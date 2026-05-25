@@ -20,19 +20,26 @@
 	let modalCategories = $state([]);
 	let modalPersons = $state([]);
 	let modalError = $state('');
+	let modalInfo = $state('');
 	let frozenUsedCategories = $state(new Set());
 	let frozenUsedPersons = $state(new Set());
+	let originalCategoryCount = $state(0);
+	let originalPersonCount = $state(0);
 
 	function openModal() {
 		modalCategories = [...localCategories];
 		modalPersons = [...localPersons];
+		originalCategoryCount = localCategories.length;
+		originalPersonCount = localPersons.length;
 		frozenUsedCategories = new Set(usedCategories);
 		frozenUsedPersons = new Set(usedPersons);
 		modalError = '';
+		modalInfo = '';
 		showModal = true;
 	}
 
 	function closeModal() {
+		modalInfo = '';
 		showModal = false;
 	}
 
@@ -64,16 +71,44 @@
 		modalPersons = modalPersons.filter((_, i) => i !== index);
 	}
 
-	function handleModalSubmit() {
+	function handleModalSubmit({ formData }) {
 		modalError = '';
+		modalInfo = '';
+
+		const allCats = formData.getAll('category').map((c) => c.trim()).filter(Boolean);
+		const allPersons = formData.getAll('person').map((p) => p.trim()).filter(Boolean);
+		const uniqueCats = [...new Set(allCats)];
+		const uniquePersons = [...new Set(allPersons)];
+
+		const dupCats = [...new Set(allCats.filter((c, i) => allCats.indexOf(c) !== i))];
+		const dupPersons = [...new Set(allPersons.filter((p, i) => allPersons.indexOf(p) !== i))];
+		const allDups = [...dupCats, ...dupPersons];
+
+		formData.delete('category');
+		formData.delete('person');
+		uniqueCats.forEach((c) => formData.append('category', c));
+		uniquePersons.forEach((p) => formData.append('person', p));
+
+		const infoMessage = allDups.length > 0
+			? `${allDups.map((d) => `„${d}"`).join(', ')} ${allDups.length === 1 ? 'war ein Duplikat' : 'waren Duplikate'} und wurde${allDups.length === 1 ? '' : 'n'} automatisch entfernt.`
+			: '';
+
 		return async ({ result }) => {
 			if (result.type === 'success') {
 				if (result.data?.error) {
 					modalError = result.data.error;
 				} else {
-					localCategories = modalCategories.filter((c) => c.trim());
-					localPersons = modalPersons.filter((p) => p.trim());
-					showModal = false;
+					localCategories = uniqueCats;
+					localPersons = uniquePersons;
+					if (infoMessage) {
+						modalCategories = uniqueCats;
+						modalPersons = uniquePersons;
+						originalCategoryCount = uniqueCats.length;
+						originalPersonCount = uniquePersons.length;
+						modalInfo = infoMessage;
+					} else {
+						showModal = false;
+					}
 				}
 			} else if (result.type === 'failure') {
 				modalError = result.data?.error || 'Fehler beim Speichern.';
@@ -195,6 +230,9 @@
 		{#if modalError}
 			<div class="modal-alert-error">{modalError}</div>
 		{/if}
+		{#if modalInfo}
+			<div class="modal-alert-info">{modalInfo}</div>
+		{/if}
 
 		<form method="POST" action="/settings" use:enhance={handleModalSubmit} class="modal-form">
 			<div class="modal-section">
@@ -207,7 +245,7 @@
 				{:else}
 					<div class="modal-items">
 						{#each modalCategories as cat, i (i)}
-							{@const used = frozenUsedCategories.has(cat)}
+							{@const used = i < originalCategoryCount && frozenUsedCategories.has(cat)}
 							<div class="modal-item-row" class:used>
 								<input type="text" name="category" bind:value={modalCategories[i]} placeholder="z. B. Arbeit" readonly={used} required />
 								<button
@@ -234,7 +272,7 @@
 				{:else}
 					<div class="modal-items">
 						{#each modalPersons as person, i (i)}
-							{@const used = frozenUsedPersons.has(person)}
+							{@const used = i < originalPersonCount && frozenUsedPersons.has(person)}
 							<div class="modal-item-row" class:used>
 								<input type="text" name="person" bind:value={modalPersons[i]} placeholder="z. B. Freund" readonly={used} required />
 								<button
@@ -366,6 +404,17 @@
 		background: #fdecea;
 		border: 1px solid #f5c2c7;
 		color: #842029;
+		font-size: 0.875rem;
+		font-weight: 600;
+	}
+
+	.modal-alert-info {
+		margin: 12px 20px 0;
+		padding: 10px 14px;
+		border-radius: 10px;
+		background: #eef6ff;
+		border: 1px solid #bfdbfe;
+		color: #1e4fa0;
 		font-size: 0.875rem;
 		font-weight: 600;
 	}
