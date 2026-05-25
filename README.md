@@ -149,7 +149,9 @@ Fasst die technische Realisierung zusammen.
   - **Passwörter im Klartext:** Im Rahmen des Prototypen wurde auf Passwort-Hashing verzichtet. Für eine produktive Version wäre dies zwingend nachzurüsten.
 
 ### 3.5 Validate
-- **URL der getesteten Version** (separat deployt)
+- **URL der getesteten Version** https://69fe172475268a0008685a2d--moodajour.netlify.app/login
+<br> 
+Ansonsten Screenshots der Änderungen in Kapitel 4 dokumentiert.
 - **Ziele der Prüfung:** 
 Die Evaluation sollte folgende Fragen beantworten:
   - Verstehen Nutzer:innen ohne Erklärung, wie ein neuer Moodeintrag erfasst wird
@@ -161,11 +163,11 @@ Die Evaluation sollte folgende Fragen beantworten:
 **Methode:** Moderierter Usability-Test mit Think-Aloud-Verfahren <br>
 **Setting:** On-site (persönlich vor Ort) <br>
 **Durchführung:** Die Testpersonen haben nacheinander 5 Szenarien gelöst, während sie laut dachten. Die Testleitung beobachtete, notierte Auffälligkeiten und griff nur bei technischen Problemen oder Unklarheiten ein. Im Anschluss wurde ein kurzes strukturiertes Interview geführt.
-- **Stichprobe:** 
-**Anzahl:** 2 Testpersonen
-**Profil:** Studierende bzw. junge Berufstätige im Alter von 18-35 Jahren (Zielgruppe der App)
-**Namen/Codes:** Kristina (TP1), Andrea (TP2)
-**Dauer:** ca. 10 Minuten pro Session 
+- **Stichprobe:** <br>
+**Anzahl:** 2 Testpersonen <br>
+**Profil:** Studierende bzw. junge Berufstätige im Alter von 18-35 Jahren (Zielgruppe der App) <br>
+**Namen/Codes:** Kristina (TP1), Andrea (TP2) <br>
+**Dauer:** ca. 10 Minuten pro Session  <br>
 - **Aufgaben/Szenarien:** 
 Vorbedingung: Bereits registrierte Person mit Login
   - *S1: Neuer Eintrag erfassen:* Sie hatten einen anstrengenden Tag. Erfassen Sie einen neuen Eintrag mit einer eher schlechten Stimmung und einer kurzen Notiz.
@@ -174,8 +176,8 @@ Vorbedingung: Bereits registrierte Person mit Login
   - *S4: Eintrag bearbeiten:* Beim Nachlesen fällt Ihnen auf, dass eine Information nicht stimmt. Passen Sie den Eintrag an.
   - *S5: Eintrag löschen:* Sie sehen einen Eintrag, den Sie nicht mehr behalten möchten. Entfernen Sie ihn aus Ihrer Sammlung.
 
-- **Kennzahlen & Beobachtungen:** _ <br>
-Erfolgsquote pro Szenario (TP1 (Kristina)	 | TP2 (Andrea) |	Erfolgsquote)
+- **Kennzahlen & Beobachtungen:**  <br>
+Szenariotitel (TP1 (Kristina)	 | TP2 (Andrea) |	Erfolgsquote)
   - S1: Neuer Eintrag erfassen	(Erfolgreich	|	Erfolgreich	|	100%)
   - S2: Warnhinweis verstehen	(Erfolgreich |	Erfolgreich |	100%)
   - S3: Eintrag finden & öffnen	(Erfolgreich |	Erfolgreich |	100%)
@@ -233,8 +235,18 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
   - **Frontend:** In `src/lib/components/MoodForm.svelte` wurden ein Modal-Dialog mit eigenem Formular, lokale Zustandsvariablen für Kategorien und Personen sowie eine `handleModalSubmit`-Funktion mit `use:enhance` ergänzt. Das Modal-Formular postet an die bestehende `/settings`-Action. Bei Erfolg werden die lokalen Listen aktualisiert und das Modal geschlossen, ohne die Seite neu zu laden.
 - **Referenz:** Evaluation Issue F4 (Kap. 3.3)
 
-  <img src="src/lib/img/4.1Kategorie und Personen/Home Verlinkung.png" alt="Home Verlinkung" width="280">  <img src="src/lib/img/4.1Kategorie und Personen/Home Möglichkeit für Anpassung Settings.png" alt="Anpassungsmöglichkeit in Settings" width="280">
+  **Home: Verlinkung zum Anpassen-Button**  
+  <img src="src/lib/img/4.1Kategorie und Personen/Home Verlinkung.png" alt="Home Verlinkung" width="280">
+
+  **Home: Anpassungsmöglichkeit im Modal**  
+  <img src="src/lib/img/4.1Kategorie und Personen/Home Möglichkeit für Anpassung Settings.png" alt="Anpassungsmöglichkeit in Settings" width="280">
   <br>*Abgebildet: Verbesserte Screens nach der Evaluation*
+
+  **Vorherige Screens (vor der Verbesserung):**
+
+  **Home: Darstellung ohne Anpassen-Button**  
+  <img src="src/lib/img/alt/4.1Kategorie und Personen/Home Darstellung.png" alt="Home Darstellung vor der Verbesserung" width="280">
+  <br>*Abgebildet: Screens vor der Evaluation*
 
 - **Aus Evaluation abgeleitet?:** Ja, Issue F4
 
@@ -260,8 +272,15 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
   - **Frontend:** In `src/lib/components/EntryCard.svelte` wurde `.btn-danger` von `flex: 1` auf `flex: none` mit fixer Breite umgestellt und die Farbe auf ein neutrales Grau reduziert. Der Button zeigt nur noch ein Papierkorb-Icon statt dem Text "Löschen".
 - **Referenz:** Evaluation Issue F5 (Kap. 3.3)
 
+  **Löschen-Button: Reduziert auf Icon**  
   <img src="src/lib/img/4.4Löschen und Datumsauswahl/Löschen.png" alt="Löschen-Button reduziert" width="280">
   <br>*Abgebildet: Verbesserte Screens nach der Evaluation*
+
+  **Vorherige Screens (vor der Verbesserung):**
+
+  **Löschen-Button: Ursprüngliche Darstellung**  
+  <img src="src/lib/img/alt/4.4Löschen und Datumsauswahl/Löschfunktion.png" alt="Löschen-Button vor der Verbesserung" width="280">
+  <br>*Abgebildet: Screens vor der Evaluation*
 
 - **Aus Evaluation abgeleitet?:** Ja, Issue F5
 
@@ -271,8 +290,15 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
   - **Frontend:** In `src/lib/components/MoodForm.svelte` wurde dem Datumsinput das Attribut `max={new Date().toLocaleDateString('sv-SE')}` hinzugefügt. Das `sv-SE`-Locale liefert das heutige Datum in der lokalen Zeitzone im Format `YYYY-MM-DD`, das der Browser als `max`-Wert erwartet.
 - **Referenz:** Evaluation Issue F2 (Kap. 3.3)
 
+  **Datumsauswahl: Auf heutiges und vergangenes Datum begrenzt**  
   <img src="src/lib/img/4.4Löschen und Datumsauswahl/Datumsauswahl.png" alt="Datumsauswahl eingeschränkt" width="280">
   <br>*Abgebildet: Verbesserte Screens nach der Evaluation*
+
+  **Vorherige Screens (vor der Verbesserung):**
+
+  **Datumsauswahl: Ohne Einschränkung (zukünftige Daten möglich)**  
+  <img src="src/lib/img/alt/4.4Löschen und Datumsauswahl/Datumsauswahl.png" alt="Datumsauswahl vor der Verbesserung" width="280">
+  <br>*Abgebildet: Screens vor der Evaluation*
 
 - **Aus Evaluation abgeleitet?:** Ja, Issue F2
 
@@ -282,8 +308,15 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
   - **Frontend:** In `src/lib/components/EntryCard.svelte` wurde ein unsichtbarer `<a class="card-link">` mit `position: absolute; inset: 0` über die gesamte Card gelegt (Stretched-Link-Technik). Der Löschen-Button liegt mit `position: relative; z-index: 1` darüber und bleibt so unabhängig klickbar. Der "Bearbeiten"-Button wurde entfernt. Hover-Effekt auf `.entry-card` signalisiert die Interaktivität.
 - **Referenz:** Evaluation Issue F4 (Kap. 3.3)
 
+  **Eintrags-Card: Vollständig anklickbar**  
   <img src="src/lib/img/4.5Card/direkt klickbar.png" alt="Card vollständig anklickbar" width="280">
   <br>*Abgebildet: Verbesserte Screens nach der Evaluation*
+
+  **Vorherige Screens (vor der Verbesserung):**
+
+  **Eintrags-Card: Mit separatem Bearbeiten-Button**  
+  <img src="src/lib/img/alt/4.5Card/Bearbeiten Card.png" alt="Eintrags-Card vor der Verbesserung" width="280">
+  <br>*Abgebildet: Screens vor der Evaluation*
 
 - **Aus Evaluation abgeleitet?:** Ja, Issue F4
 
@@ -295,10 +328,33 @@ Dokumentiert Erweiterungen über den Mindestumfang hinaus.
   - **Datenbank:** Feld `usedTips` (Array von Strings) auf `moodEntries`-Dokumente ergänzt.
 - **Referenz:** Evaluation Issue F6 (Kap. 3.3)
 
-  <img src="src/lib/img/4.6Tipps/Darstellung auf Card.png" alt="Tipps Darstellung auf Card" width="280">  <img src="src/lib/img/4.6Tipps/Speichermöglichkeit Tipps.png" alt="Speichermöglichkeit Tipps" width="280">
+  **Eintrags-Card: Verwendete Tipps als Tags**  
+  <img src="src/lib/img/4.6Tipps/Darstellung auf Card.png" alt="Tipps Darstellung auf Card" width="280">
 
-  <img src="src/lib/img/4.6Tipps/Ergänzung Informationen Tippsübersicht.png" alt="Ergänzung Informationen Tippsübersicht" width="280">  <img src="src/lib/img/4.6Tipps/Filtermöglichkeit.png" alt="Filtermöglichkeit Tipps" width="280">
+  **Bearbeitung von Moodeintrag: Tipps auswählen und speichern**  
+  <img src="src/lib/img/4.6Tipps/Speichermöglichkeit Tipps.png" alt="Speichermöglichkeit Tipps" width="280">
+
+  **Tipps-Seite: Erweiterte Tipp-Beschreibungen**  
+  <img src="src/lib/img/4.6Tipps/Ergänzung Informationen Tippsübersicht.png" alt="Ergänzung Informationen Tippsübersicht" width="280">
+
+  **Übersicht-Seite: Filtermöglichkeit**  
+  <img src="src/lib/img/4.6Tipps/Filtermöglichkeit.png" alt="Filtermöglichkeit Tipps" width="280">
   <br>*Abgebildet: Verbesserte Screens nach der Evaluation*
+
+  **Vorherige Screens (vor der Verbesserung):**
+
+  **Eintrags-Card: Ohne Tipp-Tags**  
+  <img src="src/lib/img/alt/4.6Tipps/Darstellung auf Card.png" alt="Eintrags-Card ohne Tipp-Tags" width="280">
+
+  **Moodeintrag Bearbeitungsansicht: Ohne Verknüpfung zu Tipps**  
+  <img src="src/lib/img/alt/4.6Tipps/Keine Verknüpfung auf Moodeinträge.png" alt="Tipps-Seite ohne Verknüpfung" width="280">
+
+  **Tipps-Seite: Ursprüngliche Ansicht**  
+  <img src="src/lib/img/alt/4.6Tipps/alte Ansicht Tipps.png" alt="Tipps-Seite ursprüngliche Ansicht" width="280">
+
+  **Übersicht-Seite: keine Filtermöglichkeit von Tipps**  
+  <img src="src/lib/img/alt/4.6Tipps/Filterfunktionen alt.png" alt="Filterfunktionen vor der Verbesserung" width="280">
+  <br>*Abgebildet: Screens vor der Evaluation*
 
 - **Aus Evaluation abgeleitet?:** Ja, Issue F6
 
