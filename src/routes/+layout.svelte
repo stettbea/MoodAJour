@@ -72,7 +72,7 @@
 
 						{#if data.user}
 							<form method="POST" action="/logout">
-								<button type="submit" class="dropdown-logout" onclick={() => menuOpen = false}>Ausloggen</button>
+								<button type="submit" class="dropdown-logout">Ausloggen</button>
 							</form>
 						{:else}
 							<a href="/login" class:active={page.url.pathname === '/login'} onclick={() => menuOpen = false}>Einloggen</a>
