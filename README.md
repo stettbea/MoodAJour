@@ -241,7 +241,7 @@ Beide Testpersonen konnten alle Szenarien erfolgreich abschliessen. Die Kernfunk
 - **Beschreibung & Nutzen:** Testpersonen bemängelten, dass die vordefinierten Kategorien und Personen nicht immer zur erfassten Situation passten. Die Einstellungsseite zum Verwalten eigener Listen existierte bereits, aber das Navigieren dorthin hätte alle Formular-Eingaben gelöscht. Neu erscheint neben den Labels "Person" und "Kategorie" ein "Anpassen"-Button, der ein Modal öffnet. Im Modal können Einträge hinzugefügt und entfernt werden, ohne die Seite zu verlassen. Nach dem Speichern werden die Dropdowns sofort aktualisiert und die Nutzerin kann die neue Option direkt auswählen.
 - **Wo umgesetzt:**
   - **Frontend:** In `src/lib/components/MoodForm.svelte` wurden ein Modal-Dialog mit eigenem Formular, lokale Zustandsvariablen für Kategorien und Personen sowie eine `handleModalSubmit`-Funktion mit `use:enhance` ergänzt. Das Modal-Formular postet an die bestehende `/settings`-Action. Bei Erfolg werden die lokalen Listen aktualisiert und das Modal geschlossen, ohne die Seite neu zu laden.
-- **Referenz:** Evaluation Issue F4 (Kap. 3.3)
+- **Referenz:** Evaluation Issue F1 (Kap. 3.5)
 
   **Home: Verlinkung zum Anpassen-Button**  
   <img src="src/lib/img/4.1Kategorie und Personen/Home Verlinkung.png" alt="Home Verlinkung" width="280">
@@ -256,20 +256,20 @@ Beide Testpersonen konnten alle Szenarien erfolgreich abschliessen. Die Kernfunk
   <img src="src/lib/img/alt/4.1Kategorie und Personen/Home Darstellung.png" alt="Home Darstellung vor der Verbesserung" width="280">
   <br>*Abgebildet: Screens vor der Evaluation*
 
-- **Aus Evaluation abgeleitet?:** Ja, Issue F4
+- **Aus Evaluation abgeleitet?:** Ja, Issue F1
 
 ### 4.2 Formularfehler beim Stimmungsschieberegler behoben
 - **Beschreibung & Nutzen:** Beim Erstellen eines neuen Eintrags wurde das Titelfeld geleert, sobald der Stimmungsschieberegler bewegt wurde. Dies führte dazu, dass Nutzende ihren Titel erneut eingeben mussten, was frustrierend war und zu unvollständigen Einträgen führen konnte. Mit der Behebung bleibt der Titel beim Verschieben des Schiebereglers erhalten.
 - **Wo umgesetzt:**
   - **Frontend:** In `src/lib/components/MoodForm.svelte` wurde für das Titelfeld eine eigene lokale Zustandsvariable `titleValue` mit `$state()` eingeführt und das Input-Feld auf `bind:value={titleValue}` umgestellt. Vorher war das Feld mit `value={values.title ?? ''}` direkt an die Prop gebunden, was in Svelte 5 bei reaktiven Neu-Renderings durch den Schieberegler-State (`moodValue`) zum Zurücksetzen des Feldes auf den ursprünglichen Prop-Wert führte.
-- **Referenz:** Evaluation Issue F5 (Kap. 3.3), keine visuelle Darstellung möglich da reine Logik angepasst wurde
-- **Aus Evaluation abgeleitet?:** Ja, Issue F5 (Kap. 3.3)
+- **Referenz:** Evaluation Issue F3 (Kap. 3.5), keine visuelle Darstellung möglich da reine Logik angepasst wurde
+- **Aus Evaluation abgeleitet?:** Ja, Issue F3
 
 ### 4.3 Menüband-Verhalten verbessert
 - **Beschreibung & Nutzen:** Testperson TP1 bemängelte, dass das Navigationsmenü die Nutzung störte, weil es sich nach dem Antippen eines Links nicht schloss und auch durch einen Klick ausserhalb nicht geschlossen werden konnte. Das führte dazu, dass das Dropdown offen blieb und Inhalte verdeckte. Neu schliesst das Menü in allen relevanten Situationen automatisch: beim Klick auf einen Menüpunkt, beim Klick ausserhalb des Menüs sowie beim Drücken der Escape-Taste.
 - **Wo umgesetzt:**
   - **Frontend:** In `src/routes/+layout.svelte` wurde das `<details>`/`<summary>`-Element durch einen zustandsgesteuerten `<button>` mit `menuOpen`-State (`$state`) ersetzt. Ein `svelte:window`-Handler erkennt Klicks ausserhalb des Menüs via `menuWrapper.contains(e.target)` und Escape-Tastendruck. Jeder Navigationslink und der Ausloggen-Button schliesst das Menü zusätzlich per `onclick`.
-- **Referenz:** Evaluation Issue F7 (Kap. 3.3), keine visuelle Darstellung möglich da reine Logik angepasst wurde
+- **Referenz:** Evaluation Issue F7 (Kap. 3.5), keine visuelle Darstellung möglich da reine Logik angepasst wurde
 - **Aus Evaluation abgeleitet?:** Ja, Issue F7
 
 ### 4.4 Löschen-Button visuell reduziert und Datumsauswahl eingeschränkt
@@ -278,7 +278,7 @@ Beide Testpersonen konnten alle Szenarien erfolgreich abschliessen. Die Kernfunk
 - **Beschreibung & Nutzen:** Der Löschen-Button wirkte auf TP1 zu dominant, da er gleich gross wie der Bearbeiten-Button war und mit roter Farbe sofort ins Auge fiel. Neu ist er ein kompaktes Icon-Only-Symbol (🗑), das standardmässig in einem unauffälligen Grauton erscheint. Rot wird nur beim Hover angezeigt. Die Lösch-Bestätigung bleibt weiterhin als Sicherheitsabfrage erhalten.
 - **Wo umgesetzt:**
   - **Frontend:** In `src/lib/components/EntryCard.svelte` wurde `.btn-danger` von `flex: 1` auf `flex: none` mit fixer Breite umgestellt und die Farbe auf ein neutrales Grau reduziert. Der Button zeigt nur noch ein Papierkorb-Icon statt dem Text "Löschen".
-- **Referenz:** Evaluation Issue F5 (Kap. 3.3)
+- **Referenz:** Evaluation Issue F5 (Kap. 3.5)
 
   **Löschen-Button: Reduziert auf Icon**  
   <img src="src/lib/img/4.4Löschen und Datumsauswahl/Löschen.png" alt="Löschen-Button reduziert" width="280">
@@ -296,7 +296,7 @@ Beide Testpersonen konnten alle Szenarien erfolgreich abschliessen. Die Kernfunk
 - **Beschreibung & Nutzen:** TP2 fand es irritierend, dass beim Erfassen eines Eintrags ein zukünftiges Datum ausgewählt werden konnte, da Mood-Einträge typischerweise aktuelle oder vergangene Situationen beschreiben. Das Datumfeld ist jetzt auf heute als Maximum beschränkt.
 - **Wo umgesetzt:**
   - **Frontend:** In `src/lib/components/MoodForm.svelte` wurde dem Datumsinput das Attribut `max={new Date().toLocaleDateString('sv-SE')}` hinzugefügt. Das `sv-SE`-Locale liefert das heutige Datum in der lokalen Zeitzone im Format `YYYY-MM-DD`, das der Browser als `max`-Wert erwartet.
-- **Referenz:** Evaluation Issue F2 (Kap. 3.3)
+- **Referenz:** Evaluation Issue F2 (Kap. 3.5)
 
   **Datumsauswahl: Auf heutiges und vergangenes Datum begrenzt**  
   <img src="src/lib/img/4.4Löschen und Datumsauswahl/Datumsauswahl.png" alt="Datumsauswahl eingeschränkt" width="280">
@@ -314,7 +314,7 @@ Beide Testpersonen konnten alle Szenarien erfolgreich abschliessen. Die Kernfunk
 - **Beschreibung & Nutzen:** Testperson TP1 erwartete, dass die gesamte Eintrags-Card direkt anklickbar ist um zum Bearbeitungsformular zu gelangen, und suchte vergeblich nach einer Möglichkeit den Eintrag zu öffnen. Der separate "Bearbeiten"-Button war nicht intuitiv genug. Neu ist die gesamte Card ein Link auf die Bearbeitungsseite. Beim Hovern hebt sich die Card visuell ab (lila Rahmen, leichter Schatten), was die Klickbarkeit signalisiert. Der Löschen-Button bleibt als Icon oben rechts weiterhin separat bedienbar.
 - **Wo umgesetzt:**
   - **Frontend:** In `src/lib/components/EntryCard.svelte` wurde ein unsichtbarer `<a class="card-link">` mit `position: absolute; inset: 0` über die gesamte Card gelegt (Stretched-Link-Technik). Der Löschen-Button liegt mit `position: relative; z-index: 1` darüber und bleibt so unabhängig klickbar. Der "Bearbeiten"-Button wurde entfernt. Hover-Effekt auf `.entry-card` signalisiert die Interaktivität.
-- **Referenz:** Evaluation Issue F4 (Kap. 3.3)
+- **Referenz:** Evaluation Issue F4 (Kap. 3.5)
 
   **Eintrags-Card: Vollständig anklickbar**  
   <img src="src/lib/img/4.5Card/direkt klickbar.png" alt="Card vollständig anklickbar" width="280">
@@ -329,12 +329,12 @@ Beide Testpersonen konnten alle Szenarien erfolgreich abschliessen. Die Kernfunk
 - **Aus Evaluation abgeleitet?:** Ja, Issue F4
 
 ### 4.6 Tipps konkretisiert und mit Einträgen verknüpft
-- **Beschreibung & Nutzen:** Testpersonen wünschten sich konkretere und nützlichere Tipps. Zusätzlich wurde eine direkte Verknüpfung zwischen einem Mooodeintrag und den Tipps geschaffen: Erfasst die Nutzerin eine Stimmung unter 5, erscheint der Warnhinweis mit "Tipps anzeigen". Dieser Link führt nun direkt zur Tipps-Seite mit dem Kontext des soeben erstellten Eintrags. Dort kann die Nutzerin auswählen, welche Tipps sie ausprobiert hat. Die gespeicherten Tipps erscheinen danach als Tags auf der Eintragskarte, sodass im Rückblick sichtbar ist, was in belastenden Momenten geholfen hat.
+- **Beschreibung & Nutzen:** Testpersonen wünschten sich konkretere und nützlichere Tipps. Zusätzlich wurde eine direkte Verknüpfung zwischen einem Moodeintrag und den Tipps geschaffen: Erfasst die Nutzerin eine Stimmung unter 5, erscheint der Warnhinweis mit "Tipps anzeigen". Dieser Link führt nun direkt zur Tipps-Seite mit dem Kontext des soeben erstellten Eintrags. Dort kann die Nutzerin auswählen, welche Tipps sie ausprobiert hat. Die gespeicherten Tipps erscheinen danach als Tags auf der Eintragskarte, sodass im Rückblick sichtbar ist, was in belastenden Momenten geholfen hat.
 - **Wo umgesetzt:**
   - **Frontend:** `src/lib/components/WarningBox.svelte` nimmt neu den Prop `entryId` entgegen und setzt den "Tipps anzeigen"-Link auf `/tipps?entryId=…`. `src/lib/components/TipCard.svelte` unterstützt neu den `selectable`-Modus mit visueller Auswahl. `src/routes/tipps/+page.svelte` zeigt bei vorhandenem `entryId` ein Auswahlbanner und eine Speichern-Schaltfläche. Alle Tipp-Texte wurden ausführlicher und praxisnäher formuliert. Verwendete Tipps erscheinen als 💡-Tags in `EntryCard.svelte`.
   - **Backend:** `src/routes/tipps/+page.server.js` (neu) lädt die bereits gespeicherten Tipps eines Eintrags und stellt die `saveTips`-Action bereit, welche die ausgewählten Tipps als Array im Feld `usedTips` im Dokument `moodEntries` speichert. Die Create-Actions in `+page.server.js` und `overview/+page.server.js` geben neu die `insertedId` zurück.
   - **Datenbank:** Feld `usedTips` (Array von Strings) auf `moodEntries`-Dokumente ergänzt.
-- **Referenz:** Evaluation Issue F6 (Kap. 3.3)
+- **Referenz:** Evaluation Issue F6 (Kap. 3.5)
 
   **Eintrags-Card: Verwendete Tipps als Tags**  
   <img src="src/lib/img/4.6Tipps/Darstellung auf Card.png" alt="Tipps Darstellung auf Card" width="280">
