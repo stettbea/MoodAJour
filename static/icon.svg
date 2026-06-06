@@ -5,14 +5,28 @@
       <stop offset="100%" stop-color="#5c2d91"/>
     </linearGradient>
   </defs>
+
+  <!-- Hintergrund -->
   <rect width="512" height="512" fill="url(#bg)"/>
+
+  <!-- Helles Gesichts-Kreisbereich -->
   <circle cx="256" cy="248" r="165" fill="white" opacity="0.97"/>
+
+  <!-- Linkes Auge -->
   <ellipse cx="198" cy="213" rx="24" ry="28" fill="#6b3daf"/>
   <circle cx="206" cy="206" r="8" fill="white"/>
+
+  <!-- Rechtes Auge -->
   <ellipse cx="314" cy="213" rx="24" ry="28" fill="#6b3daf"/>
   <circle cx="322" cy="206" r="8" fill="white"/>
+
+  <!-- Lächeln -->
   <path d="M 192 278 Q 256 358 320 278" stroke="#6b3daf" stroke-width="22" fill="none" stroke-linecap="round"/>
+
+  <!-- Wangen-Akzente -->
   <ellipse cx="175" cy="268" rx="30" ry="16" fill="#c084fc" opacity="0.28"/>
   <ellipse cx="337" cy="268" rx="30" ry="16" fill="#c084fc" opacity="0.28"/>
+
+  <!-- Kleines Herz unten im Icon -->
   <path d="M256 430 C256 430 216 404 216 380 C216 366 228 358 256 378 C284 358 296 366 296 380 C296 404 256 430 256 430Z" fill="white" opacity="0.45"/>
 </svg>
